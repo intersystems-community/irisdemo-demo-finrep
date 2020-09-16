@@ -1,0 +1,232 @@
+Include %occInclude
+
+Class IRISConfig.Installer Extends IRISConfig.InstallerBase
+{
+
+ClassMethod Config(pNamespace As %String) As %Status
+{
+	Set tSC = $$$OK
+	Try
+	{
+		ZN "APPINT"
+		
+		Set obj = ##class(Normalization.BatchJobSpec).%New()
+		Set obj.BatchClassName="Staging.RM.MortgageTrans.Batch"
+		Set obj.BatchRecordClassName="Staging.RM.MortgageTrans.Record"
+		Set obj.DTLClassName="Custom.Normalization.DTL.Trans"
+		Set obj.CanonicalClassName="Canonical.Mortgage"
+		Set obj.CubeList="Mortgage"
+
+		Set tSC = obj.%Save()
+
+	}
+	Catch (oException)
+	{
+		Set tSC = oException.AsStatus()
+	}	
+	
+	ZN "%SYS"
+	
+	Quit tSC
+}
+
+ClassMethod PopulateCT(pNamespace As %String) As %Status
+{
+	#define I(%T,%C,%D) Set tSC = ..InsertOnCT(%T, %C, %D) Q:$$$ISERR(tSC)
+
+	Set tSC = $$$OK
+	Try
+	{
+		ZN "APPINT"
+		
+		$$$I("TypeDwelling", "B", "Bungalow")
+		$$$I("TypeDwelling", "D", "Detached house")
+		$$$I("TypeDwelling", "S", "Semi-detached house")
+		$$$I("TypeDwelling", "T", "Terraced house")
+		$$$I("TypeDwelling", "F", "Flat or maisonette in converted house")
+		$$$I("TypeDwelling", "P", "Purpose built flat or maisonette")
+		$$$I("TypeDwelling", "O", "Other")
+
+		$$$I("TypeIntRate", "01", "Fixed rate")
+		$$$I("TypeIntRate", "02", "Discounted variable rate")
+		$$$I("TypeIntRate", "03", "Tracker")
+		$$$I("TypeIntRate", "04", "Capped rate")
+		$$$I("TypeIntRate", "05", "Standard variable rate")
+		$$$I("TypeIntRate", "06", "Bank of England base rate tracker")
+		$$$I("TypeIntRate", "07", "LIBOR tracker")
+		$$$I("TypeIntRate", "08", "Other tracker")
+		$$$I("TypeIntRate", "99", "Other")
+		
+		$$$I("MtgeType", "L", "Lifetime mortgage")
+		$$$I("MtgeType", "SA", "Shared appreciation mortgage")
+		$$$I("MtgeType", "SO", "Shared ownership mortgage")
+		$$$I("MtgeType", "BM", "Business loan")
+		$$$I("MtgeType", "BL", "Bridging loan")
+		$$$I("MtgeType", "GM", "Guarantor mortgage")
+		$$$I("MtgeType", "HN", "Loan to a high net worth mortgage customer")
+		$$$I("MtgeType", "BR", "Buy-to-let mortgage (regulated)")
+		$$$I("MtgeType", "LO", "Low start mortgage")
+		$$$I("MtgeType", "SB", "Self-build mortgage")
+		$$$I("MtgeType", "SE", "Secured overdraft")
+		$$$I("MtgeType", "SC", "Second charge regulated mortgage contract")
+		$$$I("MtgeType", "VN", "Contract variation with no affordability assessment")
+		$$$I("MtgeType", "RI", "Retirement interest-only mortgage")
+		$$$I("MtgeType", "NA", "Not applicable")
+
+		$$$I("TypeReversionRate", "1", "Fixed rate")
+		$$$I("TypeReversionRate", "2", "Discount")
+		$$$I("TypeReversionRate", "4", "Capped rate")
+		$$$I("TypeReversionRate", "5", "Standard variable rate")
+		$$$I("TypeReversionRate", "6", "Bank of England base rate tracker ")
+		$$$I("TypeReversionRate", "7", "LIBOR tracker")
+		$$$I("TypeReversionRate", "8", "Other tracker ")
+		$$$I("TypeReversionRate", "98", "Not applicable")
+		$$$I("TypeReversionRate", "99", "Other")
+		
+		$$$I("ValuationType", "I", "Internal inspection")
+		$$$I("ValuationType", "E", "External inspection only, including drive-by")
+		$$$I("ValuationType", "A", "Automated valuation model, indexed or desktop valuation")
+		$$$I("ValuationType", "O", "Other")
+
+		$$$I("RemtgePurpose", "N", "No extra money raised,")
+		$$$I("RemtgePurpose", "H", "Extra money raised for home improvements,")
+		$$$I("RemtgePurpose", "D", "Extra money raised for debt consolidation,")
+		$$$I("RemtgePurpose", "M", "Extra money raised for home improvements and debt consolidation,")
+		$$$I("RemtgePurpose", "O", "Other")
+		
+		$$$I("MainEmpStatus", "E", "Employed")
+		$$$I("MainEmpStatus", "S", "Self-Employed")
+		$$$I("MainEmpStatus", "R", "Retired,")
+		$$$I("MainEmpStatus", "O", "Other")
+		
+		
+		$$$I("BorrowerType", "F", "First time buyer")
+		$$$I("BorrowerType", "M", "Home movers (2nd or subsequent buyers)")
+		$$$I("BorrowerType", "R", "Remortgagors")
+		$$$I("BorrowerType", "C", "Council/registered social landlord tenant exercising their right to buy")
+		$$$I("BorrowerType", "O", "Other")
+		$$$I("BorrowerType", "N", "Not known")
+		
+		$$$I("RepayMethod", "C", "Capital and interest")
+		$$$I("RepayMethod", "M", "Mix of 'capital and interest' and 'interest only'")
+		$$$I("RepayMethod", "I", "Interest only / ISA")
+		$$$I("RepayMethod", "P", "Interest only / pension")
+		$$$I("RepayMethod", "U", "Interest only / unknown")
+		$$$I("RepayMethod", "E", "Interest only / endowment")
+		$$$I("RepayMethod", "N", "Not known")
+
+
+		$$$I("IncomeBasis", "S", "Sole income")
+		$$$I("IncomeBasis", "J", "Joint income")
+
+
+		$$$I("IncomeVerification", "Y", "Income evidenced by lender")
+		$$$I("IncomeVerification", "N", "No")
+		$$$I("IncomeVerification", "O", "Iincome evidenced by third party")
+
+		$$$I("MCOBUsed", "Y", "Yes, to existing borrower")
+		$$$I("MCOBUsed", "T", "Yes, to new borrower")
+		$$$I("MCOBUsed", "N", "No")
+
+
+		$$$I("MtgeChar", "CB", "Cashback")
+		$$$I("MtgeChar", "FF", "Flexible features (allowing overpayments and underpayments)")
+		$$$I("MtgeChar", "OS", "Offset positive and negative balances")
+		$$$I("MtgeChar", "EL", "A second charge regulated mortgage contract that is a shared equity credit agreement")
+		$$$I("MtgeChar", "RM", "A remortgage under MCOB 11.9 which does not extend into retirement")
+		$$$I("MtgeChar", "RR", "A remortgage under MCOB 11.9 which extends into retirement")
+		$$$I("MtgeChar", "L", "The loan is a lifetime mortgage")
+		$$$I("MtgeChar", "SA", "The loan is a shared appreciation mortgage")
+		$$$I("MtgeChar", "SE", "Mortgage with shared equity scheme loan attached")
+		$$$I("MtgeChar", "MI", "Mortgage with indemnity insurance attached ")
+		$$$I("MtgeChar", "NA", "Not applicable")
+
+		$$$I("BorrowerImpCredHist", "A", "Arrears")
+		$$$I("BorrowerImpCredHist", "V", "IVA")
+		$$$I("BorrowerImpCredHist", "B", "Bankruptcy")
+		$$$I("BorrowerImpCredHist", "D", "Debt relief order")
+		$$$I("BorrowerImpCredHist", "NA", "Not applicable")
+
+
+		$$$I("HowSaleMade", "F", "Direct face-to-face")
+		$$$I("HowSaleMade", "T", "Direct telephone")
+		$$$I("HowSaleMade", "E", "Direct internet")
+		$$$I("HowSaleMade", "P", "Direct post")
+		$$$I("HowSaleMade", "O", "Direct other")
+		$$$I("HowSaleMade", "I", "Intermediary")
+
+
+		$$$I("RepaymentStrategy", "E", "Endowment")
+		$$$I("RepaymentStrategy", "P", "Pension")
+		$$$I("RepaymentStrategy", "S", "Savings or investments (other than endowments and pensions)")
+		$$$I("RepaymentStrategy", "M", "Sale of mortgaged property")
+		$$$I("RepaymentStrategy", "B", "Sale of other property (e.g. buy-to-let or second home)")
+		$$$I("RepaymentStrategy", "A", "Sale of other asset")
+		$$$I("RepaymentStrategy", "C", "Occasional payments from income")
+		$$$I("RepaymentStrategy", "R", "Repaid by capital and interest (for low start mortgages)")
+		$$$I("RepaymentStrategy", "F", "Refinancing (for bridging loans)")
+		$$$I("RepaymentStrategy", "L", "Lifetime mortgage")
+		$$$I("RepaymentStrategy", "O", "Other repayment strategy")
+
+	}
+	Catch (oException)
+	{
+		Set tSC = oException.AsStatus()
+	}	
+	
+	ZN "%SYS"
+	
+	Quit tSC
+}
+
+ClassMethod InsertOnCT(pShortClassName As %String, pCode As %String, pDescription As %String) As %Status
+{
+	Set result = ##class(%SQL.Statement).%ExecDirect(, "insert or update into Canonical_CT."_pShortClassName_" (Code, Description) values (?,?)", pCode, pDescription)
+
+	If result.%SQLCODE<0
+	{
+		Quit $$$ERROR(5001, result.%Message)
+	}
+
+	Quit $$$OK
+}
+
+/// You can customize this to run code during docker build
+XData Install [ XMLNamespace = INSTALLER ]
+{
+<Manifest>
+	<Namespace Name="${Namespace}" Create="no">
+		<IfDef Var="SourceDir">
+            <Log Text="SourceDir defined - offline install from ${SourceDir}" Level="0"/>
+            <Import File="${SourceDir}" Recurse="true"/>
+        </IfDef>
+	</Namespace>
+		
+	<Log Text="Adding workflow role for demo..." Level="0"/>
+	<Invoke Class="IRISConfig.Installer" Method="AddWFRole" CheckStatus="true">
+		<Arg name="pNamespace" Value="${Namespace}"/>
+		<Arg name="pRoleName" Value="Data Stewards"/>
+	</Invoke>
+		
+	<Log Text="Adding workflow user for demo..." Level="0"/>
+	<Invoke Class="IRISConfig.Installer" Method="AddWFUser" CheckStatus="true">
+		<Arg name="pNamespace" Value="${Namespace}"/>
+		<Arg name="pUserName" Value="SuperUser"/>
+		<Arg name="pFullName" Value="Mr Anderson"/>
+		<Arg name="pRoleName" Value="Data Stewards"/>
+	</Invoke>
+	
+	<Log Text="Configuring schema registry entries for demo..." Level="0"/>
+	<Invoke Class="IRISConfig.Installer" Method="Config" CheckStatus="true">
+		<Arg name="pNamespace" Value="${Namespace}"/>
+	</Invoke>
+
+	<Log Text="Populating canonical code tables for the demo..." Level="0"/>
+	<Invoke Class="IRISConfig.Installer" Method="PopulateCT" CheckStatus="true">
+		<Arg name="pNamespace" Value="${Namespace}"/>
+	</Invoke>
+
+</Manifest>
+}
+
+}

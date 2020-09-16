@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+
+  iris: 
+    image: intersystemsdc/irisdemo-demo-finrep:iris-version-0.0.1
+    hostname: iris
+    init: true
+    container_name: iris
+    ports:
+    - "10000:52773" # 52773 is the webserver/management portal port: http://localhost:9092/csp/sys/UtilHome.csp
+    volumes:
+    - type: bind
+      source: ./MortgageSystemFiles
+      target: /MortgageSystemFiles

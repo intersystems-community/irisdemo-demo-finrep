@@ -1,0 +1,56 @@
+Class IRISDemo.Production Extends IRISDemo.BaseProduction
+{
+
+XData ProductionDefinition
+{
+<Production Name="IRISDemo.Production" TestingEnabled="true" LogGeneralTraceEvents="true">
+  <Description></Description>
+  <ActorPoolSize>2</ActorPoolSize>
+  <Item Name="Trace Operation" Category="" ClassName="IRISDemo.BO.Trace.Operation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  <Item Name="Ens.Alert" Category="" ClassName="EnsLib.EMail.AlertOperation" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  <Item Name="Mortgage Transactions Data Service" Category="" ClassName="EnsLib.RecordMap.Service.BatchFileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+    <Setting Target="Host" Name="RecordMap">Staging.RM.MortgageTrans</Setting>
+    <Setting Target="Host" Name="SynchronousSend">1</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">Normalization Process</Setting>
+    <Setting Target="Adapter" Name="ArchivePath">/MortgageSystemFiles/Trans/Done/</Setting>
+    <Setting Target="Adapter" Name="Charset">utf-8</Setting>
+    <Setting Target="Adapter" Name="ConfirmComplete">1</Setting>
+    <Setting Target="Adapter" Name="FilePath">/MortgageSystemFiles/Trans/In/</Setting>
+    <Setting Target="Host" Name="BatchClass">Staging.RM.MortgageTrans.Batch</Setting>
+    <Setting Target="Host" Name="BatchHandling">Whole</Setting>
+  </Item>
+  <Item Name="Mortgage Affordability Data Service" Category="" ClassName="EnsLib.RecordMap.Service.BatchFileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+    <Setting Target="Host" Name="RecordMap">Staging.RM.MortgageAfford</Setting>
+    <Setting Target="Host" Name="SynchronousSend">1</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">Normalization Process</Setting>
+    <Setting Target="Adapter" Name="ArchivePath">/MortgageSystemFiles/Afford/Done/</Setting>
+    <Setting Target="Adapter" Name="Charset">utf-8</Setting>
+    <Setting Target="Adapter" Name="ConfirmComplete">1</Setting>
+    <Setting Target="Adapter" Name="FilePath">/MortgageSystemFiles/Afford/In/</Setting>
+    <Setting Target="Host" Name="BatchClass">Staging.RM.MortgageAfford.Batch</Setting>
+    <Setting Target="Host" Name="BatchHandling">Whole</Setting>
+  </Item>
+  <Item Name="Mortgage Performance Data Service" Category="" ClassName="EnsLib.RecordMap.Service.BatchFileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+    <Setting Target="Host" Name="RecordMap">Staging.RM.MortgagePerf</Setting>
+    <Setting Target="Host" Name="SynchronousSend">1</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">Normalization Process</Setting>
+    <Setting Target="Adapter" Name="ArchivePath">/MortgageSystemFiles/Perf/Done/</Setting>
+    <Setting Target="Adapter" Name="Charset">utf-8</Setting>
+    <Setting Target="Adapter" Name="ConfirmComplete">1</Setting>
+    <Setting Target="Adapter" Name="FilePath">/MortgageSystemFiles/Perf/In/</Setting>
+    <Setting Target="Host" Name="BatchClass">Staging.RM.MortgagePerf.Batch</Setting>
+    <Setting Target="Host" Name="BatchHandling">Whole</Setting>
+  </Item>
+  <Item Name="Normalization Process" Category="" ClassName="Normalization.Process" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  
+  <Item Name="Data Stewards" Category="" ClassName="EnsLib.Workflow.Operation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="AutoCreateRole">1</Setting>
+  </Item>
+
+</Production>
+}
+
+}
