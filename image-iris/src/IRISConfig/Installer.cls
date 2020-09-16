@@ -16,8 +16,17 @@ ClassMethod Config(pNamespace As %String) As %Status
 		Set obj.DTLClassName="Custom.Normalization.DTL.Trans"
 		Set obj.CanonicalClassName="Canonical.Mortgage"
 		Set obj.CubeList="Mortgage"
-
 		Set tSC = obj.%Save()
+		Quit:$$$ISERR(tSC)
+
+		Set obj = ##class(Normalization.BatchJobSpec).%New()
+		Set obj.BatchClassName="Staging.RM.MortgageAfford.Batch"
+		Set obj.BatchRecordClassName="Staging.RM.MortgageAfford.Record"
+		Set obj.DTLClassName="Custom.Normalization.DTL.Afford"
+		Set obj.CanonicalClassName="Canonical.MortgageAfford"
+		Set obj.CubeList="Mortgage"
+		Set tSC = obj.%Save()
+		Quit:$$$ISERR(tSC)
 
 	}
 	Catch (oException)

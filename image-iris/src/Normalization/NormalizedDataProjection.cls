@@ -30,7 +30,9 @@ ClassMethod CreateProjection(cls As %String, ByRef params) As %Status
             Set tIndexName = oRS.GetData(1)
             Set tIndexParams = oRS.GetData(2)
 
-            Set tSC = ..UpdateCanonicalUtilityFunctions(cls, tUtilityFunctionPrefix, tIndexName_"Open", tIndexParams, bIsCodeTable)
+            Set tMethodParameters = ..ParseIndexParams(cls, tIndexParams)
+
+            Set tSC = ..UpdateCanonicalUtilityFunctions(cls, tUtilityFunctionPrefix, tIndexName_"Open", tMethodParameters, bIsCodeTable)
             Quit:$$$ISERR(tSC)
         }
     }
@@ -40,6 +42,38 @@ ClassMethod CreateProjection(cls As %String, ByRef params) As %Status
     }
     
     Quit tSC
+}
+
+ClassMethod ParseIndexParams(pClassName As %String, pProperties As %String) As %List
+{
+    Set oClassDef = ##class(%Library.CompiledClass).%OpenId(pClassName)
+    Set propertyList = ""
+    For i=1:1:$Length(pProperties,",")
+    {
+        Set tPropName = $Piece(pProperties,",",i)
+        For p=1:1:oClassDef.Properties.Count()
+        {
+            Set oProp=oClassDef.Properties.GetAt(p)
+
+            If oProp.Name=tPropName
+            {
+                If $Extract(oProp.Type,1)="%" 
+                {
+                    Set isObjectRef=0
+                }
+                Else 
+                {
+                    Set isObjectRef=1
+                }
+                
+                Set $List(propertyList,i)=$ListBuild(tPropName, isObjectRef)
+
+                Break
+            }
+        }
+    }
+
+    Quit propertyList
 }
 
 ClassMethod UpdateCanonicalUtilityFunctions(pCanonicalClassName As %String, pUtilityFunctionPrefix As %String, pOpenMethodName As %String, pMethodParameters As %String, pIsCodeTable As %Boolean) As %Status
@@ -79,32 +113,75 @@ ClassMethod UpdateCanonicalUtilityFunctions(pCanonicalClassName As %String, pUti
         Set oMethodDef.ReturnType=pCanonicalClassName
         
         Set tFormalSpec=""
-        For i=1:1:$Length(pMethodParameters,",")
+        For i=1:1:$Listlength(pMethodParameters)
         {
-            Set $Piece(tFormalSpec,",",i)=$Piece(pMethodParameters,",",i)_"="""""
+            Set tProperty=$ListGet(pMethodParameters,i)
+            Set tPropertyName=$ListGet(tProperty,1)
+
+            Set $Piece(tFormalSpec,",",i)=tPropertyName_"="""""
+            Set $Piece(tIndexOpenParameters,",",i)=tPropertyName
+            
         }
 
         Set tFormalSpec=tFormalSpec
         Set oMethodDef.FormalSpec=tFormalSpec
 
         Do oMethodDef.Implementation.Clear()
-        Set tFirstParam=$Piece(pMethodParameters,",")
+        Set tFirstParam=$ListGet($ListGet(pMethodParameters))
         //Do oMethodDef.Implementation.Write("$Select("_tFirstParam_"="""":##class("_pCanonicalClassName_").%New(), 1:##class("_pCanonicalClassName_")."_pOpenMethodName_"("_pMethodParameters_",,.pSC))")
 
         If 'pIsCodeTable
         {
+            Do oMethodDef.Implementation.WriteLine(" Set new=0")
             Do oMethodDef.Implementation.WriteLine(" If "_tFirstParam_"="""" {")
-            Do oMethodDef.Implementation.WriteLine("   Return ##class("_pCanonicalClassName_").%New()")
+            Do oMethodDef.Implementation.WriteLine("   Set obj = ##class("_pCanonicalClassName_").%New()")
+            Do oMethodDef.Implementation.WriteLine("   Set new=1")
             Do oMethodDef.Implementation.WriteLine(" } Else {")
-            Do oMethodDef.Implementation.WriteLine("   Set obj=##class("_pCanonicalClassName_")."_pOpenMethodName_"("_pMethodParameters_")")
-            Do oMethodDef.Implementation.WriteLine("   If obj="""" Return ##class("_pCanonicalClassName_").%New()")
-            Do oMethodDef.Implementation.WriteLine("   Return obj")
+            
+            Do oMethodDef.Implementation.Write("   Set obj=##class("_pCanonicalClassName_")."_pOpenMethodName_"(")
+            
+            For i=1:1:$Listlength(pMethodParameters)
+            {
+                Set tProperty=$ListGet(pMethodParameters,i)
+                Set tPropertyName=$ListGet(tProperty,1)
+                Set isObjectRef=$ListGet(tProperty,2)
+
+                If 'isObjectRef
+                {
+                    Do oMethodDef.Implementation.Write(tPropertyName)    
+                }
+                Else 
+                {
+                    Do oMethodDef.Implementation.Write(tPropertyName_".%Id()") 
+                }
+
+                If i<$Listlength(pMethodParameters) Do oMethodDef.Implementation.Write(", ")
+                
+            }
+            Do oMethodDef.Implementation.WriteLine(")")
+
+            Do oMethodDef.Implementation.WriteLine("   If obj="""" { ")
+            Do oMethodDef.Implementation.WriteLine("     Set obj = ##class("_pCanonicalClassName_").%New()")
+            Do oMethodDef.Implementation.WriteLine("     Set new=1")
+            Do oMethodDef.Implementation.WriteLine("   }")
             Do oMethodDef.Implementation.WriteLine(" }")
+            Do oMethodDef.Implementation.WriteLine(" If new {")
+            For i=1:1:$Listlength(pMethodParameters)
+            {
+                Set tProperty=$ListGet(pMethodParameters,i)
+                Set tPropertyName=$ListGet(tProperty,1)
+                Set isObjectRef=$ListGet(tProperty,2)
+
+                Do oMethodDef.Implementation.WriteLine("   Set obj."_tPropertyName_"="_tPropertyName)                
+            }
+            Do oMethodDef.Implementation.WriteLine(" }")
+            Do oMethodDef.Implementation.WriteLine(" Return obj")
+            
         }
         Else
         {
             Do oMethodDef.Implementation.WriteLine(" If "_tFirstParam_"="""" Return """"")
-            Do oMethodDef.Implementation.WriteLine(" Set obj=##class("_pCanonicalClassName_")."_pOpenMethodName_"("_pMethodParameters_",,.tSC)")
+            Do oMethodDef.Implementation.WriteLine(" Set obj=##class("_pCanonicalClassName_")."_pOpenMethodName_"("_tIndexOpenParameters_",,.tSC)")
             Do oMethodDef.Implementation.WriteLine(" If $$$ISERR(tSC) Throw ##class(%Exception.StatusException).CreateFromStatus(tSC)")
             Do oMethodDef.Implementation.WriteLine(" Return obj")
         }

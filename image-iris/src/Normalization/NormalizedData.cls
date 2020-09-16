@@ -2,10 +2,10 @@ Class Normalization.NormalizedData Extends (%Persistent, %XML.Adaptor) [ NoExten
 {
 
 /// For data lineage
-Property %BatchControlRecord As Normalization.BatchControlRecord [ Required ];
+Property %BatchControlRecord As Normalization.BatchControlRecord;
 
 /// For data lineage
-Property %OriginalBatchRecordId As %String [ Required ];
+Property %OriginalBatchRecordId As %String;
 
 /// For logical deletes. Cubes should not consider this record when building
 Property %BatchRecordStatus As %String(DISPLAYLIST = ",Processing,Error,Discarded,Available,Replaced", VALUELIST = ",1,2,3,7,9") [ InitialExpression = 1, Required ];

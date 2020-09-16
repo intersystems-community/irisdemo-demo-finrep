@@ -11,8 +11,6 @@ XData DTL [ XMLNamespace = "http://www.intersystems.com/dtl" ]
 {
 <transform sourceClass='Staging.RM.MortgageTrans.Record' targetClass='Canonical.Mortgage' create='new' language='objectscript' >
 <assign value='##class(Canonical.UtilityFunctions).Mortgage(source.LegacyFirmId,source.LegacyTransId)' property='target' action='set' />
-<assign value='source.LegacyFirmId' property='target.FirmId' action='set' />
-<assign value='source.LegacyTransId' property='target.TransactionId' action='set' />
 <assign value='$ZDateH(source.LegacyAsOfDate,3)' property='target.AsOfDate' action='set' />
 <assign value='$ZDateH(source.LegacyAcctOpen,3)' property='target.AcctOpenDate' action='set' />
 <assign value='##class(Canonical.CT.UtilityFunctions).CTBorrowerType(source.LegacyBorrowerType)' property='target.BorrowerType' action='set' />
