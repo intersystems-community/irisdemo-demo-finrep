@@ -88,8 +88,7 @@ Method ChangeToReplacedStatus() As %Status
     {
         TStart 
 
-        Set ..ProcessingStatus=9 //Error
-        Set ..BatchControl.LastProcessingStatus=..ProcessingStatus
+        Set ..ProcessingStatus=9 //Replaced
 
         Set tSC = $ClassMethod(..CanonicalClassName, "ChangeBatchRecordStatus", ..%Id(), ..ProcessingStatus)
         Quit:$$$ISERR(tSC)
