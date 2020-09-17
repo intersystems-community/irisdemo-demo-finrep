@@ -3,6 +3,28 @@ Include %occInclude
 Class IRISConfig.Installer Extends IRISConfig.InstallerBase
 {
 
+ClassMethod ConfigIRIS() As %Status
+{
+	Set tSC = $$$OK
+	Try
+	{
+		Set tSC=##Class(Config.config).Get(.Properties)
+		Quit:$$$ISERR(tSC)
+
+		// the default is 262144Kb (256*1024 = 256Mb). 
+		// I am increasing it to 512Mb
+		Set Properties("bbsiz")=512*1024
+
+		Set tSC=##Class(Config.config).Modify(.Properties)
+	}
+	Catch (oException)
+	{
+		Set tSC = oException.AsStatus()
+	}	
+		
+	Quit tSC
+}
+
 ClassMethod Config(pNamespace As %String) As %Status
 {
 	Set tSC = $$$OK
@@ -15,7 +37,7 @@ ClassMethod Config(pNamespace As %String) As %Status
 		Set obj.BatchRecordClassName="Staging.RM.MortgageTrans.Record"
 		Set obj.DTLClassName="Custom.Normalization.DTL.Trans"
 		Set obj.CanonicalClassName="Canonical.Mortgage"
-		Set obj.CubeList="Mortgage"
+		Set obj.CubeList="MortgageSales"
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
 
@@ -24,7 +46,7 @@ ClassMethod Config(pNamespace As %String) As %Status
 		Set obj.BatchRecordClassName="Staging.RM.MortgageAfford.Record"
 		Set obj.DTLClassName="Custom.Normalization.DTL.Afford"
 		Set obj.CanonicalClassName="Canonical.MortgageAfford"
-		Set obj.CubeList="Mortgage"
+		Set obj.CubeList="MortgageSales"
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
 
@@ -82,13 +104,13 @@ ClassMethod PopulateCT(pNamespace As %String) As %Status
 		$$$I("MtgeType", "RI", "Retirement interest-only mortgage")
 		$$$I("MtgeType", "NA", "Not applicable")
 
-		$$$I("TypeReversionRate", "1", "Fixed rate")
-		$$$I("TypeReversionRate", "2", "Discount")
-		$$$I("TypeReversionRate", "4", "Capped rate")
-		$$$I("TypeReversionRate", "5", "Standard variable rate")
-		$$$I("TypeReversionRate", "6", "Bank of England base rate tracker ")
-		$$$I("TypeReversionRate", "7", "LIBOR tracker")
-		$$$I("TypeReversionRate", "8", "Other tracker ")
+		$$$I("TypeReversionRate", "01", "Fixed rate")
+		$$$I("TypeReversionRate", "02", "Discount")
+		$$$I("TypeReversionRate", "04", "Capped rate")
+		$$$I("TypeReversionRate", "05", "Standard variable rate")
+		$$$I("TypeReversionRate", "06", "Bank of England base rate tracker ")
+		$$$I("TypeReversionRate", "07", "LIBOR tracker")
+		$$$I("TypeReversionRate", "08", "Other tracker ")
 		$$$I("TypeReversionRate", "98", "Not applicable")
 		$$$I("TypeReversionRate", "99", "Other")
 		
@@ -233,6 +255,10 @@ XData Install [ XMLNamespace = INSTALLER ]
 	<Log Text="Populating canonical code tables for the demo..." Level="0"/>
 	<Invoke Class="IRISConfig.Installer" Method="PopulateCT" CheckStatus="true">
 		<Arg name="pNamespace" Value="${Namespace}"/>
+	</Invoke>
+
+	<Log Text="Configuring IRIS..." Level="0"/>
+	<Invoke Class="IRISConfig.Installer" Method="ConfigIRIS" CheckStatus="true">
 	</Invoke>
 
 </Manifest>

@@ -7,6 +7,8 @@ Property %BatchControlRecord As Normalization.BatchControlRecord;
 /// For data lineage
 Property %OriginalBatchRecordId As %String;
 
+Property %LastChanged As %TimeStamp [ InitialExpression = {$ZDateTime($ZTimeStamp,3)}, Required ];
+
 /// For logical deletes. Cubes should not consider this record when building
 Property %BatchRecordStatus As %String(DISPLAYLIST = ",Processing,Error,Discarded,Available,Replaced", VALUELIST = ",1,2,3,7,9") [ InitialExpression = 1, Required ];
 
@@ -16,6 +18,13 @@ Projection NormalizedDataProjection As Normalization.NormalizedDataProjection;
 Index BatchControlRecordIndex On %BatchControlRecord;
 
 Index BatchRecordStatusIndex On %BatchRecordStatus;
+
+Method Touch() As %Status
+{
+    Set %LastChanged = $ZDateTime($ZTimeStamp,3)
+
+    Quit $$$OK
+}
 
 ClassMethod ChangeBatchRecordStatus(pBatchControlRecordId As %String, pBatchRecordStatus As %Integer) As %Status [ CodeMode = objectgenerator ]
 {

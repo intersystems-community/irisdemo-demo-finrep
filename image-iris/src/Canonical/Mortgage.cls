@@ -1,6 +1,18 @@
 Class Canonical.Mortgage Extends Normalization.NormalizedData
 {
 
+Property Affordability As Canonical.MortgageAfford [ Calculated, SqlComputeCode = { 
+    Set idMortgageAfford=""
+    Set idMortgage={ID}
+
+    &sql(select top 1 ID into :idMortgageAfford 
+            from Canonical.MortgageAfford 
+            where Mortgage=:idMortgage 
+            and AsOfDate >= (select max(AsOfDate) from Canonical.MortgageAfford 
+                             where Mortgage=:idMortgage))
+    Set {*} = idMortgageAfford
+}, SqlComputed ];
+
 Property AsOfDate As %Date [ SqlColumnNumber = 2 ];
 
 Property FirmId As %String [ SqlColumnNumber = 3 ];
@@ -173,235 +185,235 @@ Storage Default
 <Value>%BatchRecordStatus</Value>
 </Value>
 <Value name="5">
-<Value>AcctOpenDate</Value>
+<Value>TransactionId</Value>
 </Value>
 <Value name="6">
-<Value>BorrowerType</Value>
+<Value>AcctOpenDate</Value>
 </Value>
 <Value name="7">
-<Value>LoanAmt</Value>
+<Value>BorrowerType</Value>
 </Value>
 <Value name="8">
-<Value>PrimaryDateOfBirth</Value>
+<Value>LoanAmt</Value>
 </Value>
 <Value name="9">
-<Value>SecondaryDateOfBirth</Value>
+<Value>PrimaryDateOfBirth</Value>
 </Value>
 <Value name="10">
-<Value>PrimaryBorrowerCCJValue</Value>
+<Value>SecondaryDateOfBirth</Value>
 </Value>
 <Value name="11">
-<Value>SecondaryBorrowerCCJValue</Value>
+<Value>PrimaryBorrowerCCJValue</Value>
 </Value>
 <Value name="12">
-<Value>InitialGrossIntRate</Value>
+<Value>SecondaryBorrowerCCJValue</Value>
 </Value>
 <Value name="13">
-<Value>PrincipalOrNetworkFirmId</Value>
+<Value>InitialGrossIntRate</Value>
 </Value>
 <Value name="14">
-<Value>MtgeCharacteristic1</Value>
+<Value>PrincipalOrNetworkFirmId</Value>
 </Value>
 <Value name="15">
-<Value>MtgeCharacteristic2</Value>
+<Value>MtgeCharacteristic1</Value>
 </Value>
 <Value name="16">
-<Value>MtgeCharacteristic3</Value>
+<Value>MtgeCharacteristic2</Value>
 </Value>
 <Value name="17">
-<Value>MtgeCharacteristic4</Value>
+<Value>MtgeCharacteristic3</Value>
 </Value>
 <Value name="18">
-<Value>MtgeCharacteristic5</Value>
+<Value>MtgeCharacteristic4</Value>
 </Value>
 <Value name="19">
-<Value>IntRateType</Value>
+<Value>MtgeCharacteristic5</Value>
 </Value>
 <Value name="20">
-<Value>PropertyValue</Value>
+<Value>IntRateType</Value>
 </Value>
 <Value name="21">
-<Value>PrimaryBorrowerCrdHist1</Value>
+<Value>PropertyValue</Value>
 </Value>
 <Value name="22">
-<Value>PrimaryBorrowerCrdHist2</Value>
+<Value>PrimaryBorrowerCrdHist1</Value>
 </Value>
 <Value name="23">
-<Value>PrimaryBorrowerCrdHist3</Value>
+<Value>PrimaryBorrowerCrdHist2</Value>
 </Value>
 <Value name="24">
-<Value>PrimaryBorrowerCrdHist4</Value>
+<Value>PrimaryBorrowerCrdHist3</Value>
 </Value>
 <Value name="25">
-<Value>SecondaryBorrowerCrdHist1</Value>
+<Value>PrimaryBorrowerCrdHist4</Value>
 </Value>
 <Value name="26">
-<Value>SecondaryBorrowerCrdHist2</Value>
+<Value>SecondaryBorrowerCrdHist1</Value>
 </Value>
 <Value name="27">
-<Value>SecondaryBorrowerCrdHist3</Value>
+<Value>SecondaryBorrowerCrdHist2</Value>
 </Value>
 <Value name="28">
-<Value>SecondaryBorrowerCrdHist4</Value>
+<Value>SecondaryBorrowerCrdHist3</Value>
 </Value>
 <Value name="29">
-<Value>IncentiveRateEndDate</Value>
+<Value>SecondaryBorrowerCrdHist4</Value>
 </Value>
 <Value name="30">
-<Value>NewDwelling</Value>
+<Value>IncentiveRateEndDate</Value>
 </Value>
 <Value name="31">
-<Value>AdvisedSale</Value>
+<Value>NewDwelling</Value>
 </Value>
 <Value name="32">
-<Value>PropertyPostCode</Value>
+<Value>AdvisedSale</Value>
 </Value>
 <Value name="33">
-<Value>MtgeTerm</Value>
+<Value>PropertyPostCode</Value>
 </Value>
 <Value name="34">
-<Value>PurchasePrice</Value>
+<Value>MtgeTerm</Value>
 </Value>
 <Value name="35">
-<Value>IncomeBasisType</Value>
+<Value>PurchasePrice</Value>
 </Value>
 <Value name="36">
-<Value>ERCEndDate</Value>
+<Value>IncomeBasisType</Value>
 </Value>
 <Value name="37">
-<Value>HowSaleMade</Value>
+<Value>ERCEndDate</Value>
 </Value>
 <Value name="38">
-<Value>ReversionRateType</Value>
+<Value>HowSaleMade</Value>
 </Value>
 <Value name="39">
-<Value>GovtInitiative</Value>
+<Value>ReversionRateType</Value>
 </Value>
 <Value name="40">
-<Value>RepayMethod</Value>
+<Value>GovtInitiative</Value>
 </Value>
 <Value name="41">
-<Value>RepayStrat1</Value>
+<Value>RepayMethod</Value>
 </Value>
 <Value name="42">
-<Value>RepayStrat2</Value>
+<Value>RepayStrat1</Value>
 </Value>
 <Value name="43">
-<Value>RepayStrat3</Value>
+<Value>RepayStrat2</Value>
 </Value>
 <Value name="44">
-<Value>RepayStrat4</Value>
+<Value>RepayStrat3</Value>
 </Value>
 <Value name="45">
-<Value>RepayStrat5</Value>
+<Value>RepayStrat4</Value>
 </Value>
 <Value name="46">
-<Value>RepayStrat6</Value>
+<Value>RepayStrat5</Value>
 </Value>
 <Value name="47">
-<Value>RepayStrat7</Value>
+<Value>RepayStrat6</Value>
 </Value>
 <Value name="48">
-<Value>RepayStrat8</Value>
+<Value>RepayStrat7</Value>
 </Value>
 <Value name="49">
-<Value>RepayStrat9</Value>
+<Value>RepayStrat8</Value>
 </Value>
 <Value name="50">
-<Value>RepayStrat10</Value>
+<Value>RepayStrat9</Value>
 </Value>
 <Value name="51">
-<Value>RepayStrat11</Value>
+<Value>RepayStrat10</Value>
 </Value>
 <Value name="52">
-<Value>PercentageIO</Value>
+<Value>RepayStrat11</Value>
 </Value>
 <Value name="53">
-<Value>InterestRollUp</Value>
+<Value>PercentageIO</Value>
 </Value>
 <Value name="54">
-<Value>ValuationType</Value>
+<Value>InterestRollUp</Value>
 </Value>
 <Value name="55">
-<Value>MoneyWithdrawn</Value>
+<Value>ValuationType</Value>
 </Value>
 <Value name="56">
-<Value>DebtConsolidationAmt</Value>
+<Value>MoneyWithdrawn</Value>
 </Value>
 <Value name="57">
-<Value>EarlyRepaymentCharge</Value>
+<Value>DebtConsolidationAmt</Value>
 </Value>
 <Value name="58">
-<Value>Currency</Value>
+<Value>EarlyRepaymentCharge</Value>
 </Value>
 <Value name="59">
-<Value>CustomerPct</Value>
+<Value>Currency</Value>
 </Value>
 <Value name="60">
-<Value>TotalLoanAvailable</Value>
+<Value>CustomerPct</Value>
 </Value>
 <Value name="61">
-<Value>LenderFee</Value>
+<Value>TotalLoanAvailable</Value>
 </Value>
 <Value name="62">
-<Value>IntermediaryFee</Value>
+<Value>LenderFee</Value>
 </Value>
 <Value name="63">
-<Value>ProcurationFee</Value>
+<Value>IntermediaryFee</Value>
 </Value>
 <Value name="64">
-<Value>TotalFeesCharges</Value>
+<Value>ProcurationFee</Value>
 </Value>
 <Value name="65">
-<Value>MtgeType1</Value>
+<Value>TotalFeesCharges</Value>
 </Value>
 <Value name="66">
-<Value>MtgeType2</Value>
+<Value>MtgeType1</Value>
 </Value>
 <Value name="67">
-<Value>MtgeType3</Value>
+<Value>MtgeType2</Value>
 </Value>
 <Value name="68">
-<Value>MtgeType4</Value>
+<Value>MtgeType3</Value>
 </Value>
 <Value name="69">
-<Value>MtgeType5</Value>
+<Value>MtgeType4</Value>
 </Value>
 <Value name="70">
-<Value>MtgeType6</Value>
+<Value>MtgeType5</Value>
 </Value>
 <Value name="71">
-<Value>MtgeType7</Value>
+<Value>MtgeType6</Value>
 </Value>
 <Value name="72">
-<Value>MtgeType8</Value>
+<Value>MtgeType7</Value>
 </Value>
 <Value name="73">
-<Value>MtgeType9</Value>
+<Value>MtgeType8</Value>
 </Value>
 <Value name="74">
-<Value>MtgeType10</Value>
+<Value>MtgeType9</Value>
 </Value>
 <Value name="75">
-<Value>MtgeType11</Value>
+<Value>MtgeType10</Value>
 </Value>
 <Value name="76">
-<Value>RemtgePurpose1</Value>
+<Value>MtgeType11</Value>
 </Value>
 <Value name="77">
-<Value>RemtgePurpose2</Value>
+<Value>RemtgePurpose1</Value>
 </Value>
 <Value name="78">
-<Value>RemtgePurpose3</Value>
+<Value>RemtgePurpose2</Value>
 </Value>
 <Value name="79">
-<Value>AsOfDate</Value>
+<Value>RemtgePurpose3</Value>
 </Value>
 <Value name="80">
-<Value>FirmId</Value>
+<Value>AsOfDate</Value>
 </Value>
 <Value name="81">
-<Value>TransactionId</Value>
+<Value>FirmId</Value>
 </Value>
 </Data>
 <DataLocation>^Canonical.MortgageD</DataLocation>

@@ -182,7 +182,10 @@ ClassMethod UpdateCanonicalUtilityFunctions(pCanonicalClassName As %String, pUti
         {
             Do oMethodDef.Implementation.WriteLine(" If "_tFirstParam_"="""" Return """"")
             Do oMethodDef.Implementation.WriteLine(" Set obj=##class("_pCanonicalClassName_")."_pOpenMethodName_"("_tIndexOpenParameters_",,.tSC)")
-            Do oMethodDef.Implementation.WriteLine(" If $$$ISERR(tSC) Throw ##class(%Exception.StatusException).CreateFromStatus(tSC)")
+            Do oMethodDef.Implementation.WriteLine(" If $$$ISERR(tSC) { ")
+            Do oMethodDef.Implementation.WriteLine("    Set tSC = $System.Status.AppendStatus(tSC, $$$ERROR(5001,""Could not find entry on table "_pCanonicalClassName_".""))")
+            Do oMethodDef.Implementation.WriteLine("    Throw ##class(%Exception.StatusException).CreateFromStatus(tSC)")
+            Do oMethodDef.Implementation.WriteLine(" }")
             Do oMethodDef.Implementation.WriteLine(" Return obj")
         }
         Set tSC = oClassDef.%Save(1)

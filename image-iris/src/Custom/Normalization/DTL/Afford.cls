@@ -19,7 +19,7 @@ XData DTL [ XMLNamespace = "http://www.intersystems.com/dtl" ]
 <assign value='##class(Canonical.CT.UtilityFunctions).CTIncomeVerification(source.LegacyIncomeVerification)' property='target.IncomeVerification' action='set' />
 <assign value='source.LegacyMtgeProtection' property='target.MtgeProtection' action='set' />
 <assign value='##class(Canonical.CT.UtilityFunctions).CTMainEmpStatus(source.LegacyPrimaryEmpStatus)' property='target.PrimaryEmpStatus' action='set' />
-<assign value='##class(Canonical.CT.UtilityFunctions).CTMainEmpStatus(##class(Canonical.CT.UtilityFunctions).CTMCOBUsed(source.LegacySecondaryEmpStatus))' property='target.SecondaryEmpStatus' action='set' />
+<assign value='##class(Canonical.CT.UtilityFunctions).CTMainEmpStatus(source.LegacySecondaryEmpStatus)' property='target.SecondaryEmpStatus' action='set' />
 <assign value='source.LegacyNumHabitableRooms' property='target.NumHabitableRooms' action='set' />
 <assign value='source.LegacyGarage' property='target.HasGarage' action='set' />
 <assign value='##class(Canonical.CT.UtilityFunctions).CTMCOBUsed(source.LegacyMCOBUsed)' property='target.MtgeConductOfBusinessUsed' action='set' />
