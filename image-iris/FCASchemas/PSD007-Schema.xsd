@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+    ***************************************************************************************************************
+    *                                                                 
+    *    Schema for: Data Item PSD007-Mortgage Performance Sales Data                   
+    *                                                                 
+    *    Version:       3.0                                      
+    *    Date:          22/10/2019 
+    *
+    *    Dependencies: 	Version 12 CommonTypes-Schema.xsd                                                           
+    *    
+    *    History:       Version 3.0 issued following PS19/23 FCA and PRA changes to mortgage reporting requirements
+    *                   - New element "BeneficialOwnerRegFirm"
+    *                   - New element "BeneficialOwnerFRN"
+    *                   - New element "BeneficialOwnerName"
+    *                   - New element "LegalOwnerRegFirm"
+    *                   - New element "LegalOwnerFRN"
+    *                   - New element "LegalOwnerName"
+    *                   - New element "ClosedBook"
+    *
+    *                   Version 2.0 issued following PS15/9 Implementation of Mortgage Credit Directive (MCD)
+    *                   - New element "SecondChargeMortgage"
+    *                                                                 
+    ****************************************************************************************************************
+-->
+<xs:schema 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    
+    targetNamespace="urn:fsa-gov-uk:MER:PSD007:3"
+    xmlns="urn:fsa-gov-uk:MER:PSD007:3" 
+    xmlns:mer-meta="urn:fsa-gov-uk:MER:Meta-Data:1"
+    
+    version="3.0"
+    id="MER-PSD007">
+
+    <xs:annotation>
+        <xs:documentation>
+            <mer-meta:DataItemReference>PSD007</mer-meta:DataItemReference>
+            <mer-meta:DataItemName>Mortgage Performance Sales Data</mer-meta:DataItemName>
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:include schemaLocation="./CommonTypes-Schema.xsd"/>
+
+    <xs:element name="PSD007-MortgagePerformanceSalesData">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="PSDFeedHeader" minOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Submitter" minOccurs="1">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="SubmittingFirm"       type="FRNType" minOccurs="1"/>
+                                    </xs:sequence>
+                                </xs:complexType>                              
+                            </xs:element>
+                            <xs:element name="ReportDetails" minOccurs="1">
+                               <xs:complexType>
+                                   <xs:sequence>
+                                       <xs:element name="ReportCreationDate" type="xs:date" minOccurs="1"/>
+                                       <xs:element name="ReportIdentifier" type="String100Type" minOccurs="1"/>
+                                   </xs:sequence>
+                               </xs:complexType> 
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>                    
+                </xs:element> 
+                <xs:element name="PSD007FeedMsg" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>Defines the individual transactions to be reported</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="CoreItems" minOccurs="1">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="AdminFRN"                 type="FRNType"                  minOccurs="0"/>
+                                        <xs:element name="Postcode"                 type="PostCodeType"             minOccurs="1"/>
+                                        <xs:element name="MainDOB"                  type="xs:date"                  minOccurs="1"/>
+                                        <xs:element name="AcctOpenedDate"           type="xs:date"                  minOccurs="0"/>
+                                        <xs:element name="TransRef"                 type="String100Type"            minOccurs="1"/>
+                                        <xs:element name="DateofBalance"            type="xs:date"                  minOccurs="1"/>
+                                        <xs:element name="LoanPurchase"             type="YNType"                   minOccurs="1"/>
+                                        <xs:element name="OrigLoanSize"             type="NonNegativeMonetaryType"  minOccurs="0"/>
+                                        <xs:element name="OrigLoanTerm"             type="NonNegativeIntegerType"   minOccurs="0"/>
+                                        <xs:element name="OrigProviderFRN"          type="FRNType"                  minOccurs="0"/>
+                                        <xs:element name="BeneficialOwnerRegFirm"   type="YNType"                   minOccurs="1"/>
+                                        <xs:element name="BeneficialOwnerFRN"       type="FRNType"                  minOccurs="0"/>
+                                        <xs:element name="BeneficialOwnerName"      type="String100Type"            minOccurs="0"/>
+                                        <xs:element name="LegalOwnerRegFirm"        type="YNType"                   minOccurs="1"/>
+                                        <xs:element name="LegalOwnerFRN"            type="FRNType"                  minOccurs="0"/>
+                                        <xs:element name="LegalOwnerName"           type="String100Type"            minOccurs="0"/>
+                                        <xs:element name="Cancellation"             type="xs:boolean"               minOccurs="0"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element> 
+                            <xs:element name="PerformanceSalesData" minOccurs="1">
+                               <xs:complexType>
+                                   <xs:sequence>
+                                       <xs:element name="OutstandingBalance"    type="MonetaryType"            minOccurs="1"/>
+                                       <xs:element name="MonthlyPayment"        type="NonNegativeMonetaryType" minOccurs="1"/>
+                                       <xs:element name="ValueLinkedAccounts"   type="MonetaryType"            minOccurs="1"/>
+                                       <xs:element name="GrossInterestCharged"  type="PercentDP2Type"          minOccurs="1"/>
+                                       <xs:element name="TypeIntRate"                                          minOccurs="1">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="01"/>
+                                                   <xs:enumeration value="02"/>
+                                                   <xs:enumeration value="04"/>
+                                                   <xs:enumeration value="05"/>
+                                                   <xs:enumeration value="06"/>
+                                                   <xs:enumeration value="07"/>
+                                                   <xs:enumeration value="08"/>
+                                                   <xs:enumeration value="99"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>
+                                       </xs:element>                                       
+                                       <xs:element name="IncentivisedRate"      type="YNType"                  minOccurs="1"/>
+                                       <xs:element name="DateIncentiveEnds"     type="xs:date"                 minOccurs="0"/>
+                                       <xs:element name="RemainingTerm"         type="NonNegativeIntegerType"  minOccurs="1"/>
+                                       <xs:element name="MonthsPastMaturity"    type="NonNegativeIntegerType"  minOccurs="1"/>
+                                       <xs:element name="RepaymentMethod"                                      minOccurs="1">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="C"/>
+                                                   <xs:enumeration value="I"/>
+                                                   <xs:enumeration value="M"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>
+                                       </xs:element>                                            
+                                       <xs:element name="ReasonForClosure"                                     minOccurs="0">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="R"/>
+                                                   <xs:enumeration value="M"/>
+                                                   <xs:enumeration value="P"/>
+                                                   <xs:enumeration value="A"/>
+                                                   <xs:enumeration value="V"/>
+                                                   <xs:enumeration value="O"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>                                           
+                                       </xs:element>                                                                            
+                                       <xs:element name="CurrentPaymentShortfall"           type="NonNegativeMonetaryType"  minOccurs="1"/>
+                                       <xs:element name="ArrearsStartDate"                  type="xs:date"                  minOccurs="0"/>
+                                       <xs:element name="PaymentShortfallArrangement"       type="YNType"                   minOccurs="1"/>
+                                       <xs:element name="DateFormalArrangement"             type="xs:date"                  minOccurs="0"/>
+                                       <xs:element name="PaymentShortfallCapitalisation"    type="YNType"                   minOccurs="1"/>
+                                       <xs:element name="CapitalisationDate"                type="xs:date"                  minOccurs="0"/>
+                                       <xs:element name="SwitchInterestOnly"                type="YNType"                   minOccurs="1"/>
+                                       <xs:element name="InterestOnlyDate"                  type="xs:date"                  minOccurs="0"/>
+                                       <xs:element name="PaymentsSuspended"                 type="YNType"                   minOccurs="1"/>
+                                       <xs:element name="DatesPaymentsSuspended"            type="xs:date"                  minOccurs="0"/>
+                                       <xs:element name="ReducedPayments"                   type="YNType"                   minOccurs="1"/>
+                                       <xs:element name="DateReducedPayments"               type="xs:date"                  minOccurs="0"/>
+                                       <xs:element name="TermExtension"                     type="YNType"                   minOccurs="1"/>
+                                       <xs:element name="DateTermExtension"                 type="xs:date"                  minOccurs="0"/>
+                                       <xs:element name="OtherForbearance"                  type="YNType"                   minOccurs="1"/>
+                                       <xs:element name="DateOtherForbearance"              type="xs:date"                  minOccurs="0"/>
+                                       <xs:element name="DateLitigationStarted"             type="xs:date"                  minOccurs="0"/>
+                                       <xs:element name="PossessionOrder"                   type="YNType"                   minOccurs="1"/>
+                                       <xs:element name="DatePossession"                    type="xs:date"                  minOccurs="0"/>
+                                       <xs:element name="RepossessionSaleValueAchieved"     type="MonetaryType"             minOccurs="0"/>
+                                       <xs:element name="SecondChargeMortgage"              type="YNType"                   minOccurs="0"/>
+                                       <xs:element name="ClosedBook"                        type="YNType"                   minOccurs="1"/>
+                                   </xs:sequence>
+                               </xs:complexType> 
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>                    
+            <xs:attribute name="currency" fixed="GBP" use="required"/>
+        </xs:complexType>
+    </xs:element> 
+</xs:schema>

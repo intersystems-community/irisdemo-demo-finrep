@@ -25,6 +25,36 @@ ClassMethod ConfigIRIS() As %Status
 	Quit tSC
 }
 
+ClassMethod LoadFCAXMLSchemas() As %Status
+{
+	Set tSC = $$$OK
+	Try
+	{
+		ZN "APPINT"
+
+		Set tSC = ##class(EnsLib.EDI.XML.SchemaXSD).ImportFiles("/tmp/FCASchemas/CommonTypes-Schema.xsd")
+		Quit:$$$ISERR(tSC)
+
+		Set tSC = ##class(EnsLib.EDI.XML.SchemaXSD).ImportFiles("/tmp/FCASchemas/FSAFeedCommon-v1-2.xsd")
+		Quit:$$$ISERR(tSC)
+
+		Set tSC = ##class(EnsLib.EDI.XML.SchemaXSD).ImportFiles("/tmp/FCASchemas/PSD007-Schema.xsd")
+		Quit:$$$ISERR(tSC)
+
+		Set tSC = ##class(EnsLib.EDI.XML.SchemaXSD).ImportFiles("/tmp/FCASchemas/psd001-schema-v2-2.xsd")
+		Quit:$$$ISERR(tSC)
+
+	}
+	Catch (oException)
+	{
+		Set tSC = oException.AsStatus()
+	}	
+	
+	ZN "%SYS"
+
+	Quit tSC
+}
+
 ClassMethod Config(pNamespace As %String) As %Status
 {
 	Set tSC = $$$OK
@@ -259,6 +289,10 @@ XData Install [ XMLNamespace = INSTALLER ]
 
 	<Log Text="Configuring IRIS..." Level="0"/>
 	<Invoke Class="IRISConfig.Installer" Method="ConfigIRIS" CheckStatus="true">
+	</Invoke>
+
+	<Log Text="Loading FCA XML Schemas..." Level="0"/>
+	<Invoke Class="IRISConfig.Installer" Method="LoadFCAXMLSchemas" CheckStatus="true">
 	</Invoke>
 
 </Manifest>

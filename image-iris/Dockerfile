@@ -11,6 +11,8 @@ ARG IRIS_PROJECT_FOLDER_NAME=src
 # Adding source code that will be loaded by the installer
 ADD --chown=irisowner:irisuser ./${IRIS_PROJECT_FOLDER_NAME}/ $IRIS_APP_SOURCEDIR
 
+ADD --chown=irisowner:irisuser ./FCASchemas/ /tmp/FCASchemas/
+
 # Running the installer. This will load the source from our project.
 RUN /usr/irissys/demo/irisdemoinstaller.sh 
 

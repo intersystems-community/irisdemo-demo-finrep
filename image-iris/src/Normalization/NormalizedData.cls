@@ -7,8 +7,6 @@ Property %BatchControlRecord As Normalization.BatchControlRecord;
 /// For data lineage
 Property %OriginalBatchRecordId As %String;
 
-Property %LastChanged As %TimeStamp [ InitialExpression = {$ZDateTime($ZTimeStamp,3)}, Required ];
-
 /// For logical deletes. Cubes should not consider this record when building
 Property %BatchRecordStatus As %String(DISPLAYLIST = ",Processing,Error,Discarded,Available,Replaced", VALUELIST = ",1,2,3,7,9") [ InitialExpression = 1, Required ];
 

@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+    *******************************************************************************************************************
+    *                                                                 
+    *    Schema for:    Data Item PSD001-Mortgage Product Sales Data                   
+    *                                                                 
+    *    Version:       2.2                                      
+    *    Date:          05/11/2019
+    *
+    *    Dependencies: 	Version 10 CommonTypes-Schema.xsd & FSAFeedCommon-v1-2.xsd                                                          
+    *    
+    *    History:    	Version 2.2 issued following PS19/27 Changes to mortgage responsible lending rules and guidance
+    *                   - RM and RR added to "MtgeChar"
+    
+    *                   Version 2.1 issued following Handbook Instrument FCA 2018/28
+    *                   - RI added to "MortgageType"
+    *
+    *                   Version 2.0 issued following PS15/9 Implementation of Mortgage Credit Directive (MCD)
+    *                   - SC added to "MortgageType"
+    *                   - EL added to "MtgeChar"
+    *                                                                 
+    ********************************************************************************************************************
+  
+-->
+<xs:schema 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    xmlns:cmn="http://www.fsa.gov.uk/XMLSchema/FSAFeedCommon-v1-2" 
+    targetNamespace="http://www.fsa.gov.uk/XMLSchema/FSAHSFFeedMG-v2"
+    xmlns="http://www.fsa.gov.uk/XMLSchema/FSAHSFFeedMG-v2" 
+    xmlns:mer-meta="urn:fsa-gov-uk:MER:Meta-Data:1" 
+    
+    version="2.0"
+    id="FSAHSFFeedMG-v2">
+
+    <xs:annotation>
+        <xs:documentation>
+            <mer-meta:DataItemReference>PSD001</mer-meta:DataItemReference>
+            <mer-meta:DataItemName>Product Sales Data - Mortgage</mer-meta:DataItemName>
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:include schemaLocation="./CommonTypes-Schema.xsd"/>
+    <xs:import namespace="http://www.fsa.gov.uk/XMLSchema/FSAFeedCommon-v1-2" 
+        schemaLocation="./FSAFeedCommon-v1-2.xsd"/>
+    
+    <xs:element name="FSAHSFFeedMG">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="cmn:FSAFeedHeader" minOccurs="1"/>
+                <xs:element name="FSAHSFFeedMGMsg" minOccurs="1" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>Defines the individual transactions to be reported</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="cmn:CoreItems" minOccurs="1"/>
+                            <xs:element name="Mortgage" minOccurs="1">
+                               <xs:complexType>
+                                   <xs:sequence>
+                                       <xs:element name="PrincipalOrNetworkFSARef"       type="cmn:FSARefType"  minOccurs="0"/>
+                                       <xs:element name="AcctOpenDate"                   type="xs:date"         minOccurs="1"/>
+                                       <xs:element name="AdvisedSale"                    type="cmn:YNType"      minOccurs="0"/>
+                                       <xs:element name="TypeIntRate"                                           minOccurs="1">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="01"/>
+                                                   <xs:enumeration value="02"/>
+                                                   <xs:enumeration value="03"/>
+                                                   <xs:enumeration value="04"/>
+                                                   <xs:enumeration value="05"/>
+                                                   <xs:enumeration value="06"/>
+                                                   <xs:enumeration value="07"/>
+                                                   <xs:enumeration value="08"/>
+                                                   <xs:enumeration value="99"/>
+                                               </xs:restriction>
+                                           </xs:simpleType> 
+                                       </xs:element>
+                                       <xs:element name="MtgeTypeList" minOccurs="0">
+                                           <xs:complexType>
+                                               <xs:sequence>
+                                                   <xs:element name="MortgageType"      minOccurs="0" maxOccurs="12">
+                                                       <xs:annotation>
+                                                           <xs:documentation>List up to 12 additional mortgage characterisitics, if applicable. Where more than one code applies, report them all.</xs:documentation>
+                                                       </xs:annotation>
+                                                       <xs:simpleType>
+                                                           <xs:restriction base="xs:string">
+                                                               <xs:enumeration value="L"/>
+                                                               <xs:enumeration value="SA"/>
+                                                               <xs:enumeration value="SO"/>
+                                                               <xs:enumeration value="BM"/>
+                                                               <xs:enumeration value="BL"/>
+                                                               <xs:enumeration value="GM"/>
+                                                               <xs:enumeration value="HN"/>
+                                                               <xs:enumeration value="BR"/>
+                                                               <xs:enumeration value="LO"/>
+                                                               <xs:enumeration value="SB"/>
+                                                               <xs:enumeration value="SE"/>
+                                                               <xs:enumeration value="SC"/>
+                                                               <xs:enumeration value="VN"/>
+                                                               <xs:enumeration value="RI"/>
+                                                               <xs:enumeration value="NA"/>
+                                                           </xs:restriction>
+                                                       </xs:simpleType>
+                                                   </xs:element>
+                                               </xs:sequence>
+                                           </xs:complexType>
+                                       </xs:element>
+                                       <xs:element name="MtgeCharsList" minOccurs="0">
+                                           <xs:complexType>
+                                               <xs:sequence>
+                                                   <xs:element name="MtgeChar"      minOccurs="0" maxOccurs="5">
+                                                       <xs:annotation>
+                                                           <xs:documentation>List up to 5 additional mortgage characterisitics, if applicable. Where more than one code applies, report them all.</xs:documentation>
+                                                       </xs:annotation>
+                                                       <xs:simpleType>
+                                                           <xs:restriction base="xs:string">
+                                                               <xs:enumeration value="CB"/>
+                                                               <xs:enumeration value="FF"/>
+                                                               <xs:enumeration value="OS"/>
+                                                               <xs:enumeration value="EL"/>
+                                                               <xs:enumeration value="RM"/>
+                                                               <xs:enumeration value="RR"/>
+                                                               <xs:enumeration value="L"/>
+                                                               <xs:enumeration value="SA"/>
+                                                               <xs:enumeration value="SE"/>
+                                                               <xs:enumeration value="MI"/>
+                                                               <xs:enumeration value="NA"/>
+                                                           </xs:restriction>
+                                                       </xs:simpleType>
+                                                   </xs:element>
+                                               </xs:sequence>
+                                           </xs:complexType>
+                                       </xs:element>
+                                       <xs:element name="PropertyPostCode"  type="cmn:PostCodeType"     minOccurs="1"/>
+                                       <xs:element name="TypeBorrower"                                  minOccurs="1">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="F"/>
+                                                   <xs:enumeration value="M"/>
+                                                   <xs:enumeration value="R"/>
+                                                   <xs:enumeration value="C"/>
+                                                   <xs:enumeration value="O"/>
+                                                   <xs:enumeration value="N"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>
+                                       </xs:element>
+                                       <xs:element name="RepayMethod" minOccurs="1">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="C"/>
+                                                   <xs:enumeration value="E"/>
+                                                   <xs:enumeration value="I"/>
+                                                   <xs:enumeration value="P"/>
+                                                   <xs:enumeration value="U"/>
+                                                   <xs:enumeration value="M"/>
+                                                   <xs:enumeration value="N"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>
+                                       </xs:element>
+                                       <xs:element name="MtgeTerm" minOccurs="0">
+                                           <xs:simpleType>
+                                               <xs:annotation>
+                                                   <xs:documentation>Report term in years if mortgage was sold pre 2015 and in months if >= 2015 .</xs:documentation>
+                                               </xs:annotation>
+                                               <xs:restriction base="xs:positiveInteger">
+                                                   <xs:totalDigits value="3"/>
+                                               </xs:restriction>
+                                            </xs:simpleType>
+                                       </xs:element>
+                                       <xs:element name="LoanAmt"       type="NonNegativeMonetaryType"  minOccurs="1"/>
+                                       <xs:element name="PropertyValue" type="NonNegativeMonetaryType"  minOccurs="1"/>
+                                       <xs:element name="IncomeBasis"                                   minOccurs="0">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="S"/>
+                                                   <xs:enumeration value="J"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>
+                                       </xs:element>
+                                       <xs:element name="MainDOB"       type="xs:date"                  minOccurs="1"/>
+                                       <xs:element name="RemtgePurpose" type="RemortgagePurposeType"    minOccurs="0">
+                                           <xs:annotation>
+                                               <xs:documentation>Purpose of remortgage, only report if mortgage was sold pre 2015 otherwise do not provide this field.</xs:documentation>
+                                           </xs:annotation>
+                                       </xs:element>
+                                       <xs:element name="MainEmpStatus" minOccurs="0">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="E"/>
+                                                   <xs:enumeration value="S"/>
+                                                   <xs:enumeration value="R"/>
+                                                   <xs:enumeration value="O"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>
+                                       </xs:element>
+                                       <xs:element name="GrossIncome"           type="NonNegativeMonetaryType"  minOccurs="0"/>
+                                       <xs:element name="IncomeVerification"                                    minOccurs="0">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="Y"/>
+                                                   <xs:enumeration value="N"/>
+                                                   <xs:enumeration value="O"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>
+                                       </xs:element>
+                                       <xs:element name="MainBorrowerCCJValue"          type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="SecondBorrowerCCJValue"        type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="MainBorrowerImpCredHistList"                                   minOccurs="0">
+                                           <xs:complexType>
+                                               <xs:sequence>
+                                                   <xs:element name="MainBorrowerImpCredHist"                           minOccurs="0" maxOccurs="4">
+                                                       <xs:annotation>
+                                                           <xs:documentation>List up to 4 additional mortgage characterisitics, if applicable. Where more than one code applies, report them all.</xs:documentation>
+                                                       </xs:annotation>
+                                                       <xs:simpleType>
+                                                           <xs:restriction base="xs:string">
+                                                               <xs:enumeration value="A"/>
+                                                               <xs:enumeration value="V"/>
+                                                               <xs:enumeration value="B"/>
+                                                               <xs:enumeration value="D"/>
+                                                               <xs:enumeration value="NA"/>
+                                                           </xs:restriction>
+                                                       </xs:simpleType>
+                                                   </xs:element>
+                                               </xs:sequence>
+                                           </xs:complexType>
+                                       </xs:element>
+                                       <xs:element name="SecondBorrowerImpCredHistList" minOccurs="0">
+                                           <xs:complexType>
+                                               <xs:sequence>
+                                                   <xs:element name="SecondBorrowerImpCredHist"      minOccurs="0" maxOccurs="4">
+                                                       <xs:annotation>
+                                                           <xs:documentation>List up to 4 additional mortgage characterisitics, if applicable. Where more than one code applies, report them all.</xs:documentation>
+                                                       </xs:annotation>
+                                                       <xs:simpleType>
+                                                           <xs:restriction base="xs:string">
+                                                               <xs:enumeration value="A"/>
+                                                               <xs:enumeration value="V"/>
+                                                               <xs:enumeration value="B"/>
+                                                               <xs:enumeration value="D"/>
+                                                               <xs:enumeration value="NA"/>
+                                                           </xs:restriction>
+                                                       </xs:simpleType>
+                                                   </xs:element>
+                                               </xs:sequence>
+                                           </xs:complexType>
+                                       </xs:element>
+                                       <xs:element name="InitialGrossIntRate"   type="xs:decimal"               minOccurs="0"/>
+                                       <xs:element name="DateIncentiveRateEnds" type="xs:date"                  minOccurs="0"/>
+                                       <xs:element name="DateERCEnds"           type="xs:date"                  minOccurs="0"/>
+                                       <xs:element name="PurchasePrice"         type="NonNegativeMonetaryType"  minOccurs="0"/>
+                                       <xs:element name="TypeDwelling"                                          minOccurs="0">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="B"/>
+                                                   <xs:enumeration value="D"/>
+                                                   <xs:enumeration value="S"/>
+                                                   <xs:enumeration value="T"/>
+                                                   <xs:enumeration value="F"/>
+                                                   <xs:enumeration value="P"/>
+                                                   <xs:enumeration value="O"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>
+                                       </xs:element>
+                                       <xs:element name="NumHabitableRooms" type="xs:nonNegativeInteger" minOccurs="0"/>
+                                       <xs:element name="NumBedrooms"       type="xs:nonNegativeInteger" minOccurs="0"/>
+
+                                       <xs:element name="RemtgePurposeList" minOccurs="0">
+                                           <xs:complexType>
+                                               <xs:sequence>
+                                                   <xs:element name="RemtgePurpose"      minOccurs="0" maxOccurs="3">
+                                                       <xs:annotation>
+                                                           <xs:documentation>List up to 3 additional mortgage characterisitics, if applicable and mortgage was sold post 2015. Where more than one code applies, report them all.</xs:documentation>
+                                                       </xs:annotation>
+                                                       <xs:simpleType>
+                                                           <xs:restriction base="xs:string">
+                                                               <xs:enumeration value="N"/>
+                                                               <xs:enumeration value="H"/>
+                                                               <xs:enumeration value="D"/>
+                                                               <xs:enumeration value="M"/>
+                                                               <xs:enumeration value="O"/>
+                                                           </xs:restriction>
+                                                       </xs:simpleType>
+                                                   </xs:element>
+                                               </xs:sequence>
+                                           </xs:complexType>
+                                       </xs:element>
+                                       <xs:element name="HowSaleMade"                                     minOccurs="0">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="F"/>
+                                                   <xs:enumeration value="T"/>
+                                                   <xs:enumeration value="E"/>
+                                                   <xs:enumeration value="P"/>
+                                                   <xs:enumeration value="O"/>
+                                                   <xs:enumeration value="I"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>                                           
+                                       </xs:element>
+                                       <xs:element name="TypeReversionRate"                               minOccurs="0">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="01"/>
+                                                   <xs:enumeration value="02"/>
+                                                   <xs:enumeration value="04"/>
+                                                   <xs:enumeration value="05"/>
+                                                   <xs:enumeration value="06"/>
+                                                   <xs:enumeration value="07"/>
+                                                   <xs:enumeration value="08"/>
+                                                   <xs:enumeration value="98"/>
+                                                   <xs:enumeration value="99"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>
+                                       </xs:element>
+                                       <xs:element name="GovernmentInitiative"  type="YesNoType"    minOccurs="0"/>
+                                       <xs:element name="RepaymentStrategyList"                     minOccurs="0">
+                                           <xs:complexType>
+                                               <xs:sequence>
+                                                   <xs:element name="RepaymentStrategy"             minOccurs="0" maxOccurs="11">
+                                                       <xs:annotation>
+                                                           <xs:documentation>List up to 11 if applicable. Where more than one code applies, report them all.</xs:documentation>
+                                                       </xs:annotation>
+                                                       <xs:simpleType>
+                                                           <xs:restriction base="xs:string">
+                                                               <xs:enumeration value="E"/>
+                                                               <xs:enumeration value="P"/>
+                                                               <xs:enumeration value="S"/>
+                                                               <xs:enumeration value="M"/>
+                                                               <xs:enumeration value="B"/>
+                                                               <xs:enumeration value="A"/>
+                                                               <xs:enumeration value="C"/>
+                                                               <xs:enumeration value="R"/>
+                                                               <xs:enumeration value="F"/>
+                                                               <xs:enumeration value="L"/>
+                                                               <xs:enumeration value="O"/>
+                                                           </xs:restriction>
+                                                       </xs:simpleType>
+                                                   </xs:element>
+                                               </xs:sequence>
+                                           </xs:complexType>
+                                       </xs:element>                                       
+                                       <xs:element name="PercentageIO"      type="PercentDP0Type"   minOccurs="0"/>
+                                       <xs:element name="InterestRollUp"    type="YesNoType"        minOccurs="0"/>
+                                       <xs:element name="ValuationType"                             minOccurs="0">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="I"/>
+                                                   <xs:enumeration value="E"/>
+                                                   <xs:enumeration value="A"/>
+                                                   <xs:enumeration value="O"/>
+                                               </xs:restriction>
+                                           </xs:simpleType> 
+                                       </xs:element>
+                                       <xs:element name="SecondDOB"             type="xs:date"                  minOccurs="0"/>
+                                       <xs:element name="MoneyWithdrawn"        type="NonNegativeMonetaryType"  minOccurs="0"/>
+                                       <xs:element name="AmountDebtCons"        type="NonNegativeMonetaryType"  minOccurs="0"/>
+                                       <xs:element name="EarlyRepaymentCharge"  type="YesNoType"                minOccurs="0"/>
+                                       <xs:element name="NewDwelling"           type="cmn:YNType"               minOccurs="0"/>
+                                       <xs:element name="GarageInc"             type="cmn:YNType"               minOccurs="0"/>
+                                       <xs:element name="MtgeProtectionPlanInc" type="cmn:YNType"               minOccurs="0"/>
+                                       <xs:element name="Currency"                                              minOccurs="0">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="GBP"/>
+                                                   <xs:enumeration value="EUR"/>
+                                                   <xs:enumeration value="USD"/>
+                                                   <xs:enumeration value="JPY"/>
+                                                   <xs:enumeration value="OTH"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>
+                                       </xs:element>
+                                       <xs:element name="CustomersShare"        type="PercentDP0Type"           minOccurs="0"/>
+                                       <xs:element name="TotalLoanAvailable"    type="NonNegativeMonetaryType"  minOccurs="0"/>
+                                       <xs:element name="LenderFees"            type="NonNegativeMonetaryType"  minOccurs="0"/>
+                                       <xs:element name="IntermediaryFees"      type="NonNegativeMonetaryType"  minOccurs="0"/>
+                                       <xs:element name="FeesChargesAdded"      type="NonNegativeMonetaryType"  minOccurs="0"/>
+                                       <xs:element name="ProcurationFee"        type="NonNegativeMonetaryType"  minOccurs="0"/>
+                                       <xs:element name="NumberAssessed"                                        minOccurs="0">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="1"/>
+                                                   <xs:enumeration value="2"/>
+                                                   <xs:enumeration value="3"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>
+                                       </xs:element>
+                                       <xs:element name="DependentAdults"   type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="DependentChildren" type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="SecondEmpStatus"                                   minOccurs="0">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="E"/>
+                                                   <xs:enumeration value="S"/>
+                                                   <xs:enumeration value="R"/>
+                                                   <xs:enumeration value="O"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>
+                                       </xs:element>
+                                       <xs:element name="MainRetirementAge"                 type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="SecondRetirementAge"               type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="MainGrossBasicPay"                 type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="MainGrossOtherIncomeEmployment"    type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="MainGrossIncomeSelfEmployment"     type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="MainGrossOtherIncome"              type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="SecondGrossBasicPay"               type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="SecondGrossOtherIncomeEmployment"  type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="SecondGrossIncomeSelfEmployment"   type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="SecondGrossOtherIncome"            type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="ThirdGrossBasicPay"                type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="ThirdGrossOtherIncomeEmployment"   type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="ThirdGrossIncomeSelfEmployment"    type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="ThirdGrossOtherIncome"             type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="MainTotalVerifiedNetIncome"        type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="SecondTotalVerifiedNetIncome"      type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="ThirdTotalVerifiedNetIncome"       type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="TotalOutstandingCredits"           type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="MonthlyExpenditure"                type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="BasicExpenditure"                  type="xs:nonNegativeInteger"    minOccurs="0"/>
+                                       <xs:element name="StressTestedInterestRate"          type="PercentDP2Type"           minOccurs="0"/>
+                                       <xs:element name="MCOBUsed"                                                          minOccurs="0">
+                                           <xs:simpleType>
+                                               <xs:restriction base="xs:string">
+                                                   <xs:enumeration value="Y"/>
+                                                   <xs:enumeration value="T"/>
+                                                   <xs:enumeration value="N"/>
+                                               </xs:restriction>
+                                           </xs:simpleType>
+                                       </xs:element>
+                                   </xs:sequence>
+                               </xs:complexType> 
+                            </xs:element>
+                         </xs:sequence>
+                   </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>                
+    <xs:simpleType name="RemortgagePurposeType">
+        <xs:annotation>
+            <xs:documentation>Purpose of re-mortgage.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="N">
+                <xs:annotation>
+                    <xs:documentation>No extra money raised</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H">
+                <xs:annotation>
+                    <xs:documentation>Extra money raised for home improvements</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="D">
+                <xs:annotation>
+                    <xs:documentation>Extra money raised for debt consolidation</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="M">
+                <xs:annotation>
+                    <xs:documentation>Extra money raised for home improvements and debt consolidation</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="O">
+                <xs:annotation>
+                    <xs:documentation>Other</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

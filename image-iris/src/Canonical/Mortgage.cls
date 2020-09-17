@@ -169,6 +169,8 @@ Property RemtgePurpose3 As Canonical.CT.RemtgePurpose [ SqlColumnNumber = 78 ];
 
 Index FirmAndTransIndex On (FirmId, TransactionId) [ PrimaryKey ];
 
+Index AsOfDateIndex On AsOfDate;
+
 Storage Default
 {
 <Data name="MortgageDefaultData">
