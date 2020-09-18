@@ -104,6 +104,24 @@ ClassMethod Config(pNamespace As %String) As %Status
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
 
+		Set objReport = ##class(Report.ReportDef).%New()
+		Set objReport.ReportName="FCA PSD 001 v2.2"
+		Set objReport.ReportCode="PSD001v2.2"
+		Set objReport.HeaderDTL="Custom.FCAReport.DTL.PSDFeedHeader"
+		Set objReport.ContentsDTL="Custom.FCAReport.DTL.PSD001.FSAHSFFeedMGMsg"
+		Set objReport.ReportQuery="?"
+		Set objReport.SourceCanonicalClassName="Canonical.Mortgage"
+		Set tSC = objReport.%Save()
+		Quit:$$$ISERR(tSC)
+
+		Set objReportSch = ##class(Report.ReportSchedule).%New()
+		Set objReportSch.Report=objReport
+		Set objReportSch.DueDate=+$H
+		Do objReportSch.QueryParamList.Insert("?")
+		Set tSC = objReportSch.%Save()
+		Quit:$$$ISERR(tSC)
+
+
 	}
 	Catch (oException)
 	{

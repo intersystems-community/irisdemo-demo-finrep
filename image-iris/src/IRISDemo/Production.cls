@@ -1,6 +1,17 @@
 Class IRISDemo.Production Extends IRISDemo.BaseProduction
 {
 
+/// For this demo, we will build the empty cube MortgageSales once (it's empty)
+/// so it can be synchronized during the demo
+ClassMethod OnStart(pTimeStarted As %String) As %Status
+{
+  Set tSC = ##class(%DeepSee.CubeManager.Utils).SetActiveRegistry("Cube.Registry")
+  Quit:$$$ISERR(tSC) tSC
+  
+  //  Set tSC = ##class(%DeepSee.Utils).%BuildCube("BatchControlRecord")
+  Quit ##class(%DeepSee.CubeManager.Utils).BuildAllRegisteredGroups()
+}
+
 XData ProductionDefinition
 {
 <Production Name="IRISDemo.Production" TestingEnabled="true" LogGeneralTraceEvents="true">
@@ -53,18 +64,11 @@ XData ProductionDefinition
   </Item>
   <Item Name="Cube Operations" Category="" ClassName="Cube.BO.Operation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
+  <Item Name="Report Service" Category="" ClassName="Report.BS.Service" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  <Item Name="Reporting Process" Category="" ClassName="Report.BP.Process" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
 </Production>
-}
-
-/// For this demo, we will build the empty cube MortgageSales once (it's empty)
-/// so it can be synchronized during the demo
-ClassMethod OnStart(pTimeStarted As %String) As %Status
-{
-  Set tSC = ##class(%DeepSee.CubeManager.Utils).SetActiveRegistry("Cube.Registry")
-  Quit:$$$ISERR(tSC) tSC
-  
-  //  Set tSC = ##class(%DeepSee.Utils).%BuildCube("BatchControlRecord")
-  Quit ##class(%DeepSee.CubeManager.Utils).BuildAllRegisteredGroups()
 }
 
 }
