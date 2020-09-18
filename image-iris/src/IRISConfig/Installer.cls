@@ -55,6 +55,30 @@ ClassMethod LoadFCAXMLSchemas() As %Status
 	Quit tSC
 }
 
+ClassMethod LoadDFIFiles() As %Status
+{
+	Set tSC = $$$OK
+	Try
+	{
+		ZN "APPINT"
+
+		Set tSC = ##class(%DeepSee.UserLibrary.Utils).%Import("/tmp/dfi/pivot.dfi", 1, 1)		
+		Quit:$$$ISERR(tSC)
+ 
+		Set tSC = ##class(%DeepSee.UserLibrary.Utils).%Import("/tmp/dfi/FCA-FCA Reporting Monitoring/dashboard.dfi", 1, 1)		
+		Quit:$$$ISERR(tSC)
+
+	}
+	Catch (oException)
+	{
+		Set tSC = oException.AsStatus()
+	}	
+	
+	ZN "%SYS"
+
+	Quit tSC
+}
+
 ClassMethod Config(pNamespace As %String) As %Status
 {
 	Set tSC = $$$OK
@@ -256,6 +280,7 @@ ClassMethod InsertOnCT(pShortClassName As %String, pCode As %String, pDescriptio
 XData Install [ XMLNamespace = INSTALLER ]
 {
 <Manifest>
+	
 	<Namespace Name="${Namespace}" Create="no">
 		<IfDef Var="SourceDir">
             <Log Text="SourceDir defined - offline install from ${SourceDir}" Level="0"/>
@@ -294,6 +319,11 @@ XData Install [ XMLNamespace = INSTALLER ]
 	<Log Text="Loading FCA XML Schemas..." Level="0"/>
 	<Invoke Class="IRISConfig.Installer" Method="LoadFCAXMLSchemas" CheckStatus="true">
 	</Invoke>
+
+	<Log Text="Loading DeepSee Pivots and Dashboards..." Level="0"/>
+	<Invoke Class="IRISConfig.Installer" Method="LoadDFIFiles" CheckStatus="true">
+	</Invoke>
+
 
 </Manifest>
 }

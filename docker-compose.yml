@@ -13,3 +13,7 @@ services:
     - type: bind
       source: ./MortgageSystemFiles
       target: /MortgageSystemFiles
+    - type: bind
+      source: ./FCAGeneratedReports
+      target: /FCAGeneratedReports
+      

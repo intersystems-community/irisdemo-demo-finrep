@@ -1,6 +1,8 @@
 Class Normalization.BatchControlRecord Extends (%Persistent, %XML.Adaptor)
 {
 
+Parameter DSTIME = "AUTO";
+
 Property BatchControl As Normalization.BatchControl [ Required ];
 
 Property CreationDate As %TimeStamp [ InitialExpression = {$ZDateTime($ZTimeStamp,3)}, Required ];

@@ -56,4 +56,15 @@ XData ProductionDefinition
 </Production>
 }
 
+/// For this demo, we will build the empty cube MortgageSales once (it's empty)
+/// so it can be synchronized during the demo
+ClassMethod OnStart(pTimeStarted As %String) As %Status
+{
+  Set tSC = ##class(%DeepSee.CubeManager.Utils).SetActiveRegistry("Cube.Registry")
+  Quit:$$$ISERR(tSC) tSC
+  
+  //  Set tSC = ##class(%DeepSee.Utils).%BuildCube("BatchControlRecord")
+  Quit ##class(%DeepSee.CubeManager.Utils).BuildAllRegisteredGroups()
+}
+
 }

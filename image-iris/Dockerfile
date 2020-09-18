@@ -12,10 +12,14 @@ ARG IRIS_PROJECT_FOLDER_NAME=src
 ADD --chown=irisowner:irisuser ./${IRIS_PROJECT_FOLDER_NAME}/ $IRIS_APP_SOURCEDIR
 
 ADD --chown=irisowner:irisuser ./FCASchemas/ /tmp/FCASchemas/
+ADD --chown=irisowner:irisuser ./html/fca-logo.jpg /usr/irissys/csp/broker/covers/
 
 # Running the installer. This will load the source from our project.
-RUN /usr/irissys/demo/irisdemoinstaller.sh 
+RUN mv $IRIS_APP_SOURCEDIR/Batch-Batch\ Control\ Record\ Stats /tmp/dfi/ && \
+mv $IRIS_APP_SOURCEDIR/FCA-FCA\ Reporting\ Monitoring /tmp/dfi/ && \
+/usr/irissys/demo/irisdemoinstaller.sh 
 
 ADD --chown=irisowner:irisuser ./html/landing-page.png $ISC_PACKAGE_INSTALLDIR/csp/appint/
+ADD --chown=irisowner:irisuser ./html/landing-page-detailed.png $ISC_PACKAGE_INSTALLDIR/csp/appint/
 ADD --chown=irisowner:irisuser ./html/image-map-resizer/js/imageMapResizer.min.js $ISC_PACKAGE_INSTALLDIR/csp/appint/
 ADD --chown=irisowner:irisuser ./html/image-map-resizer/js/imageMapResizer.map $ISC_PACKAGE_INSTALLDIR/csp/appint/
