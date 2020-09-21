@@ -125,6 +125,36 @@
 				//window_open('http://' + ip + ':10001/csp/appint/rest/data/corebanking.com.irisdemo.banksim.avroevent.NewCustomerAvroEvent/2')
 			}
 
+			function bubble1(){
+				console.log("Bubble 1")
+			}
+
+			function bubble2(){
+				console.log("Bubble 2");
+				moveTransactionAndAffordabilityFiles();
+			}
+
+			function bubble3(){
+				console.log("Bubble 3")
+			}
+
+			function bubble4(){
+				console.log("Bubble 4")
+				movePerformanceFiles();
+			}
+			function bubble5(){
+				console.log("Bubble 5")
+			}
+			function bubble6(){
+				console.log("Bubble 6")
+			}
+			function bubble7(){
+				console.log("Bubble 7")
+			}
+			function bubble8(){
+				console.log("Bubble 8")
+			}
+
 			function openInstructions()
 			{
 				var btn = document.getElementById('instructionsbtn');
@@ -150,6 +180,30 @@
 					img.src = "landing-page.png"
 				}else{
 					img.src = "landing-page-detailed.png"
+				}
+			}
+
+			function moveTransactionAndAffordabilityFiles(){
+				// invoke server-side method Test
+				var transCopyMsg = #server(File.Utils.MoveFile("PSD001-TransactionData_2.2.csv", "/MortgageSystemFiles/Trans"))#;
+				var affordCopyMsg = #server(File.Utils.MoveFile("PSD001-AffordabilityData_2.2.csv", "/MortgageSystemFiles/Afford"))#;
+
+				if(transCopyMsg === "1" && affordCopyMsg === "1"){
+					alert("Transactional Data File (PSD001-TransactionData_2.2.csv) and Afordability Data File (PSD001-AffordabilityData_2.2.csv) copied over for processing")
+				}else if(transCopyMsg !== 1){
+					alert(transCopyMsg)
+				}else{
+					alert(affordCopyMsg)
+				}
+			}
+
+			function movePerformanceFiles(){
+				// invoke server-side method Test
+				var perfCopyMsg = #server(File.Utils.MoveAllFiles("/MortgageSystemFiles/Perf"))#;
+				if(perfCopyMsg === "1"){
+					alert("Mortgage System Performance files copied over for processing")
+				}else{
+					alert(perfCopyMsg)
 				}
 			}
 
@@ -186,22 +240,23 @@
 		</center>
 
 		<map name="image-map">
-			<area target="" alt="Send Transactions and Affordability Files" title="Send Transactions and Affordability Files" href="javascript:moveTransactionAndAffordabilityFiles()" coords="380,733,762,1077" shape="rect">
-			<area target="" alt="Send Transactions and Affordability Files" title="Send Transactions and Affordability Files" href="javascript:moveTransactionAndAffordabilityFiles()" coords="339,306,701,486" shape="rect">
-			<area target="" alt="Send Performance Files" title="Send Performance Files" href="javascript:movePerformanceFiles()" coords="1088,718,1495,1027" shape="rect">
-			<area target="" alt="Send Performance Files" title="Send Performance Files" href="javascript:movePerformanceFiles()" coords="1073,362,1480,531" shape="rect">
-			<area target="" alt="Generate PSD 001" title="Generate PSD 001" href="" coords="1553,728,1842,971" shape="rect">
-			<area target="" alt="Generate PSD 001" title="Generate PSD 001" href="" coords="1515,316,1839,508" shape="rect">
-			<area target="" alt="Generate PSD 007" title="Generate PSD 007" href="" coords="2285,739,2550,941" shape="rect">
-			<area target="" alt="Generate PSD 007" title="Generate PSD 007" href="" coords="2249,321,2568,498" shape="rect">
-			<area target="" alt="Show Data Normalization" title="Show Data Normalization" href="javascript:openBusinessProcess()" coords="726,511,1020,673" shape="rect">
-			<area target="" alt="Show generated PSD 001 Report" title="Show generated PSD 001 Report" href="" coords="1875,412,2201,546" shape="rect">
-			<area target="" alt="Show generated PSD 007 Report" title="Show generated PSD 007 Report" href="" coords="2596,352,2861,536" shape="rect">
+			<area target="" alt="Bubble 1 Top" title="Bubble 1 Top" href="javascript:bubble1()" coords="28,503,329,675" shape="rect">
+			<area target="" alt="Bubble 1 Bottom" title="Bubble 1 Bottom" href="javascript:bubble1()" coords="28,809,245,1065" shape="rect">
+			<area target="" alt="Bubble 2 Top" title="Bubble 2 Top" href="javascript:bubble2()" coords="349,326,676,460" shape="rect">
+			<area target="" alt="Bubble 2 Bottom" title="Bubble 2 Bottom" href="javascript:bubble2()" coords="400,817,756,1077" shape="rect">
+			<area target="" alt="Bubble 3 Top" title="Bubble 3 Top" href="javascript:bubble3()" coords="721,506,1022,675" shape="rect">
+			<area target="" alt="Bubble 4 Top" title="Bubble 4 Top" href="javascript:bubble4()" coords="1075,379,1472,511" shape="rect">
+			<area target="" alt="Bubble 4 Bottom" title="Bubble 4 Bottom" href="javascript:bubble4()" coords="1194,809,1402,991" shape="rect">
+			<area target="" alt="Bubble 5 Top" title="Bubble 5 Top" href="javascript:bubble5()" coords="1528,324,1829,498" shape="rect">
+			<area target="" alt="Bubble 5 Bottom" title="Bubble 5 Bottom" href="javascript:bubble5()" coords="1594,814,1758,933" shape="rect">
+			<area target="" alt="Bubble 6 Top" title="Bubble 6 Top" href="javascript:bubble6()" coords="1870,405,2204,539" shape="rect">
+			<area target="" alt="Bubble 7 Top" title="Bubble 7 Top" href="javascript:bubble7()" coords="2257,324,2553,488" shape="rect">
+			<area target="" alt="Bubble 7 Bottom" title="Bubble 7 Bottom" href="javascript:bubble7()" coords="2335,809,2492,931" shape="rect">
+			<area target="" alt="Bubble 8 Top" title="Bubble 8 Top" href="javascript:bubble8()" coords="2596,347,2861,534" shape="rect">
 		</map>
 						
 		<table width="100%" style="text-align: center;">
 			<tr>
-				<td><input ID="BTNALL" type="button" class="Button" value="Open All Windows" onclick="openWindows()"/></td>
 				<td><input ID="BTNIMG" type="button" class="Button" value="Toggle Detailed View" onclick="toggleImage()"/></td>
 			</tr>
 		</table>
@@ -215,21 +270,6 @@
 			demoimg.style.width="90%";
 
 			imageMapResize();
-		</script>
-
-		<script language="JavaScript">
-			function moveTransactionAndAffordabilityFiles(){
-				// invoke server-side method Test
-				var transCopy = #server(File.Utils.MoveFile("PSD001-TransactionData_2.2.csv", "/MortgageSystemFiles/Trans"))#;
-				var affordCopy = #server(File.Utils.MoveFile("PSD001-AffordabilityData_2.2.csv", "/MortgageSystemFiles/Afford"))#;
-			}
-		</script>
-
-		<script language="JavaScript">
-			function movePerformanceFiles(){
-				// invoke server-side method Test
-				var perfCopy = #server(File.Utils.MoveAllFiles("/MortgageSystemFiles/Perf"))#;
-			}
 		</script>
 
 	</body>

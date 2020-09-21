@@ -3,12 +3,11 @@ Include Macros
 Class File.Utils
 {
 
-ClassMethod MoveFile(pFileName As %String, pFileDirectory As %String) As %Status
+ClassMethod MoveFile(pFileName As %String, pFileDirectory As %String) As %String
 {
     Set tSC = $$$OK
 
 	Try {
-
         SET Source = pFileDirectory _ "/Originals/" _ pFileName
         SET Destination = $Replace(Source, "Originals", "In")
 
@@ -17,18 +16,20 @@ ClassMethod MoveFile(pFileName As %String, pFileDirectory As %String) As %Status
             Do file.CopyFile(Source, Destination)
         }
         Else {
-            write "File Not Found", !
+            SET tSC = $System.Status.Error(400, "Input File Could not be found!")
         }
     }
     Catch (oException)
     {
         set tSC = oException.AsStatus()
     }
-
-    Quit tSC
+    If $$$ISERR(tSC){
+        Quit $System.Status.GetErrorText(tSC)
+    }
+    Quit 1
 }
 
-ClassMethod MoveAllFiles(pFileDirectory As %String) As %Status
+ClassMethod MoveAllFiles(pFileDirectory As %String) As %String
 {
     Set tSC = $$$OK
 
@@ -47,7 +48,10 @@ ClassMethod MoveAllFiles(pFileDirectory As %String) As %Status
         set tSC = oException.AsStatus()
     }
 
-    Quit tSC
+    If $$$ISERR(tSC){
+        Quit $System.Status.GetErrorText(tSC)
+    }
+    Quit 1
 }
 
 }
