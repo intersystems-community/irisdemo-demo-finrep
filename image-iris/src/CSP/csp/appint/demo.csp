@@ -87,7 +87,7 @@
 
 			function openBusinessProcess()
 			{
-				window_open('EnsPortal.BPLEditor.zen?NAMESPACE=APPINT&BP=SchemaNormalization.Process.bpl&IRISUserName=SuperUser&IRISPassword=sys')
+				window_open('EnsPortal.BPLEditor.zen?NAMESPACE=APPINT&BP=Normalization.Process.bpl&IRISUserName=SuperUser&IRISPassword=sys')
 			}
 
 			function openDataTransformation()
@@ -125,6 +125,36 @@
 				//window_open('http://' + ip + ':10001/csp/appint/rest/data/corebanking.com.irisdemo.banksim.avroevent.NewCustomerAvroEvent/2')
 			}
 
+			function bubble1(){
+				console.log("Bubble 1")
+			}
+
+			function bubble2(){
+				console.log("Bubble 2");
+				moveTransactionAndAffordabilityFiles();
+			}
+
+			function bubble3(){
+				console.log("Bubble 3")
+			}
+
+			function bubble4(){
+				console.log("Bubble 4")
+				movePerformanceFiles();
+			}
+			function bubble5(){
+				console.log("Bubble 5")
+			}
+			function bubble6(){
+				console.log("Bubble 6")
+			}
+			function bubble7(){
+				console.log("Bubble 7")
+			}
+			function bubble8(){
+				console.log("Bubble 8")
+			}
+
 			function openInstructions()
 			{
 				var btn = document.getElementById('instructionsbtn');
@@ -139,6 +169,41 @@
 				{
 					btn.value = 'Show Instructions';
 					instructions.hidden=true;
+				}
+			}
+
+			function toggleImage()
+			{
+				var img = document.getElementById("demoimg")
+
+				if(img.src.includes('detailed')){
+					img.src = "landing-page.png"
+				}else{
+					img.src = "landing-page-detailed.png"
+				}
+			}
+
+			function moveTransactionAndAffordabilityFiles(){
+				// invoke server-side method Test
+				var transCopyMsg = #server(File.Utils.MoveFile("PSD001-TransactionData_2.2.csv", "/MortgageSystemFiles/Trans"))#;
+				var affordCopyMsg = #server(File.Utils.MoveFile("PSD001-AffordabilityData_2.2.csv", "/MortgageSystemFiles/Afford"))#;
+
+				if(transCopyMsg === "1" && affordCopyMsg === "1"){
+					alert("Transactional Data File (PSD001-TransactionData_2.2.csv) and Afordability Data File (PSD001-AffordabilityData_2.2.csv) copied over for processing")
+				}else if(transCopyMsg !== 1){
+					alert(transCopyMsg)
+				}else{
+					alert(affordCopyMsg)
+				}
+			}
+
+			function movePerformanceFiles(){
+				// invoke server-side method Test
+				var perfCopyMsg = #server(File.Utils.MoveAllFiles("/MortgageSystemFiles/Perf"))#;
+				if(perfCopyMsg === "1"){
+					alert("Mortgage System Performance files copied over for processing")
+				}else{
+					alert(perfCopyMsg)
 				}
 			}
 
@@ -175,27 +240,24 @@
 		</center>
 
 		<map name="image-map">
-			<area target="" alt="Open Data Simulator" title="Open Data Simulator" href="javascript:openSimulator()" coords="2,322,158,672" shape="rect">
-			<area target="" alt="See Schemas Registered" title="See Schemas Registered" href="javascript:openSchemaRegistry()" coords="256,275,476,275,453,357,236,361" shape="poly">
-			<area target="" alt="Open Confluent Control Center" title="Open Confluent Control Center" href="javascript:openKafkaControlCenter()" coords="260,453,476,455,455,539,238,541" shape="poly">
-			<area target="" alt="Open IRIS Production" title="Open IRIS Production" href="javascript:openProduction()" coords="488,277,617,275,658,318,617,359,488,359" shape="poly">
-			<area target="" alt="Open IRIS Production" title="Open IRIS Production" href="javascript:openProduction()" coords="488,453,617,451,662,494,619,537,490,537" shape="poly">
-			<area target="" alt="Open SQL Query" title="Open SQL Query" href="javascript:openDataStore()" coords="672,434,734,426,797,436,795,576,738,586,674,574" shape="poly">
-			<area target="" alt="Open Message Trace Log" title="Open Message Trace Log" href="javascript:openMessageTrace()" coords="810,451,941,449,996,508,939,566,812,566" shape="poly">
-			<area target="" alt="Open Schema Normalization Process" title="Open Schema Normalization Process" href="javascript:openBusinessProcess()" coords="1007,430,1341,598" shape="rect">
-			<area target="" alt="Open Money Transfer Transformation" title="Open Money Transfer Transformation" href="javascript:openDataTransformation()" coords="1009,283,1125,410" shape="rect">
-			<area target="" alt="Open Terminology Lookup for State Codes" title="Open Terminology Lookup for State Codes" href="javascript:openDataLookup()" coords="1142,297,1193,281,1246,297,1246,412,1193,420,1142,408" shape="poly">
-			<area target="" alt="Open Workflow Inbox" title="Open Workflow Inbox" href="javascript:openWorkflow()" coords="1242,713,1400,914" shape="rect">
-			<area target="" alt="Open Message Trace Log" title="Open Message Trace Log" href="javascript:openMessageTrace()" coords="1357,467,1480,465,1519,506,1482,553,1359,553" shape="poly">
-			<area target="" alt="Open SQL Query" title="Open SQL Query" href="javascript:openDataStore()" coords="1538,254,1847,742" shape="rect">
-			<area target="" alt="See Data through a REST API" title="See Data through a REST API" href="javascript:openRESTService()" coords="1958,428,2103,428,2149,473,2105,520,1956,518" shape="poly">
-			<area target="" alt="Open SQL Query" title="Open SQL Query" href="javascript:openDataStore()" coords="1952,203,2105,203,2148,248,2101,295,1952,295" shape="poly">
-			<area target="" alt="Open InterSystems IRIS Business Intelligence" title="Open InterSystems IRIS Business Intelligence" href="javascript:openCube()" coords="1958,316,2101,316,2148,361,2103,406,1956,406" shape="poly">
+			<area target="" alt="Bubble 1 Top" title="Bubble 1 Top" href="javascript:bubble1()" coords="28,503,329,675" shape="rect">
+			<area target="" alt="Bubble 1 Bottom" title="Bubble 1 Bottom" href="javascript:bubble1()" coords="28,809,245,1065" shape="rect">
+			<area target="" alt="Bubble 2 Top" title="Bubble 2 Top" href="javascript:bubble2()" coords="349,326,676,460" shape="rect">
+			<area target="" alt="Bubble 2 Bottom" title="Bubble 2 Bottom" href="javascript:bubble2()" coords="400,817,756,1077" shape="rect">
+			<area target="" alt="Bubble 3 Top" title="Bubble 3 Top" href="javascript:bubble3()" coords="721,506,1022,675" shape="rect">
+			<area target="" alt="Bubble 4 Top" title="Bubble 4 Top" href="javascript:bubble4()" coords="1075,379,1472,511" shape="rect">
+			<area target="" alt="Bubble 4 Bottom" title="Bubble 4 Bottom" href="javascript:bubble4()" coords="1194,809,1402,991" shape="rect">
+			<area target="" alt="Bubble 5 Top" title="Bubble 5 Top" href="javascript:bubble5()" coords="1528,324,1829,498" shape="rect">
+			<area target="" alt="Bubble 5 Bottom" title="Bubble 5 Bottom" href="javascript:bubble5()" coords="1594,814,1758,933" shape="rect">
+			<area target="" alt="Bubble 6 Top" title="Bubble 6 Top" href="javascript:bubble6()" coords="1870,405,2204,539" shape="rect">
+			<area target="" alt="Bubble 7 Top" title="Bubble 7 Top" href="javascript:bubble7()" coords="2257,324,2553,488" shape="rect">
+			<area target="" alt="Bubble 7 Bottom" title="Bubble 7 Bottom" href="javascript:bubble7()" coords="2335,809,2492,931" shape="rect">
+			<area target="" alt="Bubble 8 Top" title="Bubble 8 Top" href="javascript:bubble8()" coords="2596,347,2861,534" shape="rect">
 		</map>
 						
 		<table width="100%" style="text-align: center;">
 			<tr>
-				<td><input ID="BTNALL" type="button" class="Button" value="Open All Windows" onclick="openWindows()"/></td>
+				<td><input ID="BTNIMG" type="button" class="Button" value="Toggle Detailed View" onclick="toggleImage()"/></td>
 			</tr>
 		</table>
 
