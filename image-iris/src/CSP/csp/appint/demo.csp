@@ -87,7 +87,7 @@
 
 			function openBusinessProcess()
 			{
-				window_open('EnsPortal.BPLEditor.zen?NAMESPACE=APPINT&BP=SchemaNormalization.Process.bpl&IRISUserName=SuperUser&IRISPassword=sys')
+				window_open('EnsPortal.BPLEditor.zen?NAMESPACE=APPINT&BP=Normalization.Process.bpl&IRISUserName=SuperUser&IRISPassword=sys')
 			}
 
 			function openDataTransformation()
@@ -142,6 +142,17 @@
 				}
 			}
 
+			function toggleImage()
+			{
+				var img = document.getElementById("demoimg")
+
+				if(img.src.includes('detailed')){
+					img.src = "landing-page.png"
+				}else{
+					img.src = "landing-page-detailed.png"
+				}
+			}
+
 		</script>
 		<style>
 		.Button {
@@ -175,27 +186,23 @@
 		</center>
 
 		<map name="image-map">
-			<area target="" alt="Open Data Simulator" title="Open Data Simulator" href="javascript:openSimulator()" coords="2,322,158,672" shape="rect">
-			<area target="" alt="See Schemas Registered" title="See Schemas Registered" href="javascript:openSchemaRegistry()" coords="256,275,476,275,453,357,236,361" shape="poly">
-			<area target="" alt="Open Confluent Control Center" title="Open Confluent Control Center" href="javascript:openKafkaControlCenter()" coords="260,453,476,455,455,539,238,541" shape="poly">
-			<area target="" alt="Open IRIS Production" title="Open IRIS Production" href="javascript:openProduction()" coords="488,277,617,275,658,318,617,359,488,359" shape="poly">
-			<area target="" alt="Open IRIS Production" title="Open IRIS Production" href="javascript:openProduction()" coords="488,453,617,451,662,494,619,537,490,537" shape="poly">
-			<area target="" alt="Open SQL Query" title="Open SQL Query" href="javascript:openDataStore()" coords="672,434,734,426,797,436,795,576,738,586,674,574" shape="poly">
-			<area target="" alt="Open Message Trace Log" title="Open Message Trace Log" href="javascript:openMessageTrace()" coords="810,451,941,449,996,508,939,566,812,566" shape="poly">
-			<area target="" alt="Open Schema Normalization Process" title="Open Schema Normalization Process" href="javascript:openBusinessProcess()" coords="1007,430,1341,598" shape="rect">
-			<area target="" alt="Open Money Transfer Transformation" title="Open Money Transfer Transformation" href="javascript:openDataTransformation()" coords="1009,283,1125,410" shape="rect">
-			<area target="" alt="Open Terminology Lookup for State Codes" title="Open Terminology Lookup for State Codes" href="javascript:openDataLookup()" coords="1142,297,1193,281,1246,297,1246,412,1193,420,1142,408" shape="poly">
-			<area target="" alt="Open Workflow Inbox" title="Open Workflow Inbox" href="javascript:openWorkflow()" coords="1242,713,1400,914" shape="rect">
-			<area target="" alt="Open Message Trace Log" title="Open Message Trace Log" href="javascript:openMessageTrace()" coords="1357,467,1480,465,1519,506,1482,553,1359,553" shape="poly">
-			<area target="" alt="Open SQL Query" title="Open SQL Query" href="javascript:openDataStore()" coords="1538,254,1847,742" shape="rect">
-			<area target="" alt="See Data through a REST API" title="See Data through a REST API" href="javascript:openRESTService()" coords="1958,428,2103,428,2149,473,2105,520,1956,518" shape="poly">
-			<area target="" alt="Open SQL Query" title="Open SQL Query" href="javascript:openDataStore()" coords="1952,203,2105,203,2148,248,2101,295,1952,295" shape="poly">
-			<area target="" alt="Open InterSystems IRIS Business Intelligence" title="Open InterSystems IRIS Business Intelligence" href="javascript:openCube()" coords="1958,316,2101,316,2148,361,2103,406,1956,406" shape="poly">
+			<area target="" alt="Send Transactions and Affordability Files" title="Send Transactions and Affordability Files" href="javascript:moveTransactionAndAffordabilityFiles()" coords="380,733,762,1077" shape="rect">
+			<area target="" alt="Send Transactions and Affordability Files" title="Send Transactions and Affordability Files" href="javascript:moveTransactionAndAffordabilityFiles()" coords="339,306,701,486" shape="rect">
+			<area target="" alt="Send Performance Files" title="Send Performance Files" href="javascript:movePerformanceFiles()" coords="1088,718,1495,1027" shape="rect">
+			<area target="" alt="Send Performance Files" title="Send Performance Files" href="javascript:movePerformanceFiles()" coords="1073,362,1480,531" shape="rect">
+			<area target="" alt="Generate PSD 001" title="Generate PSD 001" href="" coords="1553,728,1842,971" shape="rect">
+			<area target="" alt="Generate PSD 001" title="Generate PSD 001" href="" coords="1515,316,1839,508" shape="rect">
+			<area target="" alt="Generate PSD 007" title="Generate PSD 007" href="" coords="2285,739,2550,941" shape="rect">
+			<area target="" alt="Generate PSD 007" title="Generate PSD 007" href="" coords="2249,321,2568,498" shape="rect">
+			<area target="" alt="Show Data Normalization" title="Show Data Normalization" href="javascript:openBusinessProcess()" coords="726,511,1020,673" shape="rect">
+			<area target="" alt="Show generated PSD 001 Report" title="Show generated PSD 001 Report" href="" coords="1875,412,2201,546" shape="rect">
+			<area target="" alt="Show generated PSD 007 Report" title="Show generated PSD 007 Report" href="" coords="2596,352,2861,536" shape="rect">
 		</map>
 						
 		<table width="100%" style="text-align: center;">
 			<tr>
 				<td><input ID="BTNALL" type="button" class="Button" value="Open All Windows" onclick="openWindows()"/></td>
+				<td><input ID="BTNIMG" type="button" class="Button" value="Toggle Detailed View" onclick="toggleImage()"/></td>
 			</tr>
 		</table>
 
@@ -208,6 +215,21 @@
 			demoimg.style.width="90%";
 
 			imageMapResize();
+		</script>
+
+		<script language="JavaScript">
+			function moveTransactionAndAffordabilityFiles(){
+				// invoke server-side method Test
+				var transCopy = #server(File.Utils.MoveFile("PSD001-TransactionData_2.2.csv", "/MortgageSystemFiles/Trans"))#;
+				var affordCopy = #server(File.Utils.MoveFile("PSD001-AffordabilityData_2.2.csv", "/MortgageSystemFiles/Afford"))#;
+			}
+		</script>
+
+		<script language="JavaScript">
+			function movePerformanceFiles(){
+				// invoke server-side method Test
+				var perfCopy = #server(File.Utils.MoveAllFiles("/MortgageSystemFiles/Perf"))#;
+			}
 		</script>
 
 	</body>
