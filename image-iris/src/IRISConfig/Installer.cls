@@ -107,17 +107,18 @@ ClassMethod Config(pNamespace As %String) As %Status
 		Set objReport = ##class(Report.ReportDef).%New()
 		Set objReport.ReportName="FCA PSD 001 v2.2"
 		Set objReport.ReportCode="PSD001v2.2"
-		Set objReport.HeaderDTL="Custom.FCAReport.DTL.PSDFeedHeader"
-		Set objReport.ContentsDTL="Custom.FCAReport.DTL.PSD001.FSAHSFFeedMGMsg"
-		Set objReport.ReportQuery="?"
+		Set objReport.HeaderDTL="Custom.FCAReport.DTL.PSD001.Header"
+		Set objReport.ContentsDTL="Custom.FCAReport.DTL.PSD001.Msg"
+		Set objReport.ReportQuery="select ID from Canonical.Mortgage where %BatchRecordStatus=7 and AsOfDate >= TO_DATE(?, 'YYYY-MM-DD') and AsOfDate < TO_DATE(?, 'YYYY-MM-DD')"
 		Set objReport.SourceCanonicalClassName="Canonical.Mortgage"
 		Set tSC = objReport.%Save()
 		Quit:$$$ISERR(tSC)
 
 		Set objReportSch = ##class(Report.ReportSchedule).%New()
 		Set objReportSch.Report=objReport
-		Set objReportSch.DueDate=+$H
-		Do objReportSch.QueryParamList.Insert("?")
+		Set objReportSch.DueDate=$ZDateH("2020-04-20", 3) // The law gives up to 20 days to the institution to send the report
+		Do objReportSch.QueryParamList.Insert("2020-01-01") //Inclusive
+		Do objReportSch.QueryParamList.Insert("2020-04-01") //Exclusive
 		Set tSC = objReportSch.%Save()
 		Quit:$$$ISERR(tSC)
 

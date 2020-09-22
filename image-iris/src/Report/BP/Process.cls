@@ -42,20 +42,14 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
         {
             Set canonicalId = ""
 
-            //Set status = context.ReportScheduleRun.GetResultSet(.oRS)
-            //Quit:$$$ISERR(status)
-
-            Set status = $classmethod(context.ReportScheduleRun.HeaderDTL, "Transform", context.ReportScheduleRun, .report)
+            Set status = context.ReportScheduleRun.GetResultSet(.oRS)
             Quit:$$$ISERR(status)
 
-            
-            Set status = $classmethod("Custom.FCAReport.DTL.PSD001.FSAHSFFeedMGMsg", "Transform", context.ReportScheduleRun, .report, 1)
+            /// Building the header of the document. Just need to call this one once. The header uses information from the Schedule
+            /// This DTL creates the XML document with the right schema
+            Set status = $classmethod(context.ReportScheduleRun.HeaderDTL, "Transform", context.ReportScheduleRun, .reportXMLDoc)
             Quit:$$$ISERR(status)
 
-            Set status = $classmethod("Custom.FCAReport.DTL.PSD001.FSAHSFFeedMGMsg", "Transform", context.ReportScheduleRun, .report, 2)
-            Quit:$$$ISERR(status)
-
-            /*
             While oRS.Next()
             {
                 Set canonicalId = oRS.GetData(1)
@@ -65,11 +59,14 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 
                 Set context.RecordCount=context.RecordCount+1
 
-                Set status = $classmethod(context.ReportScheduleRun.ContentsDTL, "Transform", canonicalObj, .report) 
-                Quit:$$$ISERR(status)
+                /// Call this second transformation once per each canonical object. 
+                /// This DTL will reuse the xml document and add a record to it for every canonical object opened by the query of the report.
+                Set status = $classmethod(context.ReportScheduleRun.ContentsDTL, "Transform", canonicalObj, .reportXMLDoc, context.RecordCount) 
+                Quit:$$$ISERR(status) 
+
+                //Quit:context.RecordCount=100
             }
             Quit:$$$ISERR(status)
-            */
         }
         Catch (oException)
         {
@@ -86,11 +83,10 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 
             Set status2 = context.ReportScheduleRun.ChangeToErrorStatus($System.Status.GetErrorText(status), context.RecordCount)
             If $$$ISERR(status2) Set status = $System.Status.AppendStatus(status, status2)
-            
         }
         Else
         {
-            Set status = report.%Save()
+            Set status = reportXMLDoc.%Save()
         
             If $$$ISERR(status)
             {
@@ -102,7 +98,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
             }
             Else
             {
-                Set context.Report=report
+                Set context.Report=reportXMLDoc 
             }
         }
         
@@ -112,9 +108,10 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 <assign name="Close Report" property="status" value="context.ReportScheduleRun.ChangeToGeneratedStatus(context.RecordCount)" action="set" xpos='200' ypos='850' />
 <trace name='Batch closed' value='"Batch closed."' xpos='200' ypos='950' />
 <assign name="Done" property="context.Action" value="&quot;Done&quot;" action="set" xpos='200' ypos='1050' />
-<call name='Send to Trace' target='Trace Operation' async='0' xpos='200' ypos='1150' >
+<call name='Send to FCA' target='Send to FCA' async='0' xpos='200' ypos='1150' >
 <request type='EnsLib.EDI.XML.Document' >
 <assign property="callrequest" value="context.Report" action="set" />
+<assign property="callrequest.Source" value="context.ReportSchedule.Report.ReportCode" action="set" />
 </request>
 <response type='Ens.Response' />
 </call>

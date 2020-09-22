@@ -68,6 +68,13 @@ XData ProductionDefinition
   </Item>
   <Item Name="Reporting Process" Category="" ClassName="Report.BP.Process" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
+  <Item Name="Send to FCA" Category="" ClassName="EnsLib.EDI.XML.Operation.FileOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="Charset">utf-8</Setting>
+    <Setting Target="Adapter" Name="FilePath">/FCAGeneratedReports/</Setting>
+    <Setting Target="Adapter" Name="Overwrite">1</Setting>
+    <Setting Target="Host" Name="Filename">%f_%Q.xml</Setting>
+    <Setting Target="Host" Name="Format">intC()</Setting>
+  </Item>
 </Production>
 }
 

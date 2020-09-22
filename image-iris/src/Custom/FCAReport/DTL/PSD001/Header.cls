@@ -1,4 +1,4 @@
-Class Custom.FCAReport.DTL.PSDFeedHeader Extends Ens.DataTransformDTL [ DependsOn = (Report.ReportScheduleRun, EnsLib.EDI.XML.Document) ]
+Class Custom.FCAReport.DTL.PSD001.Header Extends Ens.DataTransformDTL [ DependsOn = (Report.ReportScheduleRun, EnsLib.EDI.XML.Document) ]
 {
 
 Parameter IGNOREMISSINGSOURCE = 1;
@@ -15,7 +15,6 @@ XData DTL [ XMLNamespace = "http://www.intersystems.com/dtl" ]
 <assign value='"DemoFirm"' property='target.{FSAFeedHeader.Submitter.SubmittingFirm}' action='set' />
 <assign value='"DemoDept"' property='target.{FSAFeedHeader.Submitter.SubmittingDept}' action='set' />
 <assign value='"2.0"' property='target.{FSAFeedHeader.FeedTargetSchemaVersion}' action='set' />
-
 </transform>
 }
 

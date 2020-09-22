@@ -143,7 +143,9 @@
 				movePerformanceFiles();
 			}
 			function bubble5(){
-				console.log("Bubble 5")
+
+				generatePSD001();
+
 			}
 			function bubble6(){
 				console.log("Bubble 6")
@@ -185,8 +187,8 @@
 
 			function moveTransactionAndAffordabilityFiles(){
 				// invoke server-side method Test
-				var transCopyMsg = #server(File.Utils.MoveFile("PSD001-TransactionData_2.2.csv", "/MortgageSystemFiles/Trans"))#;
-				var affordCopyMsg = #server(File.Utils.MoveFile("PSD001-AffordabilityData_2.2.csv", "/MortgageSystemFiles/Afford"))#;
+				var transCopyMsg = #server(IRISDemo.LandingPage.Utils.MoveFile("PSD001-TransactionData_2.2.csv", "/MortgageSystemFiles/Trans"))#;
+				var affordCopyMsg = #server(IRISDemo.LandingPage.Utils.MoveFile("PSD001-AffordabilityData_2.2.csv", "/MortgageSystemFiles/Afford"))#;
 
 				if(transCopyMsg === "1" && affordCopyMsg === "1"){
 					alert("Transactional Data File (PSD001-TransactionData_2.2.csv) and Afordability Data File (PSD001-AffordabilityData_2.2.csv) copied over for processing")
@@ -199,11 +201,24 @@
 
 			function movePerformanceFiles(){
 				// invoke server-side method Test
-				var perfCopyMsg = #server(File.Utils.MoveAllFiles("/MortgageSystemFiles/Perf"))#;
+				var perfCopyMsg = #server(IRISDemo.LandingPage.Utils.MoveAllFiles("/MortgageSystemFiles/Perf"))#;
 				if(perfCopyMsg === "1"){
 					alert("Mortgage System Performance files copied over for processing")
 				}else{
 					alert(perfCopyMsg)
+				}
+			}
+
+			function generatePSD001()
+			{
+				
+				// Schedule ID 1 is PSD001 v2.2. It was created on IRISDemo.Installer during build time.
+				// This scehdule is for the first quarter of 2020
+				var resp = #server(IRISDemo.LandingPage.Utils.GenerateReportByScheduleId(1))#;
+				if(resp === "1"){
+					alert("Report PSD 001 is being generated for the first quarter of 2020...")
+				}else{
+					alert(resp)
 				}
 			}
 

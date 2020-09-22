@@ -52,7 +52,8 @@ Method GetResultSet(Output pRS As %Library.ResultSet) As %Status
     Set tSC = $$$OK
     Try 
     {
-        For i=1:1:..ReportSchedule.QueryParamList.Count()
+        Set args=..ReportSchedule.QueryParamList.Count()
+        For i=1:1:args
         {
             Set args(i)=..ReportSchedule.QueryParamList.GetAt(i)
         }
