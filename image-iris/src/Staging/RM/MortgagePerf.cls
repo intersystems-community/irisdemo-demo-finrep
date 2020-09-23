@@ -1,5 +1,5 @@
 /// RECORDMAP: Modified during compilation of RecordMap 'Staging.RM.MortgagePerf'
-/// on 2020-09-14 at 18:52:20.879 [2020-09-14 18:52:20.879 UTC]
+/// on 2020-09-23 at 22:40:34.774 [2020-09-23 22:40:34.774 UTC]
 /// by user SuperUser
 Class Staging.RM.MortgagePerf Extends EnsLib.RecordMap.RecordMap
 {
@@ -77,7 +77,7 @@ ClassMethod GetRecord(pStream As %IO.DeviceStream, pObject As %RegisteredObject,
 	Set tStatus = $$$OK
 	If pLabelFound { Set tRecLabel = "" } 
 	Else { Set tRecLabel = "" } 
-	Set tStatus = ..chunkRecord(pStream, .tRecordData, .tCharCount, "", pTimeout, $char(13,10), tRecLabel, .pLookAhead, "")
+	Set tStatus = ..chunkRecord(pStream, .tRecordData, .tCharCount, "", pTimeout, $char(13,10), tRecLabel, .pLookAhead, $char(34))
 	If $$$ISERR(tStatus) Quit tStatus
 	Set tMaxLocal = $$$MaxLocalLength
 	Set tRecordData("charcount") = +$get(tCharCount)
@@ -371,45 +371,45 @@ ClassMethod GetRecord(pStream As %IO.DeviceStream, pObject As %RegisteredObject,
 ClassMethod PutRecord(pStream As %IO.DeviceStream, pObject As %RegisteredObject, pHasTopFields As %Boolean, ByRef pPadArray As %String) As %Status [ Internal, Private ]
 {
 	Set tStatus = $$$OK
-	Do pStream.Write($select(pHasTopFields: pObject.LegacyAsOfDate,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyFirmId,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyTransRef,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyLoanPurchase,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyOrigProviderFRN,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyOutstandingBalance,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyValueLinkedAccounts,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyIncentivisedRate,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyRemainingTerm,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyMonthsPastMaturity,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyReasonForClosure,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyCurrentPaymentShortfall,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyArrearsStartDate,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyPaymentShortfallArrangement,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyDateFormalArrangement,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyPaymentShortfallCapitalisation,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyCapitalisationDate,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyInterestOnlyDate,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyPaymentsSuspended,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyDatesPaymentsSuspended,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyReducedPayments,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyDateReducedPayments,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyTermExtension,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyDateTermExtension,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyOtherForbearance,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyDateOtherForbearance,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyDateLitigationStarted,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyPossessionOrder,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyDatePossession,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyRepossessionSaleValueAchieved,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyDateofBalance,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacySecondChargeMortgage,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyBeneficialOwnerRegFirm,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyBeneficialOwnerFRN,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyBeneficialOwnerName,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyLegalOwnerRegFirm,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyLegalOwnerFRN,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyLegalOwnerName,1: ""),0)
-	Do pStream.Write($char(44) _ $select(pHasTopFields: pObject.LegacyClosedBook,1: ""),0)
+	Do pStream.Write($select(pHasTopFields: ..Escape(pObject.LegacyAsOfDate, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyFirmId, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyTransRef, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyLoanPurchase, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyOrigProviderFRN, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyOutstandingBalance, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyValueLinkedAccounts, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyIncentivisedRate, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyRemainingTerm, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyMonthsPastMaturity, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyReasonForClosure, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyCurrentPaymentShortfall, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyArrearsStartDate, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyPaymentShortfallArrangement, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyDateFormalArrangement, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyPaymentShortfallCapitalisation, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyCapitalisationDate, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyInterestOnlyDate, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyPaymentsSuspended, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyDatesPaymentsSuspended, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyReducedPayments, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyDateReducedPayments, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyTermExtension, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyDateTermExtension, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyOtherForbearance, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyDateOtherForbearance, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyDateLitigationStarted, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyPossessionOrder, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyDatePossession, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyRepossessionSaleValueAchieved, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyDateofBalance, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacySecondChargeMortgage, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyBeneficialOwnerRegFirm, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyBeneficialOwnerFRN, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyBeneficialOwnerName, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyLegalOwnerRegFirm, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyLegalOwnerFRN, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyLegalOwnerName, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyClosedBook, $lb($char(44)),"quote",$char(34)),1: ""),0)
 	Do pStream.Write($char(13,10), 0, .tStatus)
 	If $$$ISERR(tStatus) Quit tStatus
 	Quit tStatus
@@ -436,7 +436,7 @@ ClassMethod getType() As EnsLib.RecordMap.Model.DataType.RecordType [ CodeMode =
 
 XData RecordMap [ XMLNamespace = "http://www.intersystems.com/Ensemble/RecordMap" ]
 {
-<Record xmlns="http://www.intersystems.com/Ensemble/RecordMap" name="Staging.RM.MortgagePerf" type="delimited" char_encoding="UTF-8" targetClassname="Staging.RM.MortgagePerf.Record" batchClass="Staging.RM.MortgagePerf.Batch" complexBatchManaged="0" padFromLeft="0" recordTerminator="\x0d\x0a" allowEarlyTerminator="0">
+<Record xmlns="http://www.intersystems.com/Ensemble/RecordMap" name="Staging.RM.MortgagePerf" type="delimited" char_encoding="UTF-8" targetClassname="Staging.RM.MortgagePerf.Record" batchClass="Staging.RM.MortgagePerf.Batch" complexBatchManaged="0" padFromLeft="0" recordTerminator="\x0d\x0a" escaping="quote" escapeSequence="&quot;" allowEarlyTerminator="0">
   <Separators>
     <Separator>,</Separator>
   </Separators>
@@ -460,7 +460,7 @@ XData RecordMap [ XMLNamespace = "http://www.intersystems.com/Ensemble/RecordMap
   </Field>
   <Field name="LegacyMonthsPastMaturity" datatype="%String" sqlColumn="11">
   </Field>
-  <Field name="LegacyReasonForClosure" datatype="%String" sqlColumn="12">
+  <Field name="LegacyReasonForClosure" required="0" ignored="0" datatype="%String" params="MAXLEN=1024" sqlColumn="12" repeating="0">
   </Field>
   <Field name="LegacyCurrentPaymentShortfall" required="0" ignored="0" datatype="%String" params="MAXLEN=1024" sqlColumn="13" repeating="0">
   </Field>

@@ -1,5 +1,5 @@
 /// RECORDMAP: Modified during compilation of RecordMap 'Staging.RM.MortgagePerf'
-/// on 2020-09-14 at 18:52:20.859 [2020-09-14 18:52:20.859 UTC]
+/// on 2020-09-23 at 21:34:40.386 [2020-09-23 21:34:40.386 UTC]
 /// by user SuperUser
 Class Staging.RM.MortgagePerf.Batch Extends (%Library.Persistent, EnsLib.RecordMap.SimpleBatch)
 {
@@ -16,7 +16,7 @@ Parameter BatchTrailer;
 
 Parameter TrailerTerm = "\x0d\x0a";
 
-Parameter IgnoreLeadingData = 0;
+Parameter IgnoreLeadingData = 1;
 
 Relationship Records As Staging.RM.MortgagePerf.Record [ Cardinality = many, Inverse = %ParentBatch ];
 

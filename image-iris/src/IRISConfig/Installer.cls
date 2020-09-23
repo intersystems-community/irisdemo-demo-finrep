@@ -104,6 +104,17 @@ ClassMethod Config(pNamespace As %String) As %Status
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
 
+		Set obj = ##class(Normalization.BatchJobSpec).%New()
+		Set obj.BatchClassName="Staging.RM.MortgagePerf.Batch"
+		Set obj.BatchRecordClassName="Staging.RM.MortgagePerf.Record"
+		Set obj.DTLClassName="Custom.Normalization.DTL.Perf"
+		Set obj.CanonicalClassName="Canonical.MortgagePerf"
+		Set obj.CubeList="MortgageSales"
+		Set tSC = obj.%Save()
+		Quit:$$$ISERR(tSC)
+
+		
+		// FCA Report spec and Schedule for Mortgage sales data. These will be assigned ID 1
 		Set objReport = ##class(Report.ReportDef).%New()
 		Set objReport.ReportName="FCA PSD 001 v2.2"
 		Set objReport.ReportCode="PSD001v2.2"
@@ -122,7 +133,86 @@ ClassMethod Config(pNamespace As %String) As %Status
 		Set tSC = objReportSch.%Save()
 		Quit:$$$ISERR(tSC)
 
+		// FCA Report spec and Schedule for Mortgage performance data. These will be assigned ID 2
+		Set objReport = ##class(Report.ReportDef).%New()
+		Set objReport.ReportName="FCA PSD 007 v2"
+		Set objReport.ReportCode="PSD007v2"
+		Set objReport.HeaderDTL="Custom.FCAReport.DTL.PSD007.Header"
+		Set objReport.ContentsDTL="Custom.FCAReport.DTL.PSD007.Msg"
+		Set objReport.ReportQuery="select main.ID from Canonical.MortgagePerf main where main.%BatchRecordStatus=7 and main.AsOfDate = (select max(sub.AsOfDate) from Canonical.MortgagePerf sub where main.Mortgage=sub.Mortgage and sub.AsOfDate >= TO_DATE(?, 'YYYY-MM-DD') and sub.AsOfDate < TO_DATE(?, 'YYYY-MM-DD') and sub.%BatchRecordStatus=7)"
+		Set objReport.SourceCanonicalClassName="Canonical.MortgagePerf"
+		Set tSC = objReport.%Save()
+		Quit:$$$ISERR(tSC)
 
+		Set objReportSch = ##class(Report.ReportSchedule).%New()
+		Set objReportSch.Report=objReport
+		Set objReportSch.DueDate=$ZDateH("2020-07-20", 3) // The law gives up to 20 days to the institution to send the report
+		Do objReportSch.QueryParamList.Insert("2020-01-01") //Inclusive
+		Do objReportSch.QueryParamList.Insert("2020-07-01") //Exclusive
+		Set tSC = objReportSch.%Save()
+		Quit:$$$ISERR(tSC)
+
+
+	}
+	Catch (oException)
+	{
+		Set tSC = oException.AsStatus()
+	}	
+	
+	ZN "%SYS"
+	
+	Quit tSC
+}
+
+ClassMethod InsertOnLookupTable(pLookupName As %String, pKey As %String, pValue As %String) As %Status
+{
+	Set tSC = $$$OK
+	Try
+	{
+		ZN "APPINT"
+
+		TStart
+		
+		Set ^Ens.LookupTable(pLookupName)=$ListBuild($Horolog)
+		
+		Set ^Ens.LookupTable(pLookupName, pKey)=pValue
+		
+		Set ^IRISDemo.BS.LookupTable("PopulatedTables", pLookupName)=$ListBuild($H)
+	}
+	Catch (oException)
+	{
+		Set tSC = oException.AsStatus()
+	}
+	
+	If $System.Status.IsError(tSC)
+	{
+		TRollback
+	}
+	Else
+	{
+		TCommit
+	}
+
+	ZN "%SYS"
+	
+	Quit tSC
+}
+
+ClassMethod PopulateLookupTables(pNamespace As %String) As %Status
+{
+	#define IL(%LT,%K,%V) Set tSC = ..InsertOnLookupTable(%LT, %K, %V) Q:$$$ISERR(tSC)
+
+	Set tSC = $$$OK
+	Try
+	{
+		ZN "APPINT"
+		
+		$$$IL("ReasonForClosure", "remortgage to same lender", "R")
+		$$$IL("ReasonForClosure", "moved to a different property, mortgage taken with same lender (includes porting)", "M")
+		$$$IL("ReasonForClosure", "repossession", "P")
+		$$$IL("ReasonForClosure", "assisted sale", "A")
+		$$$IL("ReasonForClosure", "voluntary repossession", "V")
+		$$$IL("ReasonForClosure", "other", "O")
 	}
 	Catch (oException)
 	{
@@ -272,6 +362,14 @@ ClassMethod PopulateCT(pNamespace As %String) As %Status
 		$$$I("RepaymentStrategy", "L", "Lifetime mortgage")
 		$$$I("RepaymentStrategy", "O", "Other repayment strategy")
 
+		//Performance tables
+
+		$$$I("ReasonForClosure", "R", "Remortgage to same lender")
+		$$$I("ReasonForClosure", "M", "Moved to a different property, mortgage taken with same lender (includes porting)")
+		$$$I("ReasonForClosure", "P", "Repossession")
+		$$$I("ReasonForClosure", "A", "Assisted sale ")
+		$$$I("ReasonForClosure", "V", "Voluntary repossession")
+		$$$I("ReasonForClosure", "O", "Other")
 	}
 	Catch (oException)
 	{
@@ -331,6 +429,11 @@ XData Install [ XMLNamespace = INSTALLER ]
 		<Arg name="pNamespace" Value="${Namespace}"/>
 	</Invoke>
 
+	<Log Text="Populating lookup tables for the demo..." Level="0"/>
+	<Invoke Class="IRISConfig.Installer" Method="PopulateLookupTables" CheckStatus="true">
+		<Arg name="pNamespace" Value="${Namespace}"/>
+	</Invoke>
+
 	<Log Text="Configuring IRIS..." Level="0"/>
 	<Invoke Class="IRISConfig.Installer" Method="ConfigIRIS" CheckStatus="true">
 	</Invoke>
@@ -342,6 +445,7 @@ XData Install [ XMLNamespace = INSTALLER ]
 	<Log Text="Loading DeepSee Pivots and Dashboards..." Level="0"/>
 	<Invoke Class="IRISConfig.Installer" Method="LoadDFIFiles" CheckStatus="true">
 	</Invoke>
+
 
 
 </Manifest>

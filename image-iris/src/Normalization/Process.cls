@@ -75,8 +75,8 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 
             If $IsObject(normalizedRecord)
             {
-                Do normalizedRecord.XMLExportToString(.normalizedRecordXML)
-                $$$LOGERROR("Normalized Record: "_normalizedRecordXML)
+                Do normalizedRecord.XMLExportToString(.normalizedRecord)
+                $$$LOGERROR("Normalized Record: "_normalizedRecord) 
             }
 
             Set status2 = context.BatchControlRecord.ChangeToErrorStatus($System.Status.GetErrorText(status), context.RecordCount)

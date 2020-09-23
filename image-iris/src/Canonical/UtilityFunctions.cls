@@ -41,4 +41,24 @@ ClassMethod MortgageAfford(Mortgage = "", AsOfDate = "") As Canonical.MortgageAf
  Return obj
 }
 
+ClassMethod MortgagePerf(Mortgage = "", AsOfDate = "") As Canonical.MortgagePerf
+{
+ Set new=0
+ If Mortgage="" {
+   Set obj = ##class(Canonical.MortgagePerf).%New()
+   Set new=1
+ } Else {
+   Set obj=##class(Canonical.MortgagePerf).FirmAndTransIndexOpen(Mortgage.%Id(), AsOfDate)
+   If obj="" { 
+     Set obj = ##class(Canonical.MortgagePerf).%New()
+     Set new=1
+   }
+ }
+ If new {
+   Set obj.Mortgage=Mortgage
+   Set obj.AsOfDate=AsOfDate
+ }
+ Return obj
+}
+
 }

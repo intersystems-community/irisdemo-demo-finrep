@@ -16,7 +16,7 @@ Parameter BatchTrailer;
 
 Parameter TrailerTerm = "\x0d\x0a";
 
-Parameter IgnoreLeadingData = 0;
+Parameter IgnoreLeadingData = 1;
 
 Relationship Records As Staging.RM.MortgageAfford.Record [ Cardinality = many, Inverse = %ParentBatch ];
 

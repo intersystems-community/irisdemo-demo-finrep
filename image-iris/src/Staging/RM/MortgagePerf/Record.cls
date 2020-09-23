@@ -1,5 +1,5 @@
 /// RECORDMAP: Generated from RecordMap 'Staging.RM.MortgagePerf'
-/// on 2020-09-14 at 17:43:14.061 [2020-09-14 17:43:14.061 UTC]
+/// on 2020-09-23 at 22:40:34.696 [2020-09-23 22:40:34.696 UTC]
 /// by user SuperUser
 Class Staging.RM.MortgagePerf.Record Extends (%Persistent, %XML.Adaptor, Ens.Request, EnsLib.RecordMap.Base) [ Inheritance = right, ProcedureBlock ]
 {
@@ -26,9 +26,9 @@ Property LegacyRemainingTerm As %String [ SqlColumnNumber = 10 ];
 
 Property LegacyMonthsPastMaturity As %String [ SqlColumnNumber = 11 ];
 
-Property LegacyReasonForClosure As %String [ SqlColumnNumber = 12 ];
+Property LegacyReasonForClosure As %String(MAXLEN = 1024) [ SqlColumnNumber = 12 ];
 
-Property LegacyCurrentPaymentShortfall As %String [ SqlColumnNumber = 13 ];
+Property LegacyCurrentPaymentShortfall As %String(MAXLEN = 1024) [ SqlColumnNumber = 13 ];
 
 Property LegacyArrearsStartDate As %String [ SqlColumnNumber = 14 ];
 
@@ -83,12 +83,6 @@ Property LegacyLegalOwnerFRN As %String [ SqlColumnNumber = 38 ];
 Property LegacyLegalOwnerName As %String [ SqlColumnNumber = 39 ];
 
 Property LegacyClosedBook As %String [ SqlColumnNumber = 40 ];
-
-Parameter RECORDMAPGENERATED = 1;
-
-Relationship %ParentBatch As Staging.RM.MortgagePerf.Batch [ Cardinality = one, Inverse = Records ];
-
-Index %ParentBatchIdx On %ParentBatch;
 
 Storage Default
 {
@@ -214,10 +208,10 @@ Storage Default
 <Value>LegacyClosedBook</Value>
 </Value>
 <Value name="41">
-<Value>%ParentBatch</Value>
+<Value>LegacyFirmId</Value>
 </Value>
 <Value name="42">
-<Value>LegacyFirmId</Value>
+<Value>%ParentBatch</Value>
 </Value>
 </Data>
 <DataLocation>^Staging.RM.Mortgage9716.RecordD</DataLocation>
@@ -228,5 +222,11 @@ Storage Default
 <StreamLocation>^Staging.RM.Mortgage9716.RecordS</StreamLocation>
 <Type>%Storage.Persistent</Type>
 }
+
+Parameter RECORDMAPGENERATED = 1;
+
+Relationship %ParentBatch As Staging.RM.MortgagePerf.Batch [ Cardinality = one, Inverse = Records ];
+
+Index %ParentBatchIdx On %ParentBatch;
 
 }

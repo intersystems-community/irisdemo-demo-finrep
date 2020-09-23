@@ -76,7 +76,7 @@ Property BasicExpenditure As %Double [ SqlColumnNumber = 38 ];
 
 Property StressTestedInterestRate As %Double [ SqlColumnNumber = 39 ];
 
-Index MortgagePerformancePK On (Mortgage, AsOfDate) [ PrimaryKey ];
+Index MortgagePerformancePK On (Mortgage, AsOfDate) [ Data = %BatchRecordStatus, PrimaryKey ];
 
 Storage Default
 {

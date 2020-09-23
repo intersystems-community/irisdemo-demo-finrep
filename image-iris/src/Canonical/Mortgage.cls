@@ -167,7 +167,7 @@ Property RemtgePurpose2 As Canonical.CT.RemtgePurpose [ SqlColumnNumber = 77 ];
 
 Property RemtgePurpose3 As Canonical.CT.RemtgePurpose [ SqlColumnNumber = 78 ];
 
-Index FirmAndTransIndex On (FirmId, TransactionId) [ PrimaryKey ];
+Index FirmAndTransIndex On (FirmId, TransactionId) [ Data = %BatchRecordStatus, PrimaryKey ];
 
 Index AsOfDateIndex On AsOfDate;
 
