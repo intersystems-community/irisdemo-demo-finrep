@@ -2,7 +2,7 @@
 /// The report definition defines its name, query to be run and DTLs to apply to the query
 /// returned data. The query will normally have parameters. These are to be specified on the 
 /// ReportSchedule and should vary from schedule to schedule. 
-Class Report.ReportDef Extends %Persistent
+Class Report.ReportDef Extends (%Persistent, %XML.Adaptor)
 {
 
 Property ReportName As %String [ Required ];
@@ -24,6 +24,11 @@ Property HeaderDTL As %String [ Required ];
 /// transform it and add it to the generated FCA document
 Property ContentsDTL As %String [ Required ];
 
+Property ReportClassName As %String [ Required ];
+
+/// List of cubes that need to be synchronized after a report is succesfully generated
+Property CubeList As %String(MAXLEN = 32000) [ Required ];
+
 Index ReportCodeIndex On ReportCode [ Unique ];
 
 Storage Default
@@ -36,19 +41,25 @@ Storage Default
 <Value>ReportName</Value>
 </Value>
 <Value name="3">
-<Value>ReportQuery</Value>
+<Value>ReportCode</Value>
 </Value>
 <Value name="4">
-<Value>SourceCanonicalClassName</Value>
+<Value>ReportQuery</Value>
 </Value>
 <Value name="5">
-<Value>HeaderDTL</Value>
+<Value>SourceCanonicalClassName</Value>
 </Value>
 <Value name="6">
-<Value>ContentsDTL</Value>
+<Value>HeaderDTL</Value>
 </Value>
 <Value name="7">
-<Value>ReportCode</Value>
+<Value>ContentsDTL</Value>
+</Value>
+<Value name="8">
+<Value>ReportClassName</Value>
+</Value>
+<Value name="9">
+<Value>CubeList</Value>
 </Value>
 </Data>
 <DataLocation>^Report.ReportDefD</DataLocation>

@@ -27,8 +27,8 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 </parameters>
 </property>
 <property name='RecordCount' type='%Integer' instantiate='0' />
-<property name='Report' type='EnsLib.EDI.XML.Document' instantiate='0' />
 </context>
+
 <sequence xend='200' yend='350' >
 <while name='Generate Report' condition='context.Action="Generate"' xpos='200' ypos='250' xend='200' yend='1500' >
 <scope xpos='200' ypos='250' xend='200' yend='1400' >
@@ -47,11 +47,12 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 
             /// Building the header of the document. Just need to call this one once. The header uses information from the Schedule
             /// This DTL creates the XML document with the right schema
-            Set status = $classmethod(context.ReportScheduleRun.HeaderDTL, "Transform", context.ReportScheduleRun, .reportXMLDoc)
+            Set status = $classmethod(context.ReportScheduleRun.HeaderDTL, "Transform", context.ReportScheduleRun, .reportObjectTree)
             Quit:$$$ISERR(status)
 
-            Set status = reportXMLDoc.CommittedMode()
-            Quit:$$$ISERR(status)
+            // Tried to use this with XML VDocs to see if the memory issues would stop. But the memory issue happens during the %Save!
+            // Set status = reportXMLDoc.CommittedMode()
+            // Quit:$$$ISERR(status)
 
             While oRS.Next()
             {
@@ -64,9 +65,17 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 
                 /// Call this second transformation once per each canonical object. 
                 /// This DTL will reuse the xml document and add a record to it for every canonical object opened by the query of the report.
-                Set status = $classmethod(context.ReportScheduleRun.ContentsDTL, "Transform", canonicalObj, .reportXMLDoc, context.RecordCount) 
+                Set status = $classmethod(context.ReportScheduleRun.ContentsDTL, "Transform", canonicalObj, .reportObjectTree, context.RecordCount) 
                 Quit:$$$ISERR(status)
 
+                // Validate the first 10 objects just to fail fast in case of a data type validation problem
+                If context.RecordCount<10
+                {
+                    Set status = reportObjectTree.%ValidateObject()
+                    Quit:$$$ISERR(status)
+                }
+
+                // For testing.
                 //Quit:context.RecordCount=100
             }
             Quit:$$$ISERR(status)
@@ -86,45 +95,55 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 
             Set status2 = context.ReportScheduleRun.ChangeToErrorStatus($System.Status.GetErrorText(status), context.RecordCount)
             If $$$ISERR(status2) Set status = $System.Status.AppendStatus(status, status2)
+            Quit
         }
 
-        Set context.Report=reportXMLDoc 
+        If context.RecordCount=0
+        {
+            Set status = $$$ERROR(5001,"The query has not returned any records to report!")
+            Quit
+        }
 
-        /*
+        $$$TRACE("Saving generated report.")
+
+        Set status = reportObjectTree.%Save()
+        
+        If $$$ISERR(status)
+        {
+            $$$LOGERROR("An error occurred when trying to save the final report.")
+            $$$LOGSTATUS(status)
+
+            Set status2 = context.ReportScheduleRun.ChangeToErrorStatus($System.Status.GetErrorText(status), context.RecordCount)
+            If $$$ISERR(status2) Set status = $System.Status.AppendStatus(status, status2)
+        }
         Else
         {
-            $$$TRACE("XML document generated. Saving report.")
-
-            Set status = reportXMLDoc.%Save()
-         
-            If $$$ISERR(status)
-            {
-                $$$LOGERROR("An error occurred when trying to save the final report.")
-                $$$LOGSTATUS(status)
-
-                Set status2 = context.ReportScheduleRun.ChangeToErrorStatus($System.Status.GetErrorText(status), context.RecordCount)
-                If $$$ISERR(status2) Set status = $System.Status.AppendStatus(status, status2)
-            }
-            Else
-            {
-                Set context.Report=reportXMLDoc 
-            }
+            Set context.ReportScheduleRun.GeneratedReportObjectId=reportObjectTree.%Id()
         }
-        */ 
+        
+        
         
     ]]>
 </code>
-<trace name='Finished processing' value='"Finished processing the report"' xpos='200' ypos='750' />
+<trace name='Finished processing' value='"Finished processing "_context.RecordCount_" records."' xpos='200' ypos='750' />
 <assign name="Close Report" property="status" value="context.ReportScheduleRun.ChangeToGeneratedStatus(context.RecordCount)" action="set" xpos='200' ypos='850' />
 <trace name='Batch closed' value='"Batch closed."' xpos='200' ypos='950' />
 <assign name="Done" property="context.Action" value="&quot;Done&quot;" action="set" xpos='200' ypos='1050' />
 <call name='Send to FCA' target='Send to FCA' async='0' xpos='200' ypos='1150' >
-<request type='EnsLib.EDI.XML.Document' >
-<assign property="callrequest" value="context.Report" action="set" />
-<assign property="callrequest.Source" value="context.ReportSchedule.Report.ReportCode" action="set" />
+<request type='Report.ReportScheduleRun' >
+<assign property="callrequest" value="context.ReportScheduleRun" action="set" />
 </request>
-<response type='Ens.Response' />
 </call>
+<if name='Cubes?' condition='context.ReportSchedule.Report.CubeList&apos;=""' xpos='200' ypos='1350' xend='200' yend='1600' >
+<true>
+<call name='Synchronize Cubes' target='Cube Operations' async='0' xpos='335' ypos='1500' >
+<request type='Cube.BO.SynchronizeCubeListReq' >
+<assign property="callrequest.CubeList" value="context.ReportSchedule.Report.CubeList" action="set" />
+</request>
+</call>
+</true>
+</if>
+
 <faulthandlers>
 <catchall name='Report Generation error' xpos='200' ypos='1250' xend='200' yend='1250' >
 <trace name='Report Generation problem' value='"Report Generation problem"' xpos='200' ypos='250' />

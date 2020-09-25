@@ -33,49 +33,51 @@ Property PaymentShortfallCapitalisation As %String(DISPLAYLIST = ",Yes,No", VALU
 
 Property CapitalisationDate As %Date [ SqlColumnNumber = 18 ];
 
-Property InterestOnlyDate As %Date [ SqlColumnNumber = 19 ];
+Property SwitchInterestOnly As %String [ SqlColumnNumber = 19 ];
 
-Property PaymentsSuspended As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 20 ];
+Property InterestOnlyDate As %Date [ SqlColumnNumber = 20 ];
 
-Property DatesPaymentsSuspended As %String [ SqlColumnNumber = 21 ];
+Property PaymentsSuspended As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 21 ];
 
-Property ReducedPayments As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 22 ];
+Property DatesPaymentsSuspended As %String [ SqlColumnNumber = 22 ];
 
-Property DateReducedPayments As %Date [ SqlColumnNumber = 23 ];
+Property ReducedPayments As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 23 ];
 
-Property TermExtension As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 24 ];
+Property DateReducedPayments As %Date [ SqlColumnNumber = 24 ];
 
-Property DateTermExtension As %Date [ SqlColumnNumber = 25 ];
+Property TermExtension As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 25 ];
 
-Property OtherForbearance As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 26 ];
+Property DateTermExtension As %Date [ SqlColumnNumber = 26 ];
 
-Property DateOtherForbearance As %Date [ SqlColumnNumber = 27 ];
+Property OtherForbearance As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 27 ];
 
-Property DateLitigationStarted As %Date [ SqlColumnNumber = 28 ];
+Property DateOtherForbearance As %Date [ SqlColumnNumber = 28 ];
 
-Property PossessionOrder As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 29 ];
+Property DateLitigationStarted As %Date [ SqlColumnNumber = 29 ];
 
-Property DatePossession As %Date [ SqlColumnNumber = 30 ];
+Property PossessionOrder As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 30 ];
 
-Property RepossessionSaleValueAchieved As %String [ SqlColumnNumber = 31 ];
+Property DatePossession As %Date [ SqlColumnNumber = 31 ];
 
-Property DateofBalance As %Date [ SqlColumnNumber = 32 ];
+Property RepossessionSaleValueAchieved As %String [ SqlColumnNumber = 32 ];
 
-Property SecondChargeMortgage As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 33 ];
+Property DateofBalance As %Date [ SqlColumnNumber = 33 ];
 
-Property BeneficialOwnerRegFirm As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 34 ];
+Property SecondChargeMortgage As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 34 ];
 
-Property BeneficialOwnerFRN As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 35 ];
+Property BeneficialOwnerRegFirm As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 35 ];
 
-Property BeneficialOwnerName As %String [ SqlColumnNumber = 36 ];
+Property BeneficialOwnerFRN As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 36 ];
 
-Property LegalOwnerRegFirm As %String [ SqlColumnNumber = 37 ];
+Property BeneficialOwnerName As %String [ SqlColumnNumber = 37 ];
 
-Property LegalOwnerFRN As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 38 ];
+Property LegalOwnerRegFirm As %String [ SqlColumnNumber = 38 ];
 
-Property LegalOwnerName As %String [ SqlColumnNumber = 39 ];
+Property LegalOwnerFRN As %String(DISPLAYLIST = ",Yes,No", VALUELIST = ",Y,N") [ SqlColumnNumber = 39 ];
 
-Property ClosedBook As %String [ SqlColumnNumber = 40 ];
+Property LegalOwnerName As %String [ SqlColumnNumber = 40 ];
+
+Property ClosedBook As %String [ SqlColumnNumber = 41 ];
 
 Index FirmAndTransIndex On (Mortgage, AsOfDate) [ Data = %BatchRecordStatus, PrimaryKey ];
 
@@ -207,6 +209,9 @@ Storage Default
 </Value>
 <Value name="42">
 <Value>Mortgage</Value>
+</Value>
+<Value name="43">
+<Value>SwitchInterestOnly</Value>
 </Value>
 </Data>
 <DataLocation>^Canonical.MortgagePerfD</DataLocation>

@@ -23,6 +23,19 @@ XData Registry [ XMLNamespace = "http://www.intersystems.com/deepsee" ]
           <SynchFrequency>1</SynchFrequency>
           <SynchTimeUnit>Minute</SynchTimeUnit>
         </RegistryMapCube>
+
+        <RegistryMapCube CubeKey="REPORTS" CubeDisplayName="Reports" Disabled="false" DSTimeEnabled="true" BuildAsynch="true">
+          <NaturalGroup>1</NaturalGroup>
+          <CustomBuildOrder>1</CustomBuildOrder>
+          <NaturalBuildOrder>1</NaturalBuildOrder>
+          <UpdatePlan>Synch</UpdatePlan>
+          <BuildFrequency>1</BuildFrequency>
+          <BuildTimeUnit>Week</BuildTimeUnit>
+          <BuildDayOfWeek>1</BuildDayOfWeek>
+          <BuildDayOfMonth>1</BuildDayOfMonth>
+          <SynchFrequency>1</SynchFrequency>
+          <SynchTimeUnit>Minute</SynchTimeUnit>
+        </RegistryMapCube>
       </Cubes>
       <UpdatePlan>Synch</UpdatePlan>
       <BuildFrequency>1</BuildFrequency>

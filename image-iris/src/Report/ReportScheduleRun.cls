@@ -1,4 +1,4 @@
-Class Report.ReportScheduleRun Extends %Persistent
+Class Report.ReportScheduleRun Extends (%Persistent, %XML.Adaptor)
 {
 
 Property ReportSchedule As ReportSchedule [ Required ];
@@ -23,6 +23,10 @@ Property HeaderDTL As %String [ Required ];
 
 Property ContentsDTL As %String [ Required ];
 
+Property ReportClassName As %String [ Required ];
+
+Property GeneratedReportObjectId As %String;
+
 ClassMethod Create(pReportSchedule As Report.ReportSchedule, pSessionId As %String, Output pStatus As %Status) As Report.ReportScheduleRun
 {
     Set pStatus = $$$OK
@@ -36,6 +40,7 @@ ClassMethod Create(pReportSchedule As Report.ReportSchedule, pSessionId As %Stri
         Set oReportScheduleRun.SourceCanonicalClassName = pReportSchedule.Report.SourceCanonicalClassName
         Set oReportScheduleRun.HeaderDTL = pReportSchedule.Report.HeaderDTL
         Set oReportScheduleRun.ContentsDTL = pReportSchedule.Report.ContentsDTL
+        Set oReportScheduleRun.ReportClassName = pReportSchedule.Report.ReportClassName
 
         Set pStatus = oReportScheduleRun.%Save()
     } 
@@ -84,7 +89,6 @@ Method ChangeToErrorStatus(pReason As %String, pNumOfRecordsReported As %Integer
         Set ..RunStatus=2 //Error
         Set ..NumOfRecordsReported=pNumOfRecordsReported
         Set ..ReportSchedule.LastRun=$this
-        Do ..ReportSchedule.UpdateOverdueStatus()
 
         Set ..LastStatusChange = $ZDateTime($ZTimeStamp,3)
         Set ..Reason = pReason
@@ -156,7 +160,6 @@ Method ChangeToGeneratedStatus(pNumOfRecordsReported As %Integer = 0) As %Status
         Set ..NumOfRecordsReported=pNumOfRecordsReported
 
         Set ..ReportSchedule.LastRun=$this
-        Do ..ReportSchedule.UpdateOverdueStatus()
         
         Set tSC = ..%Save()
         Quit:$$$ISERR(tSC)
@@ -190,7 +193,6 @@ Method ChangeToDiscardedStatus() As %Status
         Set ..NumOfRecordsReported=pNumOfRecordsReported
 
         Set ..ReportSchedule.LastRun=$this
-        Do ..ReportSchedule.UpdateOverdueStatus()
 
         Set tSC = ..%Save()
         Quit:$$$ISERR(tSC)
@@ -248,6 +250,12 @@ Storage Default
 </Value>
 <Value name="12">
 <Value>ContentsDTL</Value>
+</Value>
+<Value name="13">
+<Value>ReportClassName</Value>
+</Value>
+<Value name="14">
+<Value>GeneratedReportObjectId</Value>
 </Value>
 </Data>
 <DataLocation>^Report.ReportScheduleRunD</DataLocation>

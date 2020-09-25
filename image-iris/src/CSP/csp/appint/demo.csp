@@ -206,14 +206,40 @@
 				generatePSD001();
 
 			}
-			function bubble6(){
-				console.log("Bubble 6")
+
+			function bubble6()
+			{
+				var time=1000;
+				var callNumber=0
+				var timeout = function () { return ++callNumber*time };
+
+				setTimeout("openSQLExplorer()", timeout());
+
+				setTimeout("openBatchDashboard()", timeout());
+
+				setTimeout("openDTLTransToFCA()", timeout());
+
+				setTimeout("openMessageTrace()", timeout());
 			}
-			function bubble7(){
-				console.log("Bubble 7")
+
+			function bubble7()
+			{
+				generatePSD007();
 			}
-			function bubble8(){
-				console.log("Bubble 8")
+
+			function bubble8()
+			{
+				var time=1000;
+				var callNumber=0
+				var timeout = function () { return ++callNumber*time };
+
+				setTimeout("openSQLExplorer()", timeout());
+
+				setTimeout("openBatchDashboard()", timeout());
+
+				setTimeout("openDTLTransToFCA()", timeout());
+
+				setTimeout("openMessageTrace()", timeout());
 			}
 
 			function openInstructions()
@@ -292,6 +318,23 @@
 				if(resp === "1")
 				{
 					alert("Report PSD 001 is being generated for the first quarter of 2020...")
+					return true;
+				}
+				
+				alert(resp)
+
+				return false;
+			}
+
+			function generatePSD007()
+			{
+				
+				// Schedule ID 2 is PSD 007 v2. It was created on IRISDemo.Installer during build time.
+				// This scehdule is for the first semester of 2020
+				var resp = #server(IRISDemo.LandingPage.Utils.GenerateReportByScheduleId(2))#;
+				if(resp === "1")
+				{
+					alert("Report PSD 007 is being generated for the first semester of 2020...")
 					return true;
 				}
 				

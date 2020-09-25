@@ -17,6 +17,8 @@ ADD --chown=irisowner:irisuser ./html/fca-logo.jpg /usr/irissys/csp/broker/cover
 # Running the installer. This will load the source from our project.
 RUN mv $IRIS_APP_SOURCEDIR/Batch-Batch\ Control\ Record\ Stats /tmp/dfi/ && \
 mv $IRIS_APP_SOURCEDIR/FCA-FCA\ Reporting\ Monitoring /tmp/dfi/ && \
+mv $IRIS_APP_SOURCEDIR/FCA-Report\ Status /tmp/dfi/ && \
+ls -l /tmp/dfi && \
 /usr/irissys/demo/irisdemoinstaller.sh 
 
 ADD --chown=irisowner:irisuser ./html/landing-page.png $ISC_PACKAGE_INSTALLDIR/csp/appint/

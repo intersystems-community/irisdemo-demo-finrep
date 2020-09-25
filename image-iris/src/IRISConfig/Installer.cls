@@ -16,6 +16,9 @@ ClassMethod ConfigIRIS() As %Status
 		Set Properties("bbsiz")=1024*1024
 
 		Set tSC=##Class(Config.config).Modify(.Properties)
+		Quit:$$$ISERR(tSC)
+
+		DO ##class(Security.SSLConfigs).Create("SSLCLIENT")
 	}
 	Catch (oException)
 	{
@@ -48,6 +51,8 @@ ClassMethod DisableJournalForDatabase(pDatabaseName As %String) As %Status
 	Quit tSC
 }
 
+/// We are not using VDocs anymore. But I have left this code here in order to be able to reproduce the 
+/// speed problems we found.
 ClassMethod LoadFCAXMLSchemas() As %Status
 {
 	Set tSC = $$$OK
@@ -78,6 +83,10 @@ ClassMethod LoadFCAXMLSchemas() As %Status
 	Quit tSC
 }
 
+/*
+/// We have manually loaded the schemas as IRIS classes using routine ^ManuallyLoadFCASchemas and then
+/// we have exported the classes from IRIS into our VSCode project so we don't need to rely on Gabriel
+/// anymore to build the demo.
 ClassMethod LoadFCAXMLSchemasAsClasses() As %Status
 {
 	Set tSC = $$$OK
@@ -86,18 +95,22 @@ ClassMethod LoadFCAXMLSchemasAsClasses() As %Status
 		ZN "APPINT"
 
 		Set reader = ##class(%XML.Utils.SchemaReader).%New()
+		Set reader.MakeNamespace=1
+		Set reader.IndexRelationship=1
+		Set reader.CascadeDeletes=1
 
-		Set tSC = reader.Process("/tmp/FCASchemas/CommonTypes-Schema.xsd","FCA")
+		Set tSC = reader.Process("/tmp/FCASchemas/CommonTypes-Schema.xsd","FCA.CommonTypes")
 		Quit:$$$ISERR(tSC)
 
-		Set tSC = reader.Process("/tmp/FCASchemas/FSAFeedCommon-v1-2.xsd","FCA")
+		Set tSC = reader.Process("/tmp/FCASchemas/FSAFeedCommon-v1-2.xsd","FCA.FSAFeedCommonV12")
 		Quit:$$$ISERR(tSC)
 
-		Set tSC = reader.Process("/tmp/FCASchemas/PSD007-Schema.xsd","FCA")
+		Set tSC = reader.Process("/tmp/FCASchemas/psd001-schema-v2-2.xsd","FCA.PSD001")
 		Quit:$$$ISERR(tSC)
 
-		Set tSC = reader.Process("/tmp/FCASchemas/psd001-schema-v2-2.xsd","FCA")
+		Set tSC = reader.Process("/tmp/FCASchemas/PSD007-Schema.xsd","FCA.PSD007")
 		Quit:$$$ISERR(tSC)
+
 
 	}
 	Catch (oException)
@@ -109,7 +122,7 @@ ClassMethod LoadFCAXMLSchemasAsClasses() As %Status
 
 	Quit tSC
 }
-
+*/
 ClassMethod LoadDFIFiles() As %Status
 {
 	Set tSC = $$$OK
@@ -118,6 +131,9 @@ ClassMethod LoadDFIFiles() As %Status
 		ZN "APPINT"
 
 		Set tSC = ##class(%DeepSee.UserLibrary.Utils).%Import("/tmp/dfi/pivot.dfi", 1, 1)		
+		Quit:$$$ISERR(tSC)
+
+		Set tSC = ##class(%DeepSee.UserLibrary.Utils).%Import("/tmp/dfi/FCA-Report Status/pivot.dfi", 1, 1)		
 		Quit:$$$ISERR(tSC)
  
 		Set tSC = ##class(%DeepSee.UserLibrary.Utils).%Import("/tmp/dfi/FCA-FCA Reporting Monitoring/dashboard.dfi", 1, 1)		
@@ -177,6 +193,8 @@ ClassMethod Config(pNamespace As %String) As %Status
 		Set objReport.ContentsDTL="Custom.FCAReport.DTL.PSD001.Msg"
 		Set objReport.ReportQuery="select ID from Canonical.Mortgage where %BatchRecordStatus=7 and AsOfDate >= TO_DATE(?, 'YYYY-MM-DD') and AsOfDate < TO_DATE(?, 'YYYY-MM-DD')"
 		Set objReport.SourceCanonicalClassName="Canonical.Mortgage"
+		Set objReport.ReportClassName="FCA.PSD001.FSAHSFFeedMG"
+		Set objReport.CubeList="Reports"
 		Set tSC = objReport.%Save()
 		Quit:$$$ISERR(tSC)
 
@@ -196,6 +214,8 @@ ClassMethod Config(pNamespace As %String) As %Status
 		Set objReport.ContentsDTL="Custom.FCAReport.DTL.PSD007.Msg"
 		Set objReport.ReportQuery="select main.ID from Canonical.MortgagePerf main where main.%BatchRecordStatus=7 and main.AsOfDate = (select max(sub.AsOfDate) from Canonical.MortgagePerf sub where main.Mortgage=sub.Mortgage and sub.AsOfDate >= TO_DATE(?, 'YYYY-MM-DD') and sub.AsOfDate < TO_DATE(?, 'YYYY-MM-DD') and sub.%BatchRecordStatus=7)"
 		Set objReport.SourceCanonicalClassName="Canonical.MortgagePerf"
+		Set objReport.ReportClassName="FCA.PSD007.PSD007MortgagePerformanceSalesData"
+		Set objReport.CubeList="Reports"
 		Set tSC = objReport.%Save()
 		Quit:$$$ISERR(tSC)
 
@@ -503,10 +523,6 @@ XData Install [ XMLNamespace = INSTALLER ]
 
 	<Log Text="Loading FCA XML Schemas..." Level="0"/>
 	<Invoke Class="IRISConfig.Installer" Method="LoadFCAXMLSchemas" CheckStatus="true">
-	</Invoke>
-
-	<Log Text="Loading FCA XML Schemas as Classes..." Level="0"/>
-	<Invoke Class="IRISConfig.Installer" Method="LoadFCAXMLSchemasAsClasses" CheckStatus="true">
 	</Invoke>
 
 	<Log Text="Loading DeepSee Pivots and Dashboards..." Level="0"/>

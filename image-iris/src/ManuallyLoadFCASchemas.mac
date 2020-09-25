@@ -1,0 +1,30 @@
+ROUTINE ManuallyLoadFCASchemas
+
+    #Include Ensemble
+    
+    Set tSC = $$$OK
+
+    Try
+    {
+        Set reader = ##class(%XML.Utils.SchemaReader).%New()
+        Set reader.MakeNamespace=1
+        Set reader.IndexRelationship=1
+        Set reader.CascadeDeletes=1
+        Set reader.SSLConfiguration = "SSLCLIENT" //Created on IRISConfig.Installer
+        //Set reader.Debug=2
+
+        // PSD 001 v2.2
+        Set tSC = reader.Process("https://gabriel.fca.org.uk/specifications/MER/DRG/PSD001/v2/psd001-schema-v2-2.xsd", "FCA.PSD001")
+        Quit:$$$ISERR(tSC)
+
+        // PSD 007 v2
+        Set tSC = reader.Process("https://gabriel.fca.org.uk/specifications/MER/DRG/PSD007/v2/PSD007-Schema.xsd", "FCA.PSD007")
+        Quit:$$$ISERR(tSC)
+
+    }
+    Catch (oException)
+    {
+        Set tSC = oException.AsStatus()
+    }
+
+    Do $System.Status.DisplayError(tSC)

@@ -1,24 +1,38 @@
 /// A report can only be run if scheduled. The business service that we will use to trigger
 /// reports is going to be expecting a ReportSchedule ID.
-Class Report.ReportSchedule Extends %Persistent
+Class Report.ReportSchedule Extends (%Persistent, %XML.Adaptor)
 {
 
 Parameter DSTIME = "AUTO";
 
-Property Report As ReportDef [ Required ];
+Property Report As ReportDef(XMLPROJECTION = "NONE") [ Required ];
 
 Property DueDate As %Date [ Required ];
 
-Property LastRun As ReportScheduleRun;
-
-Property ScheduleStatus As %String(DISPLAYLIST = ",Scheduled,Overdue,Delivered", VALUELIST = ",1,2,3") [ InitialExpression = 1, Required ];
+Property LastRun As ReportScheduleRun(XMLPROJECTION = "NONE");
 
 Property QueryParamList As list Of %String;
 
-/// TODO:w
-Method UpdateOverdueStatus()
+Property ScheduleStatus As %String(DISPLAYLIST = ",Scheduled,Overdue,Delivered", VALUELIST = ",1,2,3") [ Calculated, SqlComputeCode = { 
+    Set {*}=##class(Report.ReportSchedule).ComputeScheduleStatus({ID},{DueDate},{LastRun}) 
+    }, SqlComputed ];
+
+ClassMethod ComputeScheduleStatus(pReportScheduleId As %Integer, pDueDate As %Date, pLastRun As ReportScheduleRun) As %Integer
 {
-    // good enough for the demo
+    If pDueDate>+$H Return 1 //Scheduled
+    
+    If pLastRun="" Return 2 // Overdue
+
+    &SQL(select LastRun->RunStatus into :lastRunStatus from Report.ReportSchedule where ID = :pReportScheduleId)
+
+    // 1-Pending,2-Error,3-Replaced,4-Generated,5-Discarded,6-Pending Cancelation,7-Cancelled
+    If ",1,2,3,5,6,7,"[(","_lastRunStatus_",")
+    {
+        Return 2 // Overdue
+    }
+    
+    // lastRunStatus = 4 - Generated
+    Return 3 // Delivered
 }
 
 Storage Default
@@ -37,9 +51,6 @@ Storage Default
 <Value>LastRun</Value>
 </Value>
 <Value name="5">
-<Value>ScheduleStatus</Value>
-</Value>
-<Value name="6">
 <Value>QueryParamList</Value>
 </Value>
 </Data>

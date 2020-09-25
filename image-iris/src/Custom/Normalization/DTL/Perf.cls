@@ -93,6 +93,7 @@ XData DTL [ XMLNamespace = "http://www.intersystems.com/dtl" ]
 <assign value='source.LegacyLegalOwnerFRN' property='target.LegalOwnerFRN' action='set' />
 <assign value='source.LegacyLegalOwnerName' property='target.LegalOwnerName' action='set' />
 <assign value='source.LegacyClosedBook' property='target.ClosedBook' action='set' />
+<assign value='source.LegacySwitchInterestOnly' property='target.SwitchInterestOnly' action='set' />
 </transform>
 }
 
