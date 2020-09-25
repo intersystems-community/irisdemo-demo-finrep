@@ -23,6 +23,14 @@ Property NumberOfRecordsProcessed As %Integer;
 
 Property Reason As %String(MAXLEN = "");
 
+Property IsLatest As %Boolean [ Calculated, SqlComputeCode = { 
+    
+    Set me = {ID}
+    &SQL(select t.BatchControl->LastControlRecord into :lastControlRecordId from Normalization.BatchControlRecord t where t.ID = :me)
+    Set {IsLatest} = ({ID}=lastControlRecordId)
+    
+    }, SqlComputed ];
+
 Index BatchControlIndex On BatchControl;
 
 ClassMethod Create(pBatchControl As Normalization.BatchControl, pSessionId As %String, pJobSpec As Normalization.BatchJobSpec, Output pStatus As %Status) As Normalization.BatchControlRecord

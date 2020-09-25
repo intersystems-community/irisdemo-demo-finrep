@@ -5,11 +5,41 @@ Class IRISDemo.Production Extends IRISDemo.BaseProduction
 /// so it can be synchronized during the demo
 ClassMethod OnStart(pTimeStarted As %String) As %Status
 {
-  Set tSC = ##class(%DeepSee.CubeManager.Utils).SetActiveRegistry("Cube.Registry")
-  Quit:$$$ISERR(tSC) tSC
-  
-  //  Set tSC = ##class(%DeepSee.Utils).%BuildCube("BatchControlRecord")
-  Quit ##class(%DeepSee.CubeManager.Utils).BuildAllRegisteredGroups()
+    Set tSC = ##class(%DeepSee.CubeManager.Utils).SetActiveRegistry("Cube.Registry")
+    Quit:$$$ISERR(tSC) tSC
+
+    Set tSC = ##class(%DeepSee.CubeManager.Utils).BuildAllRegisteredGroups()
+    Quit:$$$ISERR(tSC) tSC
+
+    // To work with Community, it must be < 10240 (10Gb)
+    Quit ..ExpandDB(10000)
+}
+
+ClassMethod ExpandDB(pSizeInMb As %Integer)
+{
+    Set tSC = $$$OK 
+    Set tNS = $Namespace 
+    Try 
+    { 
+      Set $Namespace="%SYS" 
+      Set tSC = ##class(Config.Databases).Get("APPINT", .properties)
+      Quit:$$$ISERR(tSC)
+      
+      Set dir=properties("Directory")
+      Set db=##class(SYS.Database).%OpenId(dir,,.tSC)
+      Quit:$$$ISERR(tSC)
+      Set db.Size=pSizeInMb 
+      Set tSC = db.%Save()
+      
+    } 
+    Catch (oException) 
+    { 
+      Set tSC = oException.AsStatus() 
+    }
+
+    Set $Namespace=tNS 
+
+    Quit tSC
 }
 
 XData ProductionDefinition
@@ -32,6 +62,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="BatchClass">Staging.RM.MortgageTrans.Batch</Setting>
     <Setting Target="Host" Name="BatchHandling">Whole</Setting>
     <Setting Target="Adapter" Name="CallInterval">1</Setting>
+    <Setting Target="Adapter" Name="FileSpec">*.csv</Setting>
   </Item>
   <Item Name="Mortgage Affordability Data Service" Category="" ClassName="EnsLib.RecordMap.Service.BatchFileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Host" Name="RecordMap">Staging.RM.MortgageAfford</Setting>
@@ -44,6 +75,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="BatchClass">Staging.RM.MortgageAfford.Batch</Setting>
     <Setting Target="Host" Name="BatchHandling">Whole</Setting>
     <Setting Target="Adapter" Name="CallInterval">1</Setting>
+    <Setting Target="Adapter" Name="FileSpec">*.csv</Setting>
   </Item>
   <Item Name="Mortgage Performance Data Service" Category="" ClassName="EnsLib.RecordMap.Service.BatchFileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Host" Name="RecordMap">Staging.RM.MortgagePerf</Setting>
@@ -56,13 +88,14 @@ XData ProductionDefinition
     <Setting Target="Host" Name="BatchClass">Staging.RM.MortgagePerf.Batch</Setting>
     <Setting Target="Host" Name="BatchHandling">Whole</Setting>
     <Setting Target="Adapter" Name="CallInterval">1</Setting>
+    <Setting Target="Adapter" Name="FileSpec">*.csv</Setting>
   </Item>
   <Item Name="Normalization Process" Category="" ClassName="Normalization.Process" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
   <Item Name="Data Stewards" Category="" ClassName="EnsLib.Workflow.Operation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="AutoCreateRole">1</Setting>
   </Item>
-  <Item Name="Cube Operations" Category="" ClassName="Cube.BO.Operation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="Cube Operations" Category="" ClassName="Cube.BO.Operation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
   </Item>
   <Item Name="Report Service" Category="" ClassName="Report.BS.Service" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>

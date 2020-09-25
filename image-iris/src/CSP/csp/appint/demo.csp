@@ -65,20 +65,12 @@
 				winReference.parent.focus();
 			}
 
-			function openSimulator()
-			{
-				window_open('http://' + ip + ':10000');
-			}
-
-			function openSchemaRegistry()
-			{
-				window_open('http://' + ip + ':8081/subjects/');
-			}
-
+			/*
 			function openKafkaControlCenter()
 			{
 				window_open('http://' + ip + ':9021/');
 			}
+			*/
 
 			function openProduction()
 			{
@@ -90,14 +82,25 @@
 				window_open('EnsPortal.BPLEditor.zen?NAMESPACE=APPINT&BP=Normalization.Process.bpl&IRISUserName=SuperUser&IRISPassword=sys')
 			}
 
-			function openDataTransformation()
+			function openDTLTransToCanonical()
 			{
-				window_open('EnsPortal.DTLEditor.zen?DT=corebanking.com.irisdemo.banksim.avroevent.TransferAvroEventDTL.dtl&IRISUserName=SuperUser&IRISPassword=sys')
+			
+				window_open('EnsPortal.DTLEditor.zen?DT=Custom.Normalization.DTL.Trans.dtl&IRISUserName=SuperUser&IRISPassword=sys')
+			}
+
+			function openDTLTransToFCA()
+			{
+				window_open('EnsPortal.DTLEditor.zen?DT=Custom.FCAReport.DTL.PSD001.Msg.dtl&IRISUserName=SuperUser&IRISPassword=sys')
+			}
+
+			function openDTLPerfToCanonical()
+			{
+				window_open('EnsPortal.DTLEditor.zen?DT=Custom.Normalization.DTL.Perf.dtl&IRISUserName=SuperUser&IRISPassword=sys')
 			}
 
 			function openDataLookup()
 			{
-				window_open('EnsPortal.LookupSettings.zen?LookupTable=US_States_Code_To_Desc.lut&NAMESPACE=APPINT&IRISUserName=SuperUser&IRISPassword=sys')
+				window_open('/csp/appint/EnsPortal.LookupSettings.zen?LookupTable=ReasonForClosure.lut&$NAMESPACE=APPINT&IRISUserName=SuperUser&IRISPassword=sys')
 			}
 
 			function openMessageTrace()
@@ -110,11 +113,18 @@
 				window_open('_DeepSee.UserPortal.Workflow.zen?$NAMESPACE=APPINT&IRISUserName=SuperUser&IRISPassword=sys')
 			}
 
-			function openDataStore()
+			function openSQLExplorer()
 			{
+				
 				window_open('/csp/sys/exp/%25CSP.UI.Portal.SQL.Home.zen?$NAMESPACE=APPINT&IRISUserName=SuperUser&IRISPassword=sys')
 			}
-			
+
+			function openRecordMap()
+			{
+				
+				window_open('/csp/appint/EnsPortal.RecordMapper.cls?MAP=Staging.RM.MortgageTrans&SHOWSAMPLE=1&IRISUserName=SuperUser&IRISPassword=sys')
+			}
+
 			function openRESTService()
 			{
 				window_open('/csp/appint/rest/data/corebanking.com.irisdemo.banksim.avroevent.NewCustomerAvroEvent/2?IRISUserName=SuperUser&IRISPassword=sys')
@@ -125,25 +135,74 @@
 				//window_open('http://' + ip + ':10001/csp/appint/rest/data/corebanking.com.irisdemo.banksim.avroevent.NewCustomerAvroEvent/2')
 			}
 
-			function bubble1(){
-				console.log("Bubble 1")
+			function openBatchDashboard()
+			{
+				window_open('/csp/appint/_DeepSee.UserPortal.DashboardViewer.zen?DASHBOARD=FCA/FCA%20Reporting%20Monitoring.dashboard&IRISUserName=SuperUser&IRISPassword=sys')
 			}
 
-			function bubble2(){
-				console.log("Bubble 2");
+			function bubble1()
+			{
+				var time=1000;
+				var callNumber=0
+				var timeout = function () { return ++callNumber*time };
+
+				setTimeout("openMessageTrace()", timeout());
+
+				setTimeout("openSQLExplorer()", timeout());
+				
+				setTimeout("openDTLTransToFCA()", timeout());
+				
+				setTimeout("openDataLookup()", timeout());
+				
+				setTimeout("openDTLTransToCanonical()", timeout());
+				
+				setTimeout("openBusinessProcess()", timeout());
+				
+				setTimeout("openRecordMap()", timeout());
+
+				setTimeout("openProduction()", timeout());
+			}
+
+			function bubble2()
+			{
 				moveTransactionAndAffordabilityFiles();
 			}
 
-			function bubble3(){
-				console.log("Bubble 3")
+			function bubble3()
+			{
+				var time=1000;
+				var callNumber=0
+				var timeout = function () { return ++callNumber*time };
+
+
+				setTimeout("openBatchDashboard()", timeout());
+
+				setTimeout("openSQLExplorer()", timeout());
+
+				setTimeout("openMessageTrace()", timeout());
+				
 			}
 
-			function bubble4(){
-				console.log("Bubble 4")
-				movePerformanceFiles();
-			}
-			function bubble5(){
+			function bubble4()
+			{
+				var time=1000;
+				var callNumber=0
+				var timeout = function () { return ++callNumber*time };
 
+				if (movePerformanceFiles())
+				{
+					setTimeout("openDataLookup()", timeout());
+
+					setTimeout("openWorkflow()", timeout());
+
+					setTimeout("openDTLPerfToCanonical()", timeout());
+
+					setTimeout("openBatchDashboard()", timeout());
+				}
+			}
+
+			function bubble5()
+			{
 				generatePSD001();
 
 			}
@@ -185,28 +244,43 @@
 				}
 			}
 
-			function moveTransactionAndAffordabilityFiles(){
+			function moveTransactionAndAffordabilityFiles()
+			{
 				// invoke server-side method Test
 				var transCopyMsg = #server(IRISDemo.LandingPage.Utils.MoveFile("PSD001-TransactionData_2.2.csv", "/MortgageSystemFiles/Trans"))#;
 				var affordCopyMsg = #server(IRISDemo.LandingPage.Utils.MoveFile("PSD001-AffordabilityData_2.2.csv", "/MortgageSystemFiles/Afford"))#;
 
-				if(transCopyMsg === "1" && affordCopyMsg === "1"){
+				if(transCopyMsg === "1" && affordCopyMsg === "1")
+				{
 					alert("Transactional Data File (PSD001-TransactionData_2.2.csv) and Afordability Data File (PSD001-AffordabilityData_2.2.csv) copied over for processing")
-				}else if(transCopyMsg !== 1){
-					alert(transCopyMsg)
-				}else{
-					alert(affordCopyMsg)
+					return true;
 				}
+				
+				if(transCopyMsg !== 1)
+				{
+					alert(transCopyMsg);
+				}
+				
+				if(affordCopyMsg !== 1)
+				{
+					alert(affordCopyMsg);
+				}
+
+				return false;
 			}
 
-			function movePerformanceFiles(){
+			function movePerformanceFiles()
+			{
 				// invoke server-side method Test
 				var perfCopyMsg = #server(IRISDemo.LandingPage.Utils.MoveAllFiles("/MortgageSystemFiles/Perf"))#;
-				if(perfCopyMsg === "1"){
-					alert("Mortgage System Performance files copied over for processing")
-				}else{
-					alert(perfCopyMsg)
+				if(perfCopyMsg === "1")
+				{
+					alert("Mortgage System Performance files copied over for processing");
+					return true;
 				}
+
+				alert(perfCopyMsg);
+				return false;
 			}
 
 			function generatePSD001()
@@ -215,11 +289,15 @@
 				// Schedule ID 1 is PSD001 v2.2. It was created on IRISDemo.Installer during build time.
 				// This scehdule is for the first quarter of 2020
 				var resp = #server(IRISDemo.LandingPage.Utils.GenerateReportByScheduleId(1))#;
-				if(resp === "1"){
+				if(resp === "1")
+				{
 					alert("Report PSD 001 is being generated for the first quarter of 2020...")
-				}else{
-					alert(resp)
+					return true;
 				}
+				
+				alert(resp)
+
+				return false;
 			}
 
 		</script>

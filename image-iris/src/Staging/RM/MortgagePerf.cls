@@ -1,5 +1,5 @@
 /// RECORDMAP: Modified during compilation of RecordMap 'Staging.RM.MortgagePerf'
-/// on 2020-09-23 at 22:40:34.774 [2020-09-23 22:40:34.774 UTC]
+/// on 2020-09-24 at 15:40:19.417 [2020-09-24 15:40:19.417 UTC]
 /// by user SuperUser
 Class Staging.RM.MortgagePerf Extends EnsLib.RecordMap.RecordMap
 {
@@ -215,6 +215,13 @@ ClassMethod GetRecord(pStream As %IO.DeviceStream, pObject As %RegisteredObject,
 	}
 	Do ..checkMerge(.tCurrChunk, .tRecordData, .tCurrString, $char(44), .tTopPiece)
 	If pGetTopFields {
+		Set pObject.LegacySwitchInterestOnly = tCurrString
+	}
+	If '$data(tRecordData(tCurrChunk, "block")) {
+		Set tCurrString = $piece(tRecordData(tCurrChunk), $char(44), tTopPiece)
+	}
+	Do ..checkMerge(.tCurrChunk, .tRecordData, .tCurrString, $char(44), .tTopPiece)
+	If pGetTopFields {
 		Set pObject.LegacyInterestOnlyDate = tCurrString
 	}
 	If '$data(tRecordData(tCurrChunk, "block")) {
@@ -388,6 +395,7 @@ ClassMethod PutRecord(pStream As %IO.DeviceStream, pObject As %RegisteredObject,
 	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyDateFormalArrangement, $lb($char(44)),"quote",$char(34)),1: ""),0)
 	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyPaymentShortfallCapitalisation, $lb($char(44)),"quote",$char(34)),1: ""),0)
 	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyCapitalisationDate, $lb($char(44)),"quote",$char(34)),1: ""),0)
+	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacySwitchInterestOnly, $lb($char(44)),"quote",$char(34)),1: ""),0)
 	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyInterestOnlyDate, $lb($char(44)),"quote",$char(34)),1: ""),0)
 	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyPaymentsSuspended, $lb($char(44)),"quote",$char(34)),1: ""),0)
 	Do pStream.Write($char(44) _ $select(pHasTopFields: ..Escape(pObject.LegacyDatesPaymentsSuspended, $lb($char(44)),"quote",$char(34)),1: ""),0)
@@ -474,49 +482,51 @@ XData RecordMap [ XMLNamespace = "http://www.intersystems.com/Ensemble/RecordMap
   </Field>
   <Field name="LegacyCapitalisationDate" datatype="%String" sqlColumn="18">
   </Field>
-  <Field name="LegacyInterestOnlyDate" datatype="%String" sqlColumn="19">
+  <Field name="LegacySwitchInterestOnly" datatype="%String" sqlColumn="19">
   </Field>
-  <Field name="LegacyPaymentsSuspended" datatype="%String" sqlColumn="20">
+  <Field name="LegacyInterestOnlyDate" datatype="%String" sqlColumn="20">
   </Field>
-  <Field name="LegacyDatesPaymentsSuspended" datatype="%String" sqlColumn="21">
+  <Field name="LegacyPaymentsSuspended" datatype="%String" sqlColumn="21">
   </Field>
-  <Field name="LegacyReducedPayments" datatype="%String" sqlColumn="22">
+  <Field name="LegacyDatesPaymentsSuspended" datatype="%String" sqlColumn="22">
   </Field>
-  <Field name="LegacyDateReducedPayments" datatype="%String" sqlColumn="23">
+  <Field name="LegacyReducedPayments" datatype="%String" sqlColumn="23">
   </Field>
-  <Field name="LegacyTermExtension" datatype="%String" sqlColumn="24">
+  <Field name="LegacyDateReducedPayments" datatype="%String" sqlColumn="24">
   </Field>
-  <Field name="LegacyDateTermExtension" datatype="%String" sqlColumn="25">
+  <Field name="LegacyTermExtension" datatype="%String" sqlColumn="25">
   </Field>
-  <Field name="LegacyOtherForbearance" datatype="%String" sqlColumn="26">
+  <Field name="LegacyDateTermExtension" datatype="%String" sqlColumn="26">
   </Field>
-  <Field name="LegacyDateOtherForbearance" datatype="%String" sqlColumn="27">
+  <Field name="LegacyOtherForbearance" datatype="%String" sqlColumn="27">
   </Field>
-  <Field name="LegacyDateLitigationStarted" datatype="%String" sqlColumn="28">
+  <Field name="LegacyDateOtherForbearance" datatype="%String" sqlColumn="28">
   </Field>
-  <Field name="LegacyPossessionOrder" datatype="%String" sqlColumn="29">
+  <Field name="LegacyDateLitigationStarted" datatype="%String" sqlColumn="29">
   </Field>
-  <Field name="LegacyDatePossession" datatype="%String" sqlColumn="30">
+  <Field name="LegacyPossessionOrder" datatype="%String" sqlColumn="30">
   </Field>
-  <Field name="LegacyRepossessionSaleValueAchieved" datatype="%String" sqlColumn="31">
+  <Field name="LegacyDatePossession" datatype="%String" sqlColumn="31">
   </Field>
-  <Field name="LegacyDateofBalance" datatype="%String" sqlColumn="32">
+  <Field name="LegacyRepossessionSaleValueAchieved" datatype="%String" sqlColumn="32">
   </Field>
-  <Field name="LegacySecondChargeMortgage" datatype="%String" sqlColumn="33">
+  <Field name="LegacyDateofBalance" datatype="%String" sqlColumn="33">
   </Field>
-  <Field name="LegacyBeneficialOwnerRegFirm" datatype="%String" sqlColumn="34">
+  <Field name="LegacySecondChargeMortgage" datatype="%String" sqlColumn="34">
   </Field>
-  <Field name="LegacyBeneficialOwnerFRN" datatype="%String" sqlColumn="35">
+  <Field name="LegacyBeneficialOwnerRegFirm" datatype="%String" sqlColumn="35">
   </Field>
-  <Field name="LegacyBeneficialOwnerName" datatype="%String" sqlColumn="36">
+  <Field name="LegacyBeneficialOwnerFRN" datatype="%String" sqlColumn="36">
   </Field>
-  <Field name="LegacyLegalOwnerRegFirm" datatype="%String" sqlColumn="37">
+  <Field name="LegacyBeneficialOwnerName" datatype="%String" sqlColumn="37">
   </Field>
-  <Field name="LegacyLegalOwnerFRN" datatype="%String" sqlColumn="38">
+  <Field name="LegacyLegalOwnerRegFirm" datatype="%String" sqlColumn="38">
   </Field>
-  <Field name="LegacyLegalOwnerName" datatype="%String" sqlColumn="39">
+  <Field name="LegacyLegalOwnerFRN" datatype="%String" sqlColumn="39">
   </Field>
-  <Field name="LegacyClosedBook" datatype="%String" sqlColumn="40">
+  <Field name="LegacyLegalOwnerName" datatype="%String" sqlColumn="40">
+  </Field>
+  <Field name="LegacyClosedBook" datatype="%String" sqlColumn="41">
   </Field>
 </Record>
 }

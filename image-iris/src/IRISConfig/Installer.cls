@@ -12,10 +12,33 @@ ClassMethod ConfigIRIS() As %Status
 		Quit:$$$ISERR(tSC)
 
 		// the default is 262144Kb (256*1024 = 256Mb). 
-		// I am increasing it to 512Mb
-		Set Properties("bbsiz")=512*1024
+		// I am increasing it to 1024Mb
+		Set Properties("bbsiz")=1024*1024
 
 		Set tSC=##Class(Config.config).Modify(.Properties)
+	}
+	Catch (oException)
+	{
+		Set tSC = oException.AsStatus()
+	}	
+		
+	Quit tSC
+}
+
+ClassMethod DisableJournalForDatabase(pDatabaseName As %String) As %Status
+{
+	Set tSC = $$$OK
+	Try
+	{
+		Set tSC = ##class(Config.Databases).Get(pDatabaseName, .v)
+		Quit:$$$ISERR(tSC)
+
+		Set tDatabaseDir = v("Directory")
+
+		Set db=##Class(SYS.Database).%OpenId(tDatabaseDir)
+		Set db.GlobalJournalState=2
+
+		Set tSC = db.%Save()
 	}
 	Catch (oException)
 	{
@@ -42,6 +65,38 @@ ClassMethod LoadFCAXMLSchemas() As %Status
 		Quit:$$$ISERR(tSC)
 
 		Set tSC = ##class(EnsLib.EDI.XML.SchemaXSD).ImportFiles("/tmp/FCASchemas/psd001-schema-v2-2.xsd")
+		Quit:$$$ISERR(tSC)
+
+	}
+	Catch (oException)
+	{
+		Set tSC = oException.AsStatus()
+	}	
+	
+	ZN "%SYS"
+
+	Quit tSC
+}
+
+ClassMethod LoadFCAXMLSchemasAsClasses() As %Status
+{
+	Set tSC = $$$OK
+	Try
+	{
+		ZN "APPINT"
+
+		Set reader = ##class(%XML.Utils.SchemaReader).%New()
+
+		Set tSC = reader.Process("/tmp/FCASchemas/CommonTypes-Schema.xsd","FCA")
+		Quit:$$$ISERR(tSC)
+
+		Set tSC = reader.Process("/tmp/FCASchemas/FSAFeedCommon-v1-2.xsd","FCA")
+		Quit:$$$ISERR(tSC)
+
+		Set tSC = reader.Process("/tmp/FCASchemas/PSD007-Schema.xsd","FCA")
+		Quit:$$$ISERR(tSC)
+
+		Set tSC = reader.Process("/tmp/FCASchemas/psd001-schema-v2-2.xsd","FCA")
 		Quit:$$$ISERR(tSC)
 
 	}
@@ -91,7 +146,7 @@ ClassMethod Config(pNamespace As %String) As %Status
 		Set obj.BatchRecordClassName="Staging.RM.MortgageTrans.Record"
 		Set obj.DTLClassName="Custom.Normalization.DTL.Trans"
 		Set obj.CanonicalClassName="Canonical.Mortgage"
-		Set obj.CubeList="MortgageSales"
+		Set obj.CubeList="BatchControlRecord,MortgageSales"
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
 
@@ -100,7 +155,7 @@ ClassMethod Config(pNamespace As %String) As %Status
 		Set obj.BatchRecordClassName="Staging.RM.MortgageAfford.Record"
 		Set obj.DTLClassName="Custom.Normalization.DTL.Afford"
 		Set obj.CanonicalClassName="Canonical.MortgageAfford"
-		Set obj.CubeList="MortgageSales"
+		Set obj.CubeList="BatchControlRecord,MortgageSales"
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
 
@@ -109,7 +164,7 @@ ClassMethod Config(pNamespace As %String) As %Status
 		Set obj.BatchRecordClassName="Staging.RM.MortgagePerf.Record"
 		Set obj.DTLClassName="Custom.Normalization.DTL.Perf"
 		Set obj.CanonicalClassName="Canonical.MortgagePerf"
-		Set obj.CubeList="MortgageSales"
+		Set obj.CubeList="BatchControlRecord,MortgageSales"
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
 
@@ -207,12 +262,20 @@ ClassMethod PopulateLookupTables(pNamespace As %String) As %Status
 	{
 		ZN "APPINT"
 		
-		$$$IL("ReasonForClosure", "remortgage to same lender", "R")
-		$$$IL("ReasonForClosure", "moved to a different property, mortgage taken with same lender (includes porting)", "M")
-		$$$IL("ReasonForClosure", "repossession", "P")
-		$$$IL("ReasonForClosure", "assisted sale", "A")
-		$$$IL("ReasonForClosure", "voluntary repossession", "V")
-		$$$IL("ReasonForClosure", "other", "O")
+		$$$IL("ReasonForClosure", "Remortgage to same lender", "R")
+		$$$IL("ReasonForClosure", "Moved to a different property, mortgage taken with same lender (includes porting)", "M")
+		$$$IL("ReasonForClosure", "Repossession", "P")
+		$$$IL("ReasonForClosure", "Assisted sale", "A")
+		$$$IL("ReasonForClosure", "Voluntary repossession", "V")
+		$$$IL("ReasonForClosure", "Other", "O")
+
+		$$$IL("ReasonForClosure", " remortgage to same lender", "R")
+		$$$IL("ReasonForClosure", " moved to a different property, mortgage taken with same lender (includes porting)", "M")
+		$$$IL("ReasonForClosure", " repossession", "P")
+		$$$IL("ReasonForClosure", " assisted sale ", "A")
+		$$$IL("ReasonForClosure", " voluntary repossession", "V")
+		$$$IL("ReasonForClosure", " other", "O")
+
 	}
 	Catch (oException)
 	{
@@ -442,10 +505,18 @@ XData Install [ XMLNamespace = INSTALLER ]
 	<Invoke Class="IRISConfig.Installer" Method="LoadFCAXMLSchemas" CheckStatus="true">
 	</Invoke>
 
+	<Log Text="Loading FCA XML Schemas as Classes..." Level="0"/>
+	<Invoke Class="IRISConfig.Installer" Method="LoadFCAXMLSchemasAsClasses" CheckStatus="true">
+	</Invoke>
+
 	<Log Text="Loading DeepSee Pivots and Dashboards..." Level="0"/>
 	<Invoke Class="IRISConfig.Installer" Method="LoadDFIFiles" CheckStatus="true">
 	</Invoke>
 
+	<Log Text="Disabling journal for demo..." Level="0"/>
+	<Invoke Class="IRISConfig.Installer" Method="DisableJournalForDatabase" CheckStatus="true">
+		<Arg name="pNamespace" Value="${Namespace}"/>
+	</Invoke>
 
 
 </Manifest>

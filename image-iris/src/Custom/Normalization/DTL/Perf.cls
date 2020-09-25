@@ -10,7 +10,7 @@ Parameter TREATEMPTYREPEATINGFIELDASNULL = 0;
 XData DTL [ XMLNamespace = "http://www.intersystems.com/dtl" ]
 {
 <transform sourceClass='Staging.RM.MortgagePerf.Record' targetClass='Canonical.MortgagePerf' create='new' language='objectscript' >
-<assign value='..Lookup("ReasonForClosure",source.LegacyReasonForClosure)' property='reasonForClosureCode' action='set' />
+<assign value='..Lookup("ReasonForClosure",source.LegacyReasonForClosure,source.LegacyReasonForClosure)' property='reasonForClosureCode' action='set' />
 <assign value='##class(Canonical.UtilityFunctions).Mortgage(source.LegacyFirmId,source.LegacyTransRef)' property='mortgage' action='set' />
 <assign value='##class(Canonical.UtilityFunctions).MortgagePerf(mortgage,$ZDateH(source.LegacyAsOfDate,3))' property='target' action='set' />
 <assign value='source.LegacyLoanPurchase' property='target.LoanPurchase' action='set' />
@@ -93,7 +93,6 @@ XData DTL [ XMLNamespace = "http://www.intersystems.com/dtl" ]
 <assign value='source.LegacyLegalOwnerFRN' property='target.LegalOwnerFRN' action='set' />
 <assign value='source.LegacyLegalOwnerName' property='target.LegalOwnerName' action='set' />
 <assign value='source.LegacyClosedBook' property='target.ClosedBook' action='set' />
-
 </transform>
 }
 

@@ -50,6 +50,9 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
             Set status = $classmethod(context.ReportScheduleRun.HeaderDTL, "Transform", context.ReportScheduleRun, .reportXMLDoc)
             Quit:$$$ISERR(status)
 
+            Set status = reportXMLDoc.CommittedMode()
+            Quit:$$$ISERR(status)
+
             While oRS.Next()
             {
                 Set canonicalId = oRS.GetData(1)
@@ -62,7 +65,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
                 /// Call this second transformation once per each canonical object. 
                 /// This DTL will reuse the xml document and add a record to it for every canonical object opened by the query of the report.
                 Set status = $classmethod(context.ReportScheduleRun.ContentsDTL, "Transform", canonicalObj, .reportXMLDoc, context.RecordCount) 
-                Quit:$$$ISERR(status) 
+                Quit:$$$ISERR(status)
 
                 //Quit:context.RecordCount=100
             }
@@ -70,10 +73,10 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
         }
         Catch (oException)
         {
-            Set status = oException.AsStatus()
+            Set status = $System.Status.AppendStatus($$$ERROR(5001,"Error occurred during DTL msg loop."), oException.AsStatus())
         }
 
-        If $$$ISERR(status)
+        If $$$ISERR(status) 
         {
             If canonicalId'=""
             {
@@ -84,10 +87,16 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
             Set status2 = context.ReportScheduleRun.ChangeToErrorStatus($System.Status.GetErrorText(status), context.RecordCount)
             If $$$ISERR(status2) Set status = $System.Status.AppendStatus(status, status2)
         }
+
+        Set context.Report=reportXMLDoc 
+
+        /*
         Else
         {
+            $$$TRACE("XML document generated. Saving report.")
+
             Set status = reportXMLDoc.%Save()
-        
+         
             If $$$ISERR(status)
             {
                 $$$LOGERROR("An error occurred when trying to save the final report.")
@@ -101,6 +110,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
                 Set context.Report=reportXMLDoc 
             }
         }
+        */ 
         
     ]]>
 </code>
