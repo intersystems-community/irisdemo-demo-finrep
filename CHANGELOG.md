@@ -1,3 +1,11 @@
+## 1.0.2 (September 30, 2020)
+  - Docker-compose configured to run IRIS on docker with cap_add IPC_LOCK and security_opt seccomp:unconfined to boost performance for the demo
+  - Regulatory reporting shows just latest records. 
+  - Run script cleans up CSV files.
+  - New landing page added.
+  - Creating dummy files so that the folders will exists on a clonned repo
+  - Improved documentation
+
 ## 1.0.1 (September 25, 2020)
 
 Initial version
