@@ -25,6 +25,10 @@ cleanup()
 
     printf "\n\n${PURPLE}Cleaning up complete.${RESET}\n"
     trap - INT
+
+    rm -f ./MortgageSystemFiles/Trans/In/*.csv
+    rm -f ./MortgageSystemFiles/Afford/In/*.csv
+    rm -f ./MortgageSystemFiles/Perf/In/*.csv
 }
 trap cleanup INT
 

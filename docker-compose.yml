@@ -16,4 +16,7 @@ services:
     - type: bind
       source: ./FCAGeneratedReports
       target: /FCAGeneratedReports
-      
+    cap_add:
+      - IPC_LOCK
+    security_opt:
+      - seccomp:unconfined

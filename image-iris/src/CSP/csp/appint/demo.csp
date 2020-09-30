@@ -137,44 +137,90 @@
 				}
 			}
 		*/
-		function sendFiles()
+
+		function log(text)
 		{
-			// invoke server-side method Test
+   			let ele = document.getElementById('log');
+        	ele.innerHTML += "<p style=\"font-family:'Courier New'\; font-size: 10px;\">" +text + "</p>";
+		}
+
+		function clearLog()
+		{
+   			let ele = document.getElementById('log');
+        	ele.innerHTML += '';
+		}
+
+		function sendTransFiles()
+		{
+			log("Copying Mortgage Transactional Data File for processing...")
 			var ret = #server(IRISDemo.LandingPage.Utils.MoveFile("PSD001-TransactionData_2.2.csv", "/MortgageSystemFiles/Trans"))#;
 			if(ret === "1")
 			{
-				alert("Mortgage Transactional Data File copied over for processing.")
-				return true;
+				log("Done!");
 			}
 			else
 			{
-				alert(ret);
-				return false;
+				log(ret);
+				return;
 			}
+		}
 
+		function sendAffordFiles()
+		{
+			log("Copying Mortgage Afordability Data File for processing...")
 			var ret = #server(IRISDemo.LandingPage.Utils.MoveFile("PSD001-AffordabilityData_2.2.csv", "/MortgageSystemFiles/Afford"))#;
 			if(ret === "1")
 			{
-				alert("Mortgage Afordability Data File copied over for processing.")
-				return true;
+				log("Done!");
 			}
 			else
 			{
-				alert(ret);
-				return false;
+				log(ret);
+				return;
 			}
+		}
 
+		function sendPerfFiles()
+		{
+			log("Copying Mortgage Performance Data files for processing.");
 			var ret = #server(IRISDemo.LandingPage.Utils.MoveAllFiles("/MortgageSystemFiles/Perf"))#;
 			if(ret === "1")
 			{
-				alert("Mortgage Performance Data files copied over for processing.");
-				return true;
+				log("Done!");
 			}
 			else
 			{
-				alert(ret);
-				return false;
+				log(ret);
+				return;
 			}
+		}
+
+		var filesAlreadyCopied = false;
+
+		function sendFiles()
+		{
+			if (filesAlreadyCopied)
+			{
+				alert("You have already copied the files!");
+				return;
+			}
+
+			filesAlreadyCopied = true;
+
+			// we will copy each set of files every 10 seconds. 
+			// They take a lot longer to be processed but that will
+			// avoid the messages on the "log" to overlap
+			var time=10000;
+			var callNumber=0
+			var timeout = function () { return callNumber++*time };
+
+			clearLog();
+
+			setTimeout("sendTransFiles()", timeout());
+
+			setTimeout("sendAffordFiles()", timeout());
+
+			setTimeout("sendPerfFiles()", timeout());
 		}
 
 		function generatePSD001()
@@ -186,12 +232,10 @@
 			if(resp === "1")
 			{
 				alert("Report PSD 001 is being generated for the first quarter of 2020...")
-				return true;
+				return;
 			}
 			
 			alert(resp)
-
-			return false;
 		}
 
 		function generatePSD007()
@@ -203,12 +247,10 @@
 			if(resp === "1")
 			{
 				alert("Report PSD 007 is being generated for the first semester of 2020...")
-				return true;
+				return;
 			}
 			
 			alert(resp)
-
-			return false;
 		}
 
 		</script>
@@ -244,23 +286,26 @@
 		</center>
 
 		<map name="image-map">
-			<area target="" alt="Send mortgage data files from legacy system" title="Send mortgage data files from legacy system" href="javascript:sendFiles()" coords="15,198,185,349" shape="rect">
-			<area target="" alt="Open mortgage transactions record mapper" title="Open mortgage transactions record mapper" href="javascript:openRecordMap()" coords="222,220,394,384" shape="rect">
-			<area target="" alt="Open data normalization process" title="Open data normalization process" href="javascript:openNormalizationProcess()" coords="460,238,745,510" shape="rect">
-			<area target="" alt="Open SQL Explorer so you can query the canonical model and other tables" title="Open SQL Explorer so you can query the canonical model and other tables" href="javascript:openSQLExplorer()" coords="940,203,1208,631" shape="rect">
-			<area target="" alt="Open Data Transformation from Record Mapper to Canonical" title="Open Data Transformation from Record Mapper to Canonical" href="javascript:openDTLTransToCanonical()" coords="519,146,608,235" shape="rect">
-			<area target="" alt="Open Data Lookup" title="Open Data Lookup" href="javascript:openDataLookup()" coords="609,126,686,233" shape="rect">
-			<area target="" alt="Open workflow InBox" title="Open workflow InBox" href="javascript:openWorkflow()" coords="13,723,252,800" shape="rect">
-			<area target="" alt="Open reporting process" title="Open reporting process" href="javascript:openReportingProcess()" coords="1091,782,1348,933" shape="rect">
-			<area target="" alt="Open Data Transformation from Canonical to FCA PSD 001" title="Open Data Transformation from Canonical to FCA PSD 001" href="javascript:openDTLToFCAPSD001()" coords="1351,745,1454,851" shape="rect">
-			<area target="" alt="Open Data Transformation from Canonical to FCA PSD 007" title="Open Data Transformation from Canonical to FCA PSD 007" href="javascript:openDTLToFCAPSD007()" coords="1452,863,1355,965" shape="rect">
-			<area target="" alt="Open batch and reporting monitoring dashboard" title="Open batch and reporting monitoring dashboard" href="javascript:openMonitoringDashboard()" coords="267,722,500,802" shape="rect">
-			<area target="" alt="Open data traceability" title="Open data traceability" href="javascript:openMessageTrace()" coords="267,826,504,898" shape="rect">
-			<area target="" alt="Open Mortgage Analytics Cube" title="Open Mortgage Analytics Cube" href="javascript:openMortgageCube()" coords="13,819,253,896" shape="rect">
-			<area target="" alt="Triggers the generation of PSD 001 report" title="Triggers the generation of PSD 001 report" href="javascript:triggerPSD001()" coords="549,846,881,888" shape="rect">
-			<area target="" alt="Triggers the generation of PSD 007 report" title="Triggers the generation of PSD 007 report" href="javascript:triggerPSD007()" coords="551,898,878,938" shape="rect">
+			<area target="" alt="Send mortgage data files from legacy system" title="Send mortgage data files from legacy system" href="javascript:sendFiles()" coords="12,149,175,381" shape="rect">
+			<area target="" alt="Open mortgage transactions record mapper" title="Open mortgage transactions record mapper" href="javascript:openRecordMap()" coords="215,195,394,354" shape="rect">
+			<area target="" alt="Open data normalization process" title="Open data normalization process" href="javascript:openNormalizationProcess()" coords="464,251,735,379" shape="rect">
+			<area target="" alt="Open SQL Explorer so you can query the canonical model and other tables" title="Open SQL Explorer so you can query the canonical model and other tables" href="javascript:openSQLExplorer()" coords="826,182,985,428" shape="rect">
+			<area target="" alt="Open Data Transformation from Record Mapper to Canonical" title="Open Data Transformation from Record Mapper to Canonical" href="javascript:openDTLTransToCanonical()" coords="609,247,521,152" shape="rect">
+			<area target="" alt="Open Data Lookup" title="Open Data Lookup" href="javascript:openDataLookup()" coords="691,129,614,227" shape="rect">
+			<area target="" alt="Open workflow InBox" title="Open workflow InBox" href="javascript:openWorkflow()" coords="429,642,670,715" shape="rect">
+			<area target="" alt="Open reporting process" title="Open reporting process" href="javascript:openReportingProcess()" coords="1089,234,1336,373" shape="rect">
+			<area target="" alt="Open Data Transformation from Canonical to FCA PSD 001" title="Open Data Transformation from Canonical to FCA PSD 001" href="javascript:openDTLToFCAPSD001()" coords="1344,192,1444,292" shape="rect">
+			<area target="" alt="Open Data Transformation from Canonical to FCA PSD 007" title="Open Data Transformation from Canonical to FCA PSD 007" href="javascript:openDTLToFCAPSD007()" coords="1342,311,1443,411" shape="rect">
+			<area target="" alt="Open batch and reporting monitoring dashboard" title="Open batch and reporting monitoring dashboard" href="javascript:openMonitoringDashboard()" coords="685,645,917,715" shape="rect">
+			<area target="" alt="Open data traceability" title="Open data traceability" href="javascript:openMessageTrace()" coords="686,742,915,812" shape="rect">
+			<area target="" alt="Open Mortgage Analytics Cube" title="Open Mortgage Analytics Cube" href="javascript:openMortgageCube()" coords="434,738,666,810" shape="rect">
+			<area target="" alt="Triggers the generation of PSD 001 report" title="Triggers the generation of PSD 001 report" href="javascript:triggerPSD001()" coords="970,767,1294,800" shape="rect">
+			<area target="" alt="Triggers the generation of PSD 007 report" title="Triggers the generation of PSD 007 report" href="javascript:triggerPSD007()" coords="970,815,1296,847" shape="rect">
 		</map>
-						
+
+		<div id="log" width="100%">
+		</div>
+
 		<!--table width="100%" style="text-align: center;">
 			<tr>
 				<td><input ID="BTNIMG" type="button" class="Button" value="Toggle Detailed View" onclick="toggleImage()"/></td>
