@@ -11,5 +11,7 @@
     <childLevels spec="[ProcessingStatus].[H1].[ProcessingStatus].Members" key="" value="" text="ProcessingStatus" headEnabled="false" headCount="" filterEnabled="false" filterExpression="" orderEnabled="false" orderExpression="" orderDirection="BDESC" aggEnabled="false" aggFunction="" aggFunctionParm="" levelCaption="" levelFormat="" levelSummary="" levelType="" drillLevel="0" advanced="false" levelStyle="" levelHeaderStyle="" suppress8020="false" drilldownSpec="" enabled="true">
     </childLevels>
   </columnLevel>
+  <filter spec="[IsLatest].[H1].[IsLatest].&amp;[Latest Record]" key="Latest Record" value="" text="Latest Record" headEnabled="false" headCount="" filterEnabled="false" filterExpression="" orderEnabled="false" orderExpression="" orderDirection="BDESC" aggEnabled="false" aggFunction="" aggFunctionParm="" levelCaption="" levelFormat="" levelSummary="" levelType="" drillLevel="0" advanced="false" levelStyle="" levelHeaderStyle="" suppress8020="false" drilldownSpec="" enabled="true">
+  </filter>
   <sqlRestriction></sqlRestriction>
 </pivot>

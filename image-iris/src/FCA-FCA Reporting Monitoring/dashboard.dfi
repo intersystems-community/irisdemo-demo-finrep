@@ -11,9 +11,6 @@
     <control name="" action="navigate" target="" targetProperty="http://localhost:10000/csp/appint/EnsPortal.VisualTrace.zen?SESSIONID=$$$VALUELIST" location="widget" type="auto" controlClass="" label="Trace" title="Trace the Session where this batch was processed" value="" text="" readOnly="false" valueList="" displayList="" activeWhen="listingSelected1">
       <valueRequired>false</valueRequired>
     </control>
-    <control name="" action="applyFilter" target="" targetProperty="[IsLatest].[H1].[IsLatest]" location="widget" type="radioSet" controlClass="" label="Show" title="" value="" text="" readOnly="false" valueList="" displayList="" activeWhen="">
-      <valueRequired>false</valueRequired>
-    </control>
   </widget>
   <widget name="reportStatus" type="pivot" subtype="pivot" subtypeClass="lineChart" title="Report Status" dataSource="FCA/Report Status.pivot" dataLink="" drillDownDataSource="" width="200" height="200" sidebarContent="" showSidebar="false" sidebarWidth="" maximized="false" homeRowL="5" homeColL="0" colSpanL="10" rowSpanL="5" showToolbar="true" showToolbarBottomBorder="true" showToolbarOnlyWhenMaximized="false" colorToolbar="#F0F0F0" opacityToolbar="1" backgroundColor="#F0F0F0" opacity="1" theme="" dataColorList="">
     <control name="" action="applyFilter" target="" targetProperty="[ReportName].[H1].[ReportName]" location="widget" type="auto" controlClass="" label="ReportName" title="" value="" text="" readOnly="false" valueList="" displayList="" activeWhen="">
