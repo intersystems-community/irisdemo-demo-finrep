@@ -195,17 +195,9 @@
 			}
 		}
 
-		var filesAlreadyCopied = false;
-
 		function sendFiles()
 		{
-			if (filesAlreadyCopied)
-			{
-				alert("You have already copied the files!");
-				return;
-			}
-
-			filesAlreadyCopied = true;
+			clearLog();
 
 			// we will copy each set of files every 10 seconds. 
 			// They take a lot longer to be processed but that will
@@ -213,8 +205,6 @@
 			var time=10000;
 			var callNumber=0
 			var timeout = function () { return callNumber++*time };
-
-			clearLog();
 
 			setTimeout("sendTransFiles()", timeout());
 
@@ -238,22 +228,9 @@
 
 		}
 
-		var PSD001AlreadyGenerated = false;
 		function triggerPSD001()
 		{
-			clearLog();
-
-			if (PSD001AlreadyGenerated)
-			{
-				alert("You have already started the generation of PSD 001!");
-				return;
-			}
-
-			PSD001AlreadyGenerated = true;
-
-			clearLog();
-
-			setTimeout("generatePSD001()", timeout());
+			setTimeout("generatePSD001()", 1000);
 		}
 
 		function generatePSD007()
@@ -270,22 +247,9 @@
 			log(resp)
 		}
 
-		var PSD007AlreadyGenerated = false;
 		function triggerPSD007()
 		{
-			clearLog();
-
-			if (PSD007AlreadyGenerated)
-			{
-				alert("You have already started the generation of PSD 007!");
-				return;
-			}
-
-			PSD007AlreadyGenerated = true;
-
-			clearLog();
-
-			setTimeout("generatePSD007()", timeout());
+			setTimeout("generatePSD007()", 1000);
 		}
 
 		</script>
