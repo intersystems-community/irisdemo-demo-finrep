@@ -225,32 +225,67 @@
 
 		function generatePSD001()
 		{
-			
 			// Schedule ID 1 is PSD001 v2.2. It was created on IRISDemo.Installer during build time.
 			// This scehdule is for the first quarter of 2020
 			var resp = #server(IRISDemo.LandingPage.Utils.GenerateReportByScheduleId(1))#;
 			if(resp === "1")
 			{
-				alert("Report PSD 001 is being generated for the first quarter of 2020...")
+				log("Report PSD 001 is being generated for the first quarter of 2020...")
 				return;
 			}
 			
-			alert(resp)
+			log(resp)
+
+		}
+
+		var PSD001AlreadyGenerated = false;
+		function triggerPSD001()
+		{
+			clearLog();
+
+			if (PSD001AlreadyGenerated)
+			{
+				alert("You have already started the generation of PSD 001!");
+				return;
+			}
+
+			PSD001AlreadyGenerated = true;
+
+			clearLog();
+
+			setTimeout("generatePSD001()", timeout());
 		}
 
 		function generatePSD007()
 		{
-			
 			// Schedule ID 2 is PSD 007 v2. It was created on IRISDemo.Installer during build time.
 			// This scehdule is for the first semester of 2020
 			var resp = #server(IRISDemo.LandingPage.Utils.GenerateReportByScheduleId(2))#;
 			if(resp === "1")
 			{
-				alert("Report PSD 007 is being generated for the first semester of 2020...")
+				log("Report PSD 007 is being generated for the first semester of 2020...")
 				return;
 			}
 			
-			alert(resp)
+			log(resp)
+		}
+
+		var PSD007AlreadyGenerated = false;
+		function triggerPSD007()
+		{
+			clearLog();
+
+			if (PSD007AlreadyGenerated)
+			{
+				alert("You have already started the generation of PSD 007!");
+				return;
+			}
+
+			PSD007AlreadyGenerated = true;
+
+			clearLog();
+
+			setTimeout("generatePSD007()", timeout());
 		}
 
 		</script>

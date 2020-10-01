@@ -15,6 +15,11 @@ ClassMethod ConfigIRIS() As %Status
 		// I am increasing it to 1024Mb
 		Set Properties("bbsiz")=1024*1024
 
+		Set Properties("wduseasyncio")=1
+		Set Properties("Asyncwij")=1
+		Set Properties("jrnbufs")=128
+		Set Properties("gmheap")=1048576
+
 		Set tSC=##Class(Config.config).Modify(.Properties)
 		Quit:$$$ISERR(tSC)
 

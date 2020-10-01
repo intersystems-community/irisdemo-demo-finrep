@@ -18,5 +18,7 @@ services:
       target: /FCAGeneratedReports
     cap_add:
       - IPC_LOCK
-    security_opt:
+    security_opt:             # For a demo, this is ok and will provide for more performance. Maybe it is not necessary with privileged:true bellow
       - seccomp:unconfined
+    privileged: true          # For a demo, this is ok and will provide for more performance.
+

@@ -34,7 +34,7 @@ XData Cube [ XMLNamespace = "http://www.intersystems.com/deepsee" ]
   </dimension>
   <measure name="NumberOfRecordsProcessed" disabled="false" sourceProperty="NumberOfRecordsProcessed" aggregate="SUM" type="number" hidden="false" searchable="false" factNumber="1">
   </measure>
-  <listing name="Listing" disabled="false" listingType="table" fieldList="SessionId,BatchControl-&gt;BatchClassName AS &quot;&quot;Batch&quot;&quot;,CanonicalClassName,CreationDate,LastStatusChange,NumberOfRecordsProcessed,ProcessingStatus,Reason,DTLClassName">
+  <listing name="Listing" disabled="false" listingType="table" fieldList="SessionId,BatchControl-&gt;BatchClassName AS &quot;&quot;&quot;&quot;,CanonicalClassName,CreationDate,LastStatusChange,NumberOfRecordsProcessed,ProcessingStatus,Reason,DTLClassName,BatchControl-&gt;FileName">
   </listing>
 </cube>
 }

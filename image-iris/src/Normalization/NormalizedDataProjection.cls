@@ -174,6 +174,12 @@ ClassMethod UpdateCanonicalUtilityFunctions(pCanonicalClassName As %String, pUti
 
                 Do oMethodDef.Implementation.WriteLine("   Set obj."_tPropertyName_"="_tPropertyName)                
             }
+            #; Do oMethodDef.Implementation.WriteLine("   Set tSC=obj.%Save(0)")   
+            #; Do oMethodDef.Implementation.WriteLine("   If $$$ISERR(tSC) { ")
+            #; Do oMethodDef.Implementation.WriteLine("      Set tSC = $System.Status.AppendStatus(tSC, $$$ERROR(5001,""Could not save object on "_pCanonicalClassName_".""))")
+            #; Do oMethodDef.Implementation.WriteLine("      Throw ##class(%Exception.StatusException).CreateFromStatus(tSC)")
+            #; Do oMethodDef.Implementation.WriteLine("   }")
+             
             Do oMethodDef.Implementation.WriteLine(" }")
             Do oMethodDef.Implementation.WriteLine(" Return obj")
             
