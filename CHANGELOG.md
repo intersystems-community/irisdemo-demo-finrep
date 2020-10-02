@@ -1,3 +1,7 @@
+## 1.0.7 (October 02, 2020)
+  - Implemented ICM based deployment on AWS
+  - Making sure all links use /csp/user/
+
 ## 1.0.6 (October 01, 2020)
   - Making demo run on the USER namespace so we can deploy it with Durable %SYS using ICM on AWS
 
