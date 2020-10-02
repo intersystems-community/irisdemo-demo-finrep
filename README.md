@@ -56,7 +56,7 @@ After all the containers have started, open a browser at [http://localhost:10000
 
 You are going to see a page like this:
 
-![Demo](https://raw.githubusercontent.com/intersystems-community/irisdemo-demo-finrep/master/image-iris/html/landing-page.png?token=ABQT2JB4GTRJEAPZAZ5IOKK7OUGVE)
+![Demo](https://github.com/intersystems-community/irisdemo-demo-finrep/blob/master/image-iris/html/landing-page.png?raw=true)
 
 This is the landing page of the demo. All the ballons on this image are clickable. Click on the **Toggle Detailed View** to show more information. 
 
