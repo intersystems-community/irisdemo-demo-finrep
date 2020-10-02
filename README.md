@@ -52,7 +52,7 @@ When starting, you will see lots of messages from all the containers that are st
 
 When it is done, it will just hang there, without returning control to you. That is fine too. Just leave this window open. If you CTRL+C on this window, docker compose will stop all the containers and stop the demo.
 
-After all the containers have started, open a browser at [http://localhost:10000/csp/appint/demo.csp](http://localhost:10000/csp/appint/demo.csp) to see the landing page of the demo. When requested, use the credentials **SuperUser/sys** to log in. 
+After all the containers have started, open a browser at [http://localhost:10000/csp/user/demo.csp](http://localhost:10000/csp/appint/demo.csp) to see the landing page of the demo. When requested, use the credentials **SuperUser/sys** to log in. 
 
 You are going to see a page like this:
 

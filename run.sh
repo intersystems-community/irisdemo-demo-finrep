@@ -23,9 +23,9 @@ clean_files()
     rm -f ./MortgageSystemFiles/Trans/In/*.csv
     rm -f ./MortgageSystemFiles/Afford/In/*.csv
     rm -f ./MortgageSystemFiles/Perf/In/*.csv
-    rm -f ./MortgageSystemFiles/Trans/Done/*.csv
-    rm -f ./MortgageSystemFiles/Afford/Done/*.csv
-    rm -f ./MortgageSystemFiles/Perf/Done/*.csv
+    rm -f ./MortgageSystemFiles/Trans/Done/*
+    rm -f ./MortgageSystemFiles/Afford/Done/*
+    rm -f ./MortgageSystemFiles/Perf/Done/*
 }
 
 cleanup()
