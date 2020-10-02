@@ -1,3 +1,7 @@
+## 1.0.5 (October 01, 2020)
+  - Fixing docker autobuild
+  - Fixing docker autobuild
+
 ## 1.0.4 (October 01, 2020)
   - Making demo run on the USER namespace
 
