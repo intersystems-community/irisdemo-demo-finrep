@@ -1,3 +1,7 @@
+## 1.0.8 (October 02, 2020)
+  - Fixing bumpbersion.sh
+  - Documentation improvement
+
 ## 1.0.7 (October 02, 2020)
   - Implemented ICM based deployment on AWS
   - Making sure all links use /csp/user/
