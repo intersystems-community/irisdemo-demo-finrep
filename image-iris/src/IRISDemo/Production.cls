@@ -22,7 +22,7 @@ ClassMethod ExpandDB(pSizeInMb As %Integer)
     Try 
     { 
       Set $Namespace="%SYS" 
-      Set tSC = ##class(Config.Databases).Get("APPINT", .properties)
+      Set tSC = ##class(Config.Databases).Get("USER", .properties)
       Quit:$$$ISERR(tSC)
       
       Set dir=properties("Directory")

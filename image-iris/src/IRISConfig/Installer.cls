@@ -15,8 +15,8 @@ ClassMethod ConfigIRIS() As %Status
 		// I am increasing it to 1024Mb
 		Set Properties("bbsiz")=1024*1024
 
-		Set Properties("wduseasyncio")=1
-		Set Properties("Asyncwij")=1
+		#; Set Properties("wduseasyncio")=0  //to test durable %SYS with docker-compose on my mac
+		#; Set Properties("Asyncwij")=0      //to test durable %SYS with docker-compose on my mac
 		Set Properties("jrnbufs")=128
 		Set Properties("gmheap")=1048576
 
@@ -58,12 +58,12 @@ ClassMethod DisableJournalForDatabase(pDatabaseName As %String) As %Status
 
 /// We are not using VDocs anymore. But I have left this code here in order to be able to reproduce the 
 /// speed problems we found.
-ClassMethod LoadFCAXMLSchemas() As %Status
+ClassMethod LoadFCAXMLSchemas(pNamespace As %String) As %Status
 {
 	Set tSC = $$$OK
 	Try
 	{
-		ZN "APPINT"
+		ZN pNamespace
 
 		Set tSC = ##class(EnsLib.EDI.XML.SchemaXSD).ImportFiles("/tmp/FCASchemas/CommonTypes-Schema.xsd")
 		Quit:$$$ISERR(tSC)
@@ -128,12 +128,12 @@ ClassMethod LoadFCAXMLSchemasAsClasses() As %Status
 	Quit tSC
 }
 */
-ClassMethod LoadDFIFiles() As %Status
+ClassMethod LoadDFIFiles(pNamespace As %String) As %Status
 {
 	Set tSC = $$$OK
 	Try
 	{
-		ZN "APPINT"
+		ZN pNamespace
 
 		Set tSC = ##class(%DeepSee.UserLibrary.Utils).%Import("/tmp/dfi/pivot.dfi", 1, 1)		
 		Quit:$$$ISERR(tSC)
@@ -155,12 +155,12 @@ ClassMethod LoadDFIFiles() As %Status
 	Quit tSC
 }
 
-ClassMethod Config(pNamespace As %String) As %Status
+ClassMethod ConfigDemo(pNamespace As %String) As %Status
 {
 	Set tSC = $$$OK
 	Try
 	{
-		ZN "APPINT"
+		ZN pNamespace
 		
 		Set obj = ##class(Normalization.BatchJobSpec).%New()
 		Set obj.BatchClassName="Staging.RM.MortgageTrans.Batch"
@@ -244,12 +244,12 @@ ClassMethod Config(pNamespace As %String) As %Status
 	Quit tSC
 }
 
-ClassMethod InsertOnLookupTable(pLookupName As %String, pKey As %String, pValue As %String) As %Status
+ClassMethod InsertOnLookupTable(pNamespace As %String, pLookupName As %String, pKey As %String, pValue As %String) As %Status
 {
 	Set tSC = $$$OK
 	Try
 	{
-		ZN "APPINT"
+		ZN pNamespace
 
 		TStart
 		
@@ -280,13 +280,11 @@ ClassMethod InsertOnLookupTable(pLookupName As %String, pKey As %String, pValue 
 
 ClassMethod PopulateLookupTables(pNamespace As %String) As %Status
 {
-	#define IL(%LT,%K,%V) Set tSC = ..InsertOnLookupTable(%LT, %K, %V) Q:$$$ISERR(tSC)
+	#define IL(%LT,%K,%V) Set tSC = ..InsertOnLookupTable(pNamespace, %LT, %K, %V) Q:$$$ISERR(tSC)
 
 	Set tSC = $$$OK
 	Try
-	{
-		ZN "APPINT"
-		
+	{		
 		$$$IL("ReasonForClosure", "Remortgage to same lender", "R")
 		$$$IL("ReasonForClosure", "Moved to a different property, mortgage taken with same lender (includes porting)", "M")
 		$$$IL("ReasonForClosure", "Repossession", "P")
@@ -319,7 +317,7 @@ ClassMethod PopulateCT(pNamespace As %String) As %Status
 	Set tSC = $$$OK
 	Try
 	{
-		ZN "APPINT"
+		ZN pNamespace
 		
 		$$$I("TypeDwelling", "B", "Bungalow")
 		$$$I("TypeDwelling", "D", "Detached house")
@@ -507,8 +505,8 @@ XData Install [ XMLNamespace = INSTALLER ]
 		<Arg name="pRoleName" Value="Data Stewards"/>
 	</Invoke>
 	
-	<Log Text="Configuring schema registry entries for demo..." Level="0"/>
-	<Invoke Class="IRISConfig.Installer" Method="Config" CheckStatus="true">
+	<Log Text="Configuring IRIS for demo..." Level="0"/>
+	<Invoke Class="IRISConfig.Installer" Method="ConfigDemo" CheckStatus="true">
 		<Arg name="pNamespace" Value="${Namespace}"/>
 	</Invoke>
 
@@ -528,10 +526,12 @@ XData Install [ XMLNamespace = INSTALLER ]
 
 	<Log Text="Loading FCA XML Schemas..." Level="0"/>
 	<Invoke Class="IRISConfig.Installer" Method="LoadFCAXMLSchemas" CheckStatus="true">
+		<Arg name="pNamespace" Value="${Namespace}"/>
 	</Invoke>
 
 	<Log Text="Loading DeepSee Pivots and Dashboards..." Level="0"/>
 	<Invoke Class="IRISConfig.Installer" Method="LoadDFIFiles" CheckStatus="true">
+		<Arg name="pNamespace" Value="${Namespace}"/>
 	</Invoke>
 
 	<Log Text="Disabling journal for demo..." Level="0"/>

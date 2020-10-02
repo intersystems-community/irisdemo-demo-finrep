@@ -65,6 +65,7 @@ if [ -f VERSION ]; then
     #
     sed -E -i '' "s;(intersystemsdc/irisdemo-demo-finrep:.+)-version-[0-9][0-9.]*;\1-version-$INPUT_STRING;g" ./docker-compose.yml
     sed -E -i '' "s;(intersystemsdc/irisdemo-demo-finrep:.+)-version-[0-9][0-9.]*;\1-version-$INPUT_STRING;g" ./README.md
+    sed -E -i '' "s;(DEMO_VERSION.*=).*[0-9][0-9\.]*;\1$INPUT_STRING;g" ./ICM/ICMDurable/base_env.sh
 
     echo "## $INPUT_STRING ($NOW)" > tmpfile
     git log --pretty=format:"  - %s" "v$BASE_STRING"...HEAD >> tmpfile
