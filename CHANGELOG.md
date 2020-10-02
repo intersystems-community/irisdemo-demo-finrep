@@ -1,9 +1,5 @@
-## 1.0.5 (October 01, 2020)
-  - Fixing docker autobuild
-  - Fixing docker autobuild
-
-## 1.0.4 (October 01, 2020)
-  - Making demo run on the USER namespace
+## 1.0.6 (October 01, 2020)
+  - Making demo run on the USER namespace so we can deploy it with Durable %SYS using ICM on AWS
 
 ## 1.0.3 (October 01, 2020)
   - Making sure we are calling triggering file transfers and reports
