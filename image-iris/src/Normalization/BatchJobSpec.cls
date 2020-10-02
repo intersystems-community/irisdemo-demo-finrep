@@ -27,6 +27,29 @@ Property CubeList As %String(MAXLEN = 32000) [ Required ];
 
 Index BatchClassNameIndex On BatchClassName [ Unique ];
 
+Method GetSQLCursorForBatch(pParentBatchId As %String, ByRef status As %Status) As %ResultSet
+{
+    Set status = $$$OK
+    Set oRS = ""
+    Try 
+    {
+        Set tTableName = $Translate($Piece(..BatchRecordClassName,".",1,*-1),".","_")
+        Set tTableName = tTableName_"."_$Piece(..BatchRecordClassName,".",*)
+        
+        Set oRS = ##class(%ResultSet).%New()
+
+        Set status = oRS.Prepare("select ID from "_tTableName_" where %ParentBatch=?")
+        Quit:$$$ISERR(status)
+
+        Set status = oRS.Execute(pParentBatchId)
+    }
+    Catch (oException)
+    {
+        Set status = oException.AsStatus()
+    }
+    Quit oRS
+}
+
 Storage Default
 {
 <Data name="BatchJobSpecDefaultData">
