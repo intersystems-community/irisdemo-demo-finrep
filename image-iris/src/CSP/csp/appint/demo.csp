@@ -32,22 +32,22 @@
 		
 		function openProduction()
 		{
-			window_open('EnsPortal.ProductionConfig.zen?$NAMESPACE=APPINT&IRISUserName=SuperUser&IRISPassword=sys');
+			window_open('EnsPortal.ProductionConfig.zen?$NAMESPACE=USER&IRISUserName=SuperUser&IRISPassword=sys');
 		}
 
 		function openMortgageCube()
 		{
-			window_open('_DeepSee.UI.Architect.zen?$NAMESPACE=APPINT&CUBE=MortgageSales.cube&IRISUserName=SuperUser&IRISPassword=sys');
+			window_open('_DeepSee.UI.Architect.zen?$NAMESPACE=USER&CUBE=MortgageSales.cube&IRISUserName=SuperUser&IRISPassword=sys');
 		}
 
 		function openNormalizationProcess()
 		{
-			window_open('EnsPortal.BPLEditor.zen?NAMESPACE=APPINT&BP=Normalization.Process.bpl&IRISUserName=SuperUser&IRISPassword=sys')
+			window_open('EnsPortal.BPLEditor.zen?NAMESPACE=USER&BP=Normalization.Process.bpl&IRISUserName=SuperUser&IRISPassword=sys')
 		}
 
 		function openReportingProcess()
 		{
-			window_open('EnsPortal.BPLEditor.zen?NAMESPACE=APPINT&BP=Report.BP.Process.bpl&IRISUserName=SuperUser&IRISPassword=sys')
+			window_open('EnsPortal.BPLEditor.zen?NAMESPACE=USER&BP=Report.BP.Process.bpl&IRISUserName=SuperUser&IRISPassword=sys')
 		}
 
 		function openDTLTransToCanonical()
@@ -73,39 +73,39 @@
 
 		function openDataLookup()
 		{
-			window_open('/csp/appint/EnsPortal.LookupSettings.zen?LookupTable=ReasonForClosure.lut&$NAMESPACE=APPINT&IRISUserName=SuperUser&IRISPassword=sys')
+			window_open('EnsPortal.LookupSettings.zen?LookupTable=ReasonForClosure.lut&$NAMESPACE=USER&IRISUserName=SuperUser&IRISPassword=sys')
 		}
 
 		function openMessageTrace()
 		{
-			window_open('EnsPortal.MessageViewer.zen?$NAMESPACE=APPINT&IRISUserName=SuperUser&IRISPassword=sys')
+			window_open('EnsPortal.MessageViewer.zen?$NAMESPACE=USER&IRISUserName=SuperUser&IRISPassword=sys')
 		}
 
 		function openWorkflow()
 		{
-			window_open('_DeepSee.UserPortal.Workflow.zen?$NAMESPACE=APPINT&IRISUserName=SuperUser&IRISPassword=sys')
+			window_open('_DeepSee.UserPortal.Workflow.zen?$NAMESPACE=USER&IRISUserName=SuperUser&IRISPassword=sys')
 		}
 
 		function openSQLExplorer()
 		{
 			
-			window_open('/csp/sys/exp/%25CSP.UI.Portal.SQL.Home.zen?$NAMESPACE=APPINT&IRISUserName=SuperUser&IRISPassword=sys')
+			window_open('/csp/sys/exp/%25CSP.UI.Portal.SQL.Home.zen?$NAMESPACE=USER&IRISUserName=SuperUser&IRISPassword=sys')
 		}
 
 		function openRecordMap()
 		{
 			
-			window_open('/csp/appint/EnsPortal.RecordMapper.cls?MAP=Staging.RM.MortgageTrans&SHOWSAMPLE=1&IRISUserName=SuperUser&IRISPassword=sys')
+			window_open('EnsPortal.RecordMapper.cls?MAP=Staging.RM.MortgageTrans&SHOWSAMPLE=1&IRISUserName=SuperUser&IRISPassword=sys')
 		}
 
 		function openRESTService()
 		{
-			window_open('/csp/appint/rest/data/corebanking.com.irisdemo.banksim.avroevent.NewCustomerAvroEvent/2?IRISUserName=SuperUser&IRISPassword=sys')
+			window_open('rest/data/corebanking.com.irisdemo.banksim.avroevent.NewCustomerAvroEvent/2?IRISUserName=SuperUser&IRISPassword=sys')
 		}
 		
 		function openMonitoringDashboard()
 		{
-			window_open('/csp/appint/_DeepSee.UserPortal.DashboardViewer.zen?DASHBOARD=FCA/FCA%20Reporting%20Monitoring.dashboard&IRISUserName=SuperUser&IRISPassword=sys')
+			window_open('_DeepSee.UserPortal.DashboardViewer.zen?DASHBOARD=FCA/FCA%20Reporting%20Monitoring.dashboard&IRISUserName=SuperUser&IRISPassword=sys')
 		}
 
 		/*
