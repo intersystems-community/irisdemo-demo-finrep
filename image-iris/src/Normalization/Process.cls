@@ -58,7 +58,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
                         
         Try
         {
-            Set collectMetrics = 0
+            Set collectMetrics = $Get(^normMetrics)
 
             If collectMetrics 
             {
