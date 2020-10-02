@@ -16,9 +16,6 @@ services:
     - type: bind
       source: ./FCAGeneratedReports
       target: /FCAGeneratedReports
-    - type: volume
-      source: dur
-      target: /dur
     cap_add:
       - IPC_LOCK
     security_opt:             # For a demo, this is ok and will provide for more performance. Maybe it is not necessary with privileged:true bellow
