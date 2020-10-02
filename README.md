@@ -106,6 +106,12 @@ Another approach you could use would be to:
 
 The process above will work as well and can be used to demonstrate this second workflow.
 
+# Can I run the demo on AWS?
+
+Yes!
+
+Follow instructions [here](./ICM/README.md)
+
 # Other demo applications
 
 There are other IRIS demo applications that touch different subjects such as NLP, ML, Integration with AWS services, Twitter services, performance benchmarks etc. Here are some of them:
