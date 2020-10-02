@@ -1,3 +1,8 @@
+## 1.0.3 (October 01, 2020)
+  - Making sure we are calling triggering file transfers and reports
+  - Small performance changes. Making sure the scheduled reports get triggered from the demo landing page.
+  - Fixing image ref on README.
+
 ## 1.0.2 (September 30, 2020)
   - Docker-compose configured to run IRIS on docker with cap_add IPC_LOCK and security_opt seccomp:unconfined to boost performance for the demo
   - Regulatory reporting shows just latest records. 

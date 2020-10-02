@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   iris: 
-    image: intersystemsdc/irisdemo-demo-finrep:iris-version-1.0.2
+    image: intersystemsdc/irisdemo-demo-finrep:iris-version-1.0.3
     hostname: iris
     init: true
     container_name: iris
@@ -16,9 +16,11 @@ services:
     - type: bind
       source: ./FCAGeneratedReports
       target: /FCAGeneratedReports
+    - type: volume
+      source: dur
+      target: /dur
     cap_add:
       - IPC_LOCK
     security_opt:             # For a demo, this is ok and will provide for more performance. Maybe it is not necessary with privileged:true bellow
       - seccomp:unconfined
     privileged: true          # For a demo, this is ok and will provide for more performance.
-
