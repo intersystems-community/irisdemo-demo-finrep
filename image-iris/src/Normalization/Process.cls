@@ -72,11 +72,12 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 
             While oRS.Next()
             {
-                If collectMetrics Set tNextRecordEnd=$Piece($ZTimeStamp,",",2) //DEL
-                Set ^normMetrics("NextRecord")=$Get(^normMetrics("NextRecord"))+(tNextRecordEnd-tNextRecordStart) //DEL
-                
-
-                If collectMetrics Set tGetRecordStart=$Piece($ZTimeStamp,",",2) //DEL
+                If collectMetrics 
+                {
+                    Set tNextRecordEnd=$Piece($ZTimeStamp,",",2) //DEL
+                    Set ^normMetrics("NextRecord")=$Get(^normMetrics("NextRecord"))+(tNextRecordEnd-tNextRecordStart) //DEL
+                    Set tGetRecordStart=$Piece($ZTimeStamp,",",2) //DEL
+                }
 
                 Set context.Record = oRS.GetObject()
 
