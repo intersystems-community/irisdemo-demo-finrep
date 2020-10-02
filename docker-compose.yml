@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   iris: 
-    image: intersystemsdc/irisdemo-demo-finrep:iris-version-1.0.8
+    image: intersystemsdc/irisdemo-demo-finrep:iris-version-1.0.9
     hostname: iris
     init: true
     container_name: iris

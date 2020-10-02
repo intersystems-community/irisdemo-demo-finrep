@@ -1,3 +1,10 @@
+## 1.0.9 (October 02, 2020)
+  - Changing the url from /csp/appint/ to /csp/user/
+  - Merge branch 'master' of https://github.com/intersystems-community/irisdemo-demo-finrep
+  - .
+  - Update README.md
+  - Update README.md
+
 ## 1.0.8 (October 02, 2020)
   - Fixing bumpbersion.sh
   - Documentation improvement
