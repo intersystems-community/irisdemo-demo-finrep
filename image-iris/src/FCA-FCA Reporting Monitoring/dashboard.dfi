@@ -8,7 +8,7 @@
     <control name="" action="showListing" target="" targetProperty="Listing" location="widget" type="auto" controlClass="" label="" title="" value="" text="" readOnly="false" valueList="" displayList="" activeWhen="itemSelected">
       <valueRequired>false</valueRequired>
     </control>
-    <control name="" action="navigate" target="" targetProperty="http://localhost:10000/csp/appint/EnsPortal.VisualTrace.zen?SESSIONID=$$$VALUELIST" location="widget" type="auto" controlClass="" label="Trace" title="Trace the Session where this batch was processed" value="" text="" readOnly="false" valueList="" displayList="" activeWhen="listingSelected1">
+    <control name="" action="navigate" target="" targetProperty="http://localhost:10000/csp/user/EnsPortal.VisualTrace.zen?SESSIONID=$$$VALUELIST" location="widget" type="auto" controlClass="" label="Trace" title="Trace the Session where this batch was processed" value="" text="" readOnly="false" valueList="" displayList="" activeWhen="listingSelected1">
       <valueRequired>false</valueRequired>
     </control>
   </widget>
@@ -19,7 +19,7 @@
     <control name="" action="showListing" target="" targetProperty="Listing" location="widget" type="auto" controlClass="" label="" title="" value="" text="" readOnly="false" valueList="" displayList="" activeWhen="itemSelected">
       <valueRequired>false</valueRequired>
     </control>
-    <control name="" action="navigate" target="" targetProperty="http://localhost:10000/csp/appint/EnsPortal.VisualTrace.zen?SESSIONID=$$$VALUELIST" location="widget" type="auto" controlClass="" label="Trace" title="" value="" text="" readOnly="false" valueList="" displayList="" activeWhen="listingSelected1">
+    <control name="" action="navigate" target="" targetProperty="http://localhost:10000/csp/user/EnsPortal.VisualTrace.zen?SESSIONID=$$$VALUELIST" location="widget" type="auto" controlClass="" label="Trace" title="" value="" text="" readOnly="false" valueList="" displayList="" activeWhen="listingSelected1">
       <valueRequired>false</valueRequired>
     </control>
   </widget>
