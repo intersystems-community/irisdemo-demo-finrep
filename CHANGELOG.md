@@ -1,3 +1,6 @@
+## 1.0.4 (October 01, 2020)
+  - Making demo run on the USER namespace
+
 ## 1.0.3 (October 01, 2020)
   - Making sure we are calling triggering file transfers and reports
   - Small performance changes. Making sure the scheduled reports get triggered from the demo landing page.
