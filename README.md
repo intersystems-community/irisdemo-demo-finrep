@@ -52,11 +52,11 @@ When starting, you will see lots of messages from all the containers that are st
 
 When it is done, it will just hang there, without returning control to you. That is fine too. Just leave this window open. If you CTRL+C on this window, docker compose will stop all the containers and stop the demo.
 
-After all the containers have started, open a browser at [http://localhost:10000/csp/appint/demo.csp](http://localhost:10000/csp/appint/demo.csp) to see the landing page of the demo. When requested, use the credentials **SuperUser/sys** to log in. 
+After all the containers have started, open a browser at [http://localhost:10000/csp/user/demo.csp](http://localhost:10000/csp/appint/demo.csp) to see the landing page of the demo. When requested, use the credentials **SuperUser/sys** to log in. 
 
 You are going to see a page like this:
 
-![Demo](https://raw.githubusercontent.com/intersystems-community/irisdemo-demo-finrep/master/image-iris/html/landing-page.png?token=ABQT2JHUTZEPLAID2N4ZGT27NZV46)
+![Demo](https://github.com/intersystems-community/irisdemo-demo-finrep/blob/master/image-iris/html/landing-page.png?raw=true)
 
 This is the landing page of the demo. All the ballons on this image are clickable. Click on the **Toggle Detailed View** to show more information. 
 
@@ -105,6 +105,12 @@ Another approach you could use would be to:
 * Resent the same file
 
 The process above will work as well and can be used to demonstrate this second workflow.
+
+# Can I run the demo on AWS?
+
+Yes!
+
+Follow instructions [here](./ICM/README.md)
 
 # Other demo applications
 

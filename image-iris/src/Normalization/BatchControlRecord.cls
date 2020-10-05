@@ -45,6 +45,11 @@ ClassMethod Create(pBatchControl As Normalization.BatchControl, pSessionId As %S
         Set oNewBatchControlRecord.DTLClassName = pJobSpec.DTLClassName
         Set oNewBatchControlRecord.CanonicalClassName = pJobSpec.CanonicalClassName
         Set oNewBatchControlRecord.BatchRecordClassName = pJobSpec.BatchRecordClassName
+
+        If pBatchControl.LastControlRecord=""
+        {
+            Set pBatchControl.LastControlRecord=oNewBatchControlRecord
+        }
     } 
     Catch (oException)
     {

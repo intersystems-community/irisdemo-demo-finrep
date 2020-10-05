@@ -1,4 +1,4 @@
-FROM intersystemsdc/irisdemo-base-irisint-community:version-1.9.0
+FROM intersystemsdc/irisdemo-base-irisint-community:version-1.9.4U
 
 # IRIS Global buffers and Routine Buffers
 ENV IRIS_GLOBAL_BUFFERS=2048
@@ -24,7 +24,7 @@ mv $IRIS_APP_SOURCEDIR/FCA-Report\ Status /tmp/dfi/ && \
 ls -l /tmp/dfi && \
 /usr/irissys/demo/irisdemoinstaller.sh
 
-ADD --chown=irisowner:irisuser ./html/landing-page.png $ISC_PACKAGE_INSTALLDIR/csp/appint/
-ADD --chown=irisowner:irisuser ./html/landing-page-detailed.png $ISC_PACKAGE_INSTALLDIR/csp/appint/
-ADD --chown=irisowner:irisuser ./html/image-map-resizer/js/imageMapResizer.min.js $ISC_PACKAGE_INSTALLDIR/csp/appint/
-ADD --chown=irisowner:irisuser ./html/image-map-resizer/js/imageMapResizer.map $ISC_PACKAGE_INSTALLDIR/csp/appint/
+ADD --chown=irisowner:irisuser ./html/landing-page.png $ISC_PACKAGE_INSTALLDIR/csp/user/
+ADD --chown=irisowner:irisuser ./html/landing-page-detailed.png $ISC_PACKAGE_INSTALLDIR/csp/user/
+ADD --chown=irisowner:irisuser ./html/image-map-resizer/js/imageMapResizer.min.js $ISC_PACKAGE_INSTALLDIR/csp/user/
+ADD --chown=irisowner:irisuser ./html/image-map-resizer/js/imageMapResizer.map $ISC_PACKAGE_INSTALLDIR/csp/user/

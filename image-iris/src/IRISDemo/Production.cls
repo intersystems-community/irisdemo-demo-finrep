@@ -22,7 +22,7 @@ ClassMethod ExpandDB(pSizeInMb As %Integer)
     Try 
     { 
       Set $Namespace="%SYS" 
-      Set tSC = ##class(Config.Databases).Get("APPINT", .properties)
+      Set tSC = ##class(Config.Databases).Get("USER", .properties)
       Quit:$$$ISERR(tSC)
       
       Set dir=properties("Directory")
@@ -63,6 +63,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="BatchHandling">Whole</Setting>
     <Setting Target="Adapter" Name="CallInterval">1</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.csv</Setting>
+    <Setting Target="Adapter" Name="FileAccessTimeout">1</Setting>
   </Item>
   <Item Name="Mortgage Affordability Data Service" Category="" ClassName="EnsLib.RecordMap.Service.BatchFileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Host" Name="RecordMap">Staging.RM.MortgageAfford</Setting>
@@ -76,6 +77,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="BatchHandling">Whole</Setting>
     <Setting Target="Adapter" Name="CallInterval">1</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.csv</Setting>
+    <Setting Target="Adapter" Name="FileAccessTimeout">1</Setting>
   </Item>
   <Item Name="Mortgage Performance Data Service" Category="" ClassName="EnsLib.RecordMap.Service.BatchFileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Host" Name="RecordMap">Staging.RM.MortgagePerf</Setting>
@@ -89,6 +91,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="BatchHandling">Whole</Setting>
     <Setting Target="Adapter" Name="CallInterval">1</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.csv</Setting>
+    <Setting Target="Adapter" Name="FileAccessTimeout">1</Setting>
   </Item>
   <Item Name="Normalization Process" Category="" ClassName="Normalization.Process" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>

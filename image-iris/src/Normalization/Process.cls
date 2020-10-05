@@ -43,22 +43,92 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 <assign name="Open BatchJobSpec" property="context.BatchJobSpec" value="##class(Normalization.BatchJobSpec).BatchClassNameIndexOpen(request.%ClassName(1),,.status)" action="set" xpos='200' ypos='450' />
 <assign name="Open or Create Batch" property="context.BatchControl" value="##class(Normalization.BatchControl).OpenOrCreate(request.%ClassName(1),context.BatchFileName,.status)" action="set" xpos='200' ypos='550' />
 <assign name="New Batch Control Record" property="context.BatchControlRecord" value="##class(Normalization.BatchControlRecord).Create(context.BatchControl, process.%SessionId, context.BatchJobSpec, .status)" action="set" xpos='200' ypos='650' />
+
+<call name='Synchronize BatchControlRecord cube' target='Cube Operations' async='0' xpos='335' ypos='1500' >
+<request type='Cube.BO.SynchronizeCubeListReq' >
+<assign property="callrequest.CubeList" value='"BatchControlRecord"' action="set" />
+</request>
+</call>
+
 <assign name="Reset record count" property="context.RecordCount" value="0" action="set" xpos='200' ypos='750' />
-<foreach name='Normalize each record...' property='request.Records' key='context.RecordIndex' xpos='200' ypos='850' xend='200' yend='450' >
-<assign property="context.Record" value="request.Records.GetAt(context.RecordIndex)" action="set" xpos='200' ypos='250' />
+<!--foreach name='Normalize each record...' property='request.Records' key='context.RecordIndex' xpos='200' ypos='850' xend='200' yend='450' >
+<assign property="context.Record" value="request.Records.GetAt(context.RecordIndex)" action="set" xpos='200' ypos='250' /-->
 <code name='Transform Record' xpos='200' ypos='350' >
 <![CDATA[ 
                         
         Try
         {
-            Set context.RecordCount=context.RecordCount+1
+            Set collectMetrics = $Get(^normMetrics)
 
-            Set status = $classmethod(context.BatchControlRecord.DTLClassName, "Transform", context.Record, .normalizedRecord)
+            If collectMetrics 
+            {
+                Set tForTimeStart=$Piece($ZTimeStamp,",",2) //DEL
+            }
+
+            Set oRS = context.BatchJobSpec.GetSQLCursorForBatch(request.%Id(), .status)
             Quit:$$$ISERR(status)
 
-            Set normalizedRecord.%BatchControlRecord = context.BatchControlRecord 
-            Set normalizedRecord.%OriginalBatchRecordId = context.Record.%Id()
-            Set status = normalizedRecord.%Save()
+            If collectMetrics Set tNextRecordStart=$Piece($ZTimeStamp,",",2) //DEL
+
+            While oRS.Next()
+            {
+                If collectMetrics 
+                {
+                    Set tNextRecordEnd=$Piece($ZTimeStamp,",",2) //DEL
+                    Set ^normMetrics("NextRecord")=$Get(^normMetrics("NextRecord"))+(tNextRecordEnd-tNextRecordStart) //DEL
+                    Set tGetRecordStart=$Piece($ZTimeStamp,",",2) //DEL
+                }
+
+                Set context.Record = oRS.GetObject()
+
+                If collectMetrics 
+                {
+                    Set tGetRecordEnd=$Piece($ZTimeStamp,",",2) //DEL
+                    Set ^normMetrics("GetRecord")=$Get(^normMetrics("GetRecord"))+(tGetRecordEnd-tGetRecordStart) //DEL
+                    If collectMetrics Set tDTLStart=$Piece($ZTimeStamp,",",2) //DEL
+                }
+
+                Set context.RecordCount=context.RecordCount+1
+
+                
+                Set status = $classmethod(context.BatchControlRecord.DTLClassName, "Transform", context.Record, .normalizedRecord)
+                Quit:$$$ISERR(status)
+
+                If collectMetrics 
+                {
+                    Set tDTLEnd=$Piece($ZTimeStamp,",",2) //DEL
+                    Set ^normMetrics("DTL")=$Get(^normMetrics("DTL"))+(tDTLEnd-tDTLStart) //DEL 
+                    Set tSaveStart=$Piece($ZTimeStamp,",",2) //DEL
+                }
+
+                Set normalizedRecord.%BatchControlRecord = context.BatchControlRecord 
+                Set normalizedRecord.%OriginalBatchRecordId = context.Record.%Id()
+                Set status = normalizedRecord.%Save() 
+                Quit:$$$ISERR(status)
+
+                If collectMetrics 
+                {
+                    Set tSaveEnd=$Piece($ZTimeStamp,",",2) //DEL
+                    Set ^normMetrics("Save")=$Get(^normMetrics("Save"))+(tSaveEnd-tSaveStart) //DEL
+                    Set tNextRecordStart=$Piece($ZTimeStamp,",",2) //DEL
+                }
+            }
+
+            If collectMetrics 
+            {
+                Set tForTimeEnd=$Piece($ZTimeStamp,",",2) //DEL
+                Set ^normMetrics("For")=tForTimeEnd-tForTimeStart 
+
+                Set ^normMetrics("DTL%")        = (^normMetrics("DTL")/^normMetrics("For"))_"%" //DEL
+                Set ^normMetrics("GetRecord%")  = (^normMetrics("GetRecord")/^normMetrics("For"))_"%" //DEL
+                Set ^normMetrics("NextRecord%") = (^normMetrics("NextRecord")/^normMetrics("For"))_"%" //DEL
+                Set ^normMetrics("Save%")       = (^normMetrics("Save")/^normMetrics("For"))_"%" //DEL
+
+                Set ^normMetrics("DTLAvg")        = (^normMetrics("DTL")/context.RecordCount)_"s" //DEL
+                Set ^normMetrics("GetRecordAvg")  = (^normMetrics("GetRecord")/context.RecordCount)_"s" //DEL
+                Set ^normMetrics("NextRecordAvg") = (^normMetrics("NextRecord")/context.RecordCount)_"s" //DEL
+                Set ^normMetrics("SaveAvg")       = (^normMetrics("Save")/context.RecordCount)_"s" //DEL
+            }
         }
         Catch (oException)
         {
@@ -87,7 +157,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
         
     ]]>
 </code>
-</foreach>
+<!--/foreach-->
 <trace name='Finished processing' value='"Finished processing the batch"' xpos='200' ypos='950' />
 <assign name="Close Batch" property="status" value="context.BatchControlRecord.ChangeToAvailableStatus(context.RecordCount)" action="set" xpos='200' ypos='1050' />
 <trace name='Batch closed' value='"Batch closed."' xpos='200' ypos='1150' />
