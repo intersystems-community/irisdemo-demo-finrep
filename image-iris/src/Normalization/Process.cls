@@ -66,7 +66,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
             }
 
             Set oRS = context.BatchJobSpec.GetSQLCursorForBatch(request.%Id(), .status)
-            Quit:$$$ISERR(status)
+            Quit:$$$ISERR(status) 
 
             If collectMetrics Set tNextRecordStart=$Piece($ZTimeStamp,",",2) //DEL
 
@@ -75,7 +75,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
                 If collectMetrics 
                 {
                     Set tNextRecordEnd=$Piece($ZTimeStamp,",",2) //DEL
-                    Set ^normMetrics("NextRecord")=$Get(^normMetrics("NextRecord"))+(tNextRecordEnd-tNextRecordStart) //DEL
+                    Set ^normMetrics(context.BatchFileName,"NextRecord")=$Get(^normMetrics(context.BatchFileName, "NextRecord"))+(tNextRecordEnd-tNextRecordStart) //DEL
                     Set tGetRecordStart=$Piece($ZTimeStamp,",",2) //DEL
                 }
 
@@ -84,7 +84,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
                 If collectMetrics 
                 {
                     Set tGetRecordEnd=$Piece($ZTimeStamp,",",2) //DEL
-                    Set ^normMetrics("GetRecord")=$Get(^normMetrics("GetRecord"))+(tGetRecordEnd-tGetRecordStart) //DEL
+                    Set ^normMetrics(context.BatchFileName,"GetRecord")=$Get(^normMetrics(context.BatchFileName, "GetRecord"))+(tGetRecordEnd-tGetRecordStart) //DEL
                     If collectMetrics Set tDTLStart=$Piece($ZTimeStamp,",",2) //DEL
                 }
 
@@ -97,7 +97,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
                 If collectMetrics 
                 {
                     Set tDTLEnd=$Piece($ZTimeStamp,",",2) //DEL
-                    Set ^normMetrics("DTL")=$Get(^normMetrics("DTL"))+(tDTLEnd-tDTLStart) //DEL 
+                    Set ^normMetrics(context.BatchFileName,"DTL")=$Get(^normMetrics(context.BatchFileName, "DTL"))+(tDTLEnd-tDTLStart) //DEL 
                     Set tSaveStart=$Piece($ZTimeStamp,",",2) //DEL
                 }
 
@@ -109,25 +109,26 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
                 If collectMetrics 
                 {
                     Set tSaveEnd=$Piece($ZTimeStamp,",",2) //DEL
-                    Set ^normMetrics("Save")=$Get(^normMetrics("Save"))+(tSaveEnd-tSaveStart) //DEL
+                    Set ^normMetrics(context.BatchFileName,"Save")=$Get(^normMetrics(context.BatchFileName, "Save"))+(tSaveEnd-tSaveStart) //DEL
                     Set tNextRecordStart=$Piece($ZTimeStamp,",",2) //DEL
                 }
             }
+            Quit:$$$ISERR(status)
 
-            If collectMetrics 
+            If collectMetrics
             {
                 Set tForTimeEnd=$Piece($ZTimeStamp,",",2) //DEL
-                Set ^normMetrics("For")=tForTimeEnd-tForTimeStart 
+                Set ^normMetrics(context.BatchFileName,"FullProc")=tForTimeEnd-tForTimeStart 
 
-                Set ^normMetrics("DTL%")        = (^normMetrics("DTL")/^normMetrics("For"))_"%" //DEL
-                Set ^normMetrics("GetRecord%")  = (^normMetrics("GetRecord")/^normMetrics("For"))_"%" //DEL
-                Set ^normMetrics("NextRecord%") = (^normMetrics("NextRecord")/^normMetrics("For"))_"%" //DEL
-                Set ^normMetrics("Save%")       = (^normMetrics("Save")/^normMetrics("For"))_"%" //DEL
+                Set ^normMetrics(context.BatchFileName,"DTL%")        = (^normMetrics(context.BatchFileName, "DTL")/^normMetrics(context.BatchFileName, "FullProc"))_"%" //DEL
+                Set ^normMetrics(context.BatchFileName,"GetRecord%")  = (^normMetrics(context.BatchFileName, "GetRecord")/^normMetrics(context.BatchFileName, "FullProc"))_"%" //DEL
+                Set ^normMetrics(context.BatchFileName,"NextRecord%") = (^normMetrics(context.BatchFileName, "NextRecord")/^normMetrics(context.BatchFileName, "FullProc"))_"%" //DEL
+                Set ^normMetrics(context.BatchFileName,"Save%")       = (^normMetrics(context.BatchFileName, "Save")/^normMetrics(context.BatchFileName, "FullProc"))_"%" //DEL
 
-                Set ^normMetrics("DTLAvg")        = (^normMetrics("DTL")/context.RecordCount)_"s" //DEL
-                Set ^normMetrics("GetRecordAvg")  = (^normMetrics("GetRecord")/context.RecordCount)_"s" //DEL
-                Set ^normMetrics("NextRecordAvg") = (^normMetrics("NextRecord")/context.RecordCount)_"s" //DEL
-                Set ^normMetrics("SaveAvg")       = (^normMetrics("Save")/context.RecordCount)_"s" //DEL
+                Set ^normMetrics(context.BatchFileName,"DTLAvg")        = (^normMetrics(context.BatchFileName, "DTL")/context.RecordCount)_"s" //DEL
+                Set ^normMetrics(context.BatchFileName,"GetRecordAvg")  = (^normMetrics(context.BatchFileName, "GetRecord")/context.RecordCount)_"s" //DEL
+                Set ^normMetrics(context.BatchFileName,"NextRecordAvg") = (^normMetrics(context.BatchFileName, "NextRecord")/context.RecordCount)_"s" //DEL
+                Set ^normMetrics(context.BatchFileName,"SaveAvg")       = (^normMetrics(context.BatchFileName, "Save")/context.RecordCount)_"s" //DEL
             }
         }
         Catch (oException)

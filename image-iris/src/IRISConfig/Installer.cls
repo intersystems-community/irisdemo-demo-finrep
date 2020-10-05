@@ -24,6 +24,9 @@ ClassMethod ConfigIRIS() As %Status
 		Quit:$$$ISERR(tSC)
 
 		DO ##class(Security.SSLConfigs).Create("SSLCLIENT")
+
+		Set MapGlobalsProperties("Database")="IRISTEMP"
+		Set tSC=##Class(Config.MapGlobals).Create("USER","CTCache",.MapGlobalsProperties)
 	}
 	Catch (oException)
 	{
@@ -162,6 +165,8 @@ ClassMethod ConfigDemo(pNamespace As %String) As %Status
 	{
 		ZN pNamespace
 		
+		Set ^normMetrics=1
+
 		Set obj = ##class(Normalization.BatchJobSpec).%New()
 		Set obj.BatchClassName="Staging.RM.MortgageTrans.Batch"
 		Set obj.BatchRecordClassName="Staging.RM.MortgageTrans.Record"
