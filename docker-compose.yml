@@ -1,8 +1,13 @@
 version: '3.7'
 
+networks:
+  mynetwork.com:
+    external:
+      name: net_test
+
 services:
 
-  iris: 
+  iris:
     image: intersystemsdc/irisdemo-demo-finrep:iris-version-1.0.1
     hostname: iris
     init: true
@@ -16,4 +21,15 @@ services:
     - type: bind
       source: ./FCAGeneratedReports
       target: /FCAGeneratedReports
-      
+    - type: bind
+      source: ./hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.yaml
+      target: /hyperledger/certs/connection-org1.yaml
+    - type: bind
+      source: ./hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem
+      target: /hyperledger/certs/ca.org1.example.com-cert.pem
+    - type: bind
+      source: ./image-iris/hyperledger-wallet
+      target: /hyperledger/wallet
+
+    networks:
+      - mynetwork.com
