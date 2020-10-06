@@ -1,3 +1,6 @@
+## 1.0.11 (October 05, 2020)
+  - Taking metrics
+
 ## 1.0.10 (October 02, 2020)
   - Improving performance of normalization process in 20% 
 
