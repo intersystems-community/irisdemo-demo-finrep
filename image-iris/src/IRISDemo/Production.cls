@@ -94,6 +94,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="FileAccessTimeout">1</Setting>
   </Item>
   <Item Name="Normalization Process" Category="" ClassName="Normalization.Process" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="RuleLogging">e</Setting>
   </Item>
   <Item Name="Data Stewards" Category="" ClassName="EnsLib.Workflow.Operation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="AutoCreateRole">1</Setting>
@@ -103,6 +104,7 @@ XData ProductionDefinition
   <Item Name="Report Service" Category="" ClassName="Report.BS.Service" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
   <Item Name="Reporting Process" Category="" ClassName="Report.BP.Process" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+    <Setting Target="Host" Name="RuleLogging">e</Setting>
   </Item>
   <Item Name="Send to FCA" Category="" ClassName="Custom.FCAReport.BO.XMLFileReport.Operation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Charset">utf-8</Setting>

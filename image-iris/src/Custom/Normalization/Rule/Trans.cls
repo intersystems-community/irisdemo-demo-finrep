@@ -8,7 +8,7 @@ XData RuleDefinition [ XMLNamespace = "http://www.intersystems.com/rule" ]
 {
 <ruleDefinition alias="MortgageTransactionRules" context="Canonical.Mortgage" production="">
 <ruleSet name="Mortgage Transaction Validation Rules" effectiveBegin="" effectiveEnd="">
-<rule name="Borrowed money can not be greater than property value" disabled="false">
+<rule name="Borrowed money can not be greater than property value" disabled="true">
 <when condition="MoneyWithdrawn&gt;=PropertyValue">
 <return>"Can not lend more money than property value"</return>
 </when>
