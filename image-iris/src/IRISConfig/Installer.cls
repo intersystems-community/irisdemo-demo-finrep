@@ -172,6 +172,7 @@ ClassMethod ConfigDemo(pNamespace As %String) As %Status
 		Set obj.BatchRecordClassName="Staging.RM.MortgageTrans.Record"
 		Set obj.DTLClassName="Custom.Normalization.DTL.Trans"
 		Set obj.CanonicalClassName="Canonical.Mortgage"
+		Set obj.ValidationRuleName="Custom.Normalization.Rule.Trans"
 		Set obj.CubeList="BatchControlRecord,MortgageSales"
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
@@ -182,6 +183,7 @@ ClassMethod ConfigDemo(pNamespace As %String) As %Status
 		Set obj.DTLClassName="Custom.Normalization.DTL.Afford"
 		Set obj.CanonicalClassName="Canonical.MortgageAfford"
 		Set obj.CubeList="BatchControlRecord,MortgageSales"
+		Set obj.ValidationRuleName="Custom.Normalization.Rule.Afford"
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
 
@@ -190,6 +192,7 @@ ClassMethod ConfigDemo(pNamespace As %String) As %Status
 		Set obj.BatchRecordClassName="Staging.RM.MortgagePerf.Record"
 		Set obj.DTLClassName="Custom.Normalization.DTL.Perf"
 		Set obj.CanonicalClassName="Canonical.MortgagePerf"
+		Set obj.ValidationRuleName="Custom.Normalization.Rule.Perf"
 		Set obj.CubeList="BatchControlRecord,MortgageSales"
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)

@@ -62,6 +62,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 
             If collectMetrics 
             {
+                Kill ^normMetrics(context.BatchFileName)
                 Set tForTimeStart=$Piece($ZTimeStamp,",",2) //DEL
             }
 
@@ -89,8 +90,6 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
                 }
 
                 Set context.RecordCount=context.RecordCount+1
-
-                
                 Set status = $classmethod(context.BatchControlRecord.DTLClassName, "Transform", context.Record, .normalizedRecord)
                 Quit:$$$ISERR(status)
 
@@ -98,6 +97,25 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
                 {
                     Set tDTLEnd=$Piece($ZTimeStamp,",",2) //DEL
                     Set ^normMetrics(context.BatchFileName,"DTL")=$Get(^normMetrics(context.BatchFileName, "DTL"))+(tDTLEnd-tDTLStart) //DEL 
+                    Set tRuleStart=$Piece($ZTimeStamp,",",2) //DEL
+                }
+
+                If context.BatchControlRecord.ValidationRuleName'=""
+                {
+                    Set status=##class(Ens.Rule.RuleDefinition).EvaluateRulesEx(context.BatchControlRecord.ValidationRuleName, process.%SessionId, normalizedRecord,"Validation Rule",.ruleReturn,.ruleReason,,process.RuleLogging)  
+                    Quit:$$$ISERR(status)
+
+                    If ruleReturn'=1
+                    {
+                        Set status = $$$ERROR(5001, "Record rejected by validation rule '"_context.BatchControlRecord.ValidationRuleName_"'. Reason: "_ruleReason)
+                        Quit
+                    }
+                }
+
+                If collectMetrics 
+                {
+                    Set tRuleEnd=$Piece($ZTimeStamp,",",2) //DEL
+                    Set ^normMetrics(context.BatchFileName,"Rule")=$Get(^normMetrics(context.BatchFileName, "Rule"))+(tRuleEnd-tRuleStart) //DEL 
                     Set tSaveStart=$Piece($ZTimeStamp,",",2) //DEL
                 }
 
