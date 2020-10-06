@@ -27,7 +27,7 @@ clean_files()
     rm -f ./MortgageSystemFiles/Afford/Done/*csv*
     rm -f ./MortgageSystemFiles/Perf/Done/*csv*
 
-    rm -f ./FCAGeneratedReports/Perf/Done/*xml*
+    rm -f ./FCAGeneratedReports/*.xml
 }
 
 cleanup()
