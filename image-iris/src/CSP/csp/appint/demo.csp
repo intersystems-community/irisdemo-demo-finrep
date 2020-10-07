@@ -268,7 +268,7 @@
 			if (status === "1")
 			{
 				var fileName = dataArray[1];
-				window_open("/csp/report" + fileName);
+				window_open("/csp/report/" + fileName);
 				return;
 			}
 
