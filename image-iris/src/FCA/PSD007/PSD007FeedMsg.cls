@@ -10,13 +10,9 @@ Parameter XMLNAME = "PSD007FeedMsg";
 
 Parameter XMLSEQUENCE = 1;
 
-Index PSD007MortgagePerformanceSalesDataIndex On PSD007MortgagePerformanceSalesData;
-
 Property CoreItems As FCA.PSD007.CoreItems(XMLNAME = "CoreItems") [ Required ];
 
 Property PerformanceSalesData As FCA.PSD007.PerformanceSalesData(XMLNAME = "PerformanceSalesData") [ Required ];
-
-Relationship PSD007MortgagePerformanceSalesData As FCA.PSD007.PSD007MortgagePerformanceSalesData(XMLPROJECTION = "NONE") [ Cardinality = one, Inverse = PSD007FeedMsg, OnDelete = cascade ];
 
 /// The %DeleteTrigger unified trigger is generated in order to cascade SQL deletes of an XML tree.
 Trigger %DeleteTrigger [ Event = DELETE, Foreach = row/object ]
@@ -42,9 +38,6 @@ Storage Default
 </Value>
 <Value name="3">
 <Value>PerformanceSalesData</Value>
-</Value>
-<Value name="4">
-<Value>PSD007MortgagePerformanceSalesData</Value>
 </Value>
 </Data>
 <DataLocation>^FCA.PSD007.PSD007FeedMsgD</DataLocation>

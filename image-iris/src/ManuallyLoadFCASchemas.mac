@@ -8,7 +8,7 @@ ROUTINE ManuallyLoadFCASchemas
     {
         Set reader = ##class(%XML.Utils.SchemaReader).%New()
         Set reader.MakeNamespace=1
-        Set reader.IndexRelationship=1
+        Set reader.MakeRelationships=0 // Relationships are too slow!!!!
         Set reader.CascadeDeletes=1
         Set reader.SSLConfiguration = "SSLCLIENT" //Created on IRISConfig.Installer
         //Set reader.Debug=2

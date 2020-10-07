@@ -138,10 +138,10 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
                 Set tForTimeEnd=$Piece($ZTimeStamp,",",2) //DEL
                 Set ^normMetrics(context.BatchFileName,"FullProc")=tForTimeEnd-tForTimeStart 
 
-                Set ^normMetrics(context.BatchFileName,"DTL%")        = (^normMetrics(context.BatchFileName, "DTL")/^normMetrics(context.BatchFileName, "FullProc"))_"%" //DEL
-                Set ^normMetrics(context.BatchFileName,"GetRecord%")  = (^normMetrics(context.BatchFileName, "GetRecord")/^normMetrics(context.BatchFileName, "FullProc"))_"%" //DEL
-                Set ^normMetrics(context.BatchFileName,"NextRecord%") = (^normMetrics(context.BatchFileName, "NextRecord")/^normMetrics(context.BatchFileName, "FullProc"))_"%" //DEL
-                Set ^normMetrics(context.BatchFileName,"Save%")       = (^normMetrics(context.BatchFileName, "Save")/^normMetrics(context.BatchFileName, "FullProc"))_"%" //DEL
+                Set ^normMetrics(context.BatchFileName,"DTL%")        = (^normMetrics(context.BatchFileName, "DTL")/^normMetrics(context.BatchFileName, "FullProc")*100)_"%" //DEL
+                Set ^normMetrics(context.BatchFileName,"GetRecord%")  = (^normMetrics(context.BatchFileName, "GetRecord")/^normMetrics(context.BatchFileName, "FullProc")*100)_"%" //DEL
+                Set ^normMetrics(context.BatchFileName,"NextRecord%") = (^normMetrics(context.BatchFileName, "NextRecord")/^normMetrics(context.BatchFileName, "FullProc")*100)_"%" //DEL
+                Set ^normMetrics(context.BatchFileName,"Save%")       = (^normMetrics(context.BatchFileName, "Save")/^normMetrics(context.BatchFileName, "FullProc")*100)_"%" //DEL
 
                 Set ^normMetrics(context.BatchFileName,"DTLAvg")        = (^normMetrics(context.BatchFileName, "DTL")/context.RecordCount)_"s" //DEL
                 Set ^normMetrics(context.BatchFileName,"GetRecordAvg")  = (^normMetrics(context.BatchFileName, "GetRecord")/context.RecordCount)_"s" //DEL

@@ -27,6 +27,13 @@ Property ReportClassName As %String [ Required ];
 
 Property GeneratedReportObjectId As %String;
 
+Property ReportRunUniqueName As %String [ Calculated ];
+
+Method ReportRunUniqueNameGet() As %String
+{
+    Quit ..ReportSchedule.Report.ReportName_"/"_..%Id()
+}
+
 ClassMethod Create(pReportSchedule As Report.ReportSchedule, pSessionId As %String, Output pStatus As %Status) As Report.ReportScheduleRun
 {
     Set pStatus = $$$OK

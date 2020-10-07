@@ -15,7 +15,7 @@ Parameter XMLTYPE = "PSD007-MortgagePerformanceSalesData";
 Property PSDFeedHeader As FCA.PSD007.PSDFeedHeader(XMLNAME = "PSDFeedHeader") [ Required ];
 
 /// Defines the individual transactions to be reported
-Relationship PSD007FeedMsg As FCA.PSD007.PSD007FeedMsg(XMLNAME = "PSD007FeedMsg", XMLPROJECTION = "ELEMENT") [ Cardinality = many, Inverse = PSD007MortgagePerformanceSalesData ];
+Property PSD007FeedMsg As list Of FCA.PSD007.PSD007FeedMsg(XMLNAME = "PSD007FeedMsg", XMLPROJECTION = "ELEMENT") [ Required ];
 
 Property currency As %String(MAXLEN = "", XMLNAME = "currency", XMLPROJECTION = "ATTRIBUTE") [ InitialExpression = "GBP", ReadOnly, Required ];
 
@@ -26,6 +26,12 @@ Trigger %DeleteTrigger [ Event = DELETE, Foreach = row/object ]
  Set oref=..%OpenId({%%ID},,.sc) If $$$ISERR(sc) Quit sc
  Set oid=oref.PSDFeedHeaderGetObject()
  If oid'="" Set sc1=##class(FCA.PSD007.PSDFeedHeader).%Delete(oid) If $$$ISERR(sc1),$$$GETERRORCODE(sc1)'=$$$ERRORCODE($$$DeleteObjectNotFound) Set sc=$$$ADDSC(sc,sc1)
+ Set index=""
+ For {
+    Set oid=oref.PSD007FeedMsg.GetObjectNext(.index)
+    If index="" Quit
+    If oid'="" Set sc1=##class(FCA.PSD007.PSD007FeedMsg).%Delete(oid) If $$$ISERR(sc1),$$$GETERRORCODE(sc1)'=$$$ERRORCODE($$$DeleteObjectNotFound) Set sc=$$$ADDSC(sc,sc1)
+ }
  If $$$ISERR(sc) Set %ok=0,%msg=$system.Status.GetErrorText(sc) 
  Quit
 }
@@ -40,6 +46,9 @@ Storage Default
 <Value>PSDFeedHeader</Value>
 </Value>
 <Value name="3">
+<Value>PSD007FeedMsg</Value>
+</Value>
+<Value name="4">
 <Value>currency</Value>
 </Value>
 </Data>

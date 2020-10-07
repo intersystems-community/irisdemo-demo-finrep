@@ -5,6 +5,17 @@ Class IRISDemo.Production Extends IRISDemo.BaseProduction
 /// so it can be synchronized during the demo
 ClassMethod OnStart(pTimeStarted As %String) As %Status
 {
+    // Stopping journaling system wide to speed up the demo
+    Set tSC = ##class(%SYS.Journal.System).Stop() 
+    If $$$ISERR(tSC) 
+    {   
+        // Was it already stopped? Good! Keep going...
+        If $System.Status.GetErrorCodes(tSC)=1141 Set tSC = $$$OK   //ERROR #1141: Error stopping journaling: -3,Not journaling
+
+        // Some other problem? Alright... Let's report it.
+        Quit tSC
+    }
+
     Set tSC = ##class(%DeepSee.CubeManager.Utils).SetActiveRegistry("Cube.Registry")
     Quit:$$$ISERR(tSC) tSC
 

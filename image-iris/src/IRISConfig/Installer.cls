@@ -165,7 +165,8 @@ ClassMethod ConfigDemo(pNamespace As %String) As %Status
 	{
 		ZN pNamespace
 		
-		Set ^normMetrics=1
+		//Set ^normMetrics=1
+		//Set ^reportMetrics=1
 
 		Set obj = ##class(Normalization.BatchJobSpec).%New()
 		Set obj.BatchClassName="Staging.RM.MortgageTrans.Batch"
@@ -183,7 +184,7 @@ ClassMethod ConfigDemo(pNamespace As %String) As %Status
 		Set obj.DTLClassName="Custom.Normalization.DTL.Afford"
 		Set obj.CanonicalClassName="Canonical.MortgageAfford"
 		Set obj.CubeList="BatchControlRecord,MortgageSales"
-		Set obj.ValidationRuleName="Custom.Normalization.Rule.Afford"
+		//Set obj.ValidationRuleName="Custom.Normalization.Rule.Afford"
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
 
@@ -192,7 +193,7 @@ ClassMethod ConfigDemo(pNamespace As %String) As %Status
 		Set obj.BatchRecordClassName="Staging.RM.MortgagePerf.Record"
 		Set obj.DTLClassName="Custom.Normalization.DTL.Perf"
 		Set obj.CanonicalClassName="Canonical.MortgagePerf"
-		Set obj.ValidationRuleName="Custom.Normalization.Rule.Perf"
+		//Set obj.ValidationRuleName="Custom.Normalization.Rule.Perf"
 		Set obj.CubeList="BatchControlRecord,MortgageSales"
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
@@ -532,11 +533,6 @@ XData Install [ XMLNamespace = INSTALLER ]
 
 	<Log Text="Configuring IRIS..." Level="0"/>
 	<Invoke Class="IRISConfig.Installer" Method="ConfigIRIS" CheckStatus="true">
-	</Invoke>
-
-	<Log Text="Loading FCA XML Schemas..." Level="0"/>
-	<Invoke Class="IRISConfig.Installer" Method="LoadFCAXMLSchemas" CheckStatus="true">
-		<Arg name="pNamespace" Value="${Namespace}"/>
 	</Invoke>
 
 	<Log Text="Loading DeepSee Pivots and Dashboards..." Level="0"/>
