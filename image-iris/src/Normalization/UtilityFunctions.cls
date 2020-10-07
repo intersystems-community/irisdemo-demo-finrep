@@ -1,7 +1,7 @@
 Class Normalization.UtilityFunctions Extends Ens.Rule.FunctionSet
 {
 
-ClassMethod TodayHorolog() As %Date
+ClassMethod Today() As %Date
 {
   Quit +$Horolog
 }
