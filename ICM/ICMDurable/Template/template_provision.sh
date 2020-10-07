@@ -43,3 +43,4 @@ IP=$(icm inventory | awk "/$ICM_LABEL/{ print \$2 }")
 
 printf "\n\n${YELLOW}Demo is available on http://$IP/csp/user/demo.csp.\n\n${RESET}"
 
+printf "\n\n${YELLOW}WARNING: The above URL will not work right away. Please wait about 10 seconds or more before trying to open it.\n\n"
