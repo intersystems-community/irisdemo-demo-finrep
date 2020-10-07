@@ -28,6 +28,7 @@ clean_files()
     rm -f ./MortgageSystemFiles/Perf/Done/*csv*
 
     rm -f ./FCAGeneratedReports/*.xml
+    rm -f ./FCAGeneratedReports/*.zip
 }
 
 cleanup()
