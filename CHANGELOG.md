@@ -1,3 +1,8 @@
+## 2.0.3 (October 07, 2020)
+  - Not using relationships on FCA objects anymore. 
+  - Added metrics to report generation. 
+  - Removed some mortgage performance files so we don't have to wait too long for them to finish loading. Moving the invalid code error to April's performance file.
+
 ## 2.0.2 (October 06, 2020)
   - Fixing bug on business rule where 18 days was being used instead of 18 YEARS
 
