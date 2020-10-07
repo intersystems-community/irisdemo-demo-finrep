@@ -1,3 +1,7 @@
+## 2.0.1 (October 06, 2020)
+  - Renaming TodayHorolog() to Today()
+  - Fixing problem where ICM was deploying the demo without the volume FCAGeneratedReports
+
 ## 2.0.0 (October 06, 2020)
   - Adding business rules to the demo.
   - Fixing issue that was preventing the deployment with ICM on AWS
