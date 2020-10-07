@@ -29,7 +29,7 @@ XData RuleDefinition [ XMLNamespace = "http://www.intersystems.com/rule" ]
 </when>
 </rule>
 <rule name="Loans must be given to adults" disabled="false">
-<when condition="((Today()-PrimaryDateOfBirth)&lt;18)&amp;&amp;((Today()-SecondaryDateOfBirth)&lt;18)">
+<when condition="((Today()-PrimaryDateOfBirth)&lt;Years(18))&amp;&amp;((Today()-SecondaryDateOfBirth)&lt;Years(18))">
 <return>"Mortgages can only be sold to adults."</return>
 </when>
 </rule>
