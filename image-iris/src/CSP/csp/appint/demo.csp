@@ -257,6 +257,24 @@
 			setTimeout("generatePSD007()", 1000);
 		}
 
+		function openGeneratedReport(fileNameSubstring)
+		{
+			var result = #server(IRISDemo.LandingPage.Utils.GetReportFileNameWithSubstring(fileNameSubstring))#;
+
+			var dataArray = result.split("^");
+
+			var status = dataArray[0];
+
+			if (status === "1")
+			{
+				var fileName = dataArray[1];
+				window_open("/csp/report" + fileName);
+				return;
+			}
+
+			alert(status);
+		}
+
 		</script>
 		<style>
 		.Button {
@@ -306,6 +324,9 @@
 			<area target="" alt="Open Mortgage Analytics Cube" title="Open Mortgage Analytics Cube" href="javascript:openMortgageCube()" coords="434,738,666,810" shape="rect">
 			<area target="" alt="Triggers the generation of PSD 001 report" title="Triggers the generation of PSD 001 report" href="javascript:triggerPSD001()" coords="970,767,1294,800" shape="rect">
 			<area target="" alt="Triggers the generation of PSD 007 report" title="Triggers the generation of PSD 007 report" href="javascript:triggerPSD007()" coords="970,815,1296,847" shape="rect">
+			<area target="" alt="Open generated PSD 001 file" title="Open generated PSD 001 file" href="javascript:openGeneratedReport('PSD001')" coords="1571,197,1698,287" shape="rect">
+			<area target="" alt="Open generated PSD 007 file" title="Open generated PSD 007 file" href="javascript:openGeneratedReport('PSD007')" coords="1576,319,1698,406" shape="rect">
+
 		</map>
 
 		<div id="log" width="100%">

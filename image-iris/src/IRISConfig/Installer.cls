@@ -497,6 +497,8 @@ XData Install [ XMLNamespace = INSTALLER ]
             <Log Text="SourceDir defined - offline install from ${SourceDir}" Level="0"/>
             <Import File="${SourceDir}" Recurse="true"/>
         </IfDef>
+
+		<CSPApplication Url="/csp/report/" Directory="/FCAGeneratedReports" Recurse="true" AuthenticationMethods="#{##class(IRISConfig.Installer).AuthForSMP()}" IsNamespaceDefault="false" CookiePath="/csp/${CSPAppName}" AutoCompile="false" Grant="AppRole" CSPZENEnabled="true" InboundWebServicesEnabled="false" GroupById="%ISCMgtPortal" Resource="%Ens_Portal"/>
 	</Namespace>
 		
 	<Log Text="Adding workflow role for demo..." Level="0"/>
