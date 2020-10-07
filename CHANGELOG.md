@@ -1,3 +1,6 @@
+## 2.0.2 (October 06, 2020)
+  - Fixing bug on business rule where 18 days was being used instead of 18 YEARS
+
 ## 2.0.1 (October 06, 2020)
   - Renaming TodayHorolog() to Today()
   - Fixing problem where ICM was deploying the demo without the volume FCAGeneratedReports

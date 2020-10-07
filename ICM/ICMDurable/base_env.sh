@@ -1,2 +1,2 @@
 
-export DEMO_VERSION=2.0.1
+export DEMO_VERSION=2.0.2
