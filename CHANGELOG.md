@@ -1,5 +1,10 @@
-## 1.0.11 (October 05, 2020)
-  - Taking metrics
+## 2.0.0 (October 06, 2020)
+  - Adding business rules to the demo.
+  - Fixing issue that was preventing the deployment with ICM on AWS
+  - Adding warning to wait before trying the URL that ICM provides.
+  - Making PSD 00* document icons on the demo landing page clickable so we can download these files when demoing from AWS.
+  - Run is now purgin old generated reports after a demo is finished running.
+  - Improving documentation
 
 ## 1.0.10 (October 02, 2020)
   - Improving performance of normalization process in 20% 
