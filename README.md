@@ -48,6 +48,8 @@ cd irisdemo-demo-finrep
 docker-compose up
 ```
 
+Another approach is tu use the **run.sh** script. This script will make sure the containers are removed before you start the demo and also after you are finished with the demo. It will also clean up generated report files and the files that are moved to the Done folders. Using the run.sh script is a good way to always start fresh and keep everything clean.
+
 When starting, you will see lots of messages from all the containers that are starting. That is fine. Don't worry!
 
 When it is done, it will just hang there, without returning control to you. That is fine too. Just leave this window open. If you CTRL+C on this window, docker compose will stop all the containers and stop the demo.
