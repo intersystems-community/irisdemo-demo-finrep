@@ -83,11 +83,37 @@ A similar process will start when you click on the second blue baloon except tha
 
 # The flow of the demo
 
-This demo has a flow. You should click on the first ballon of the demo landing page to open the tabs of things you should look at. 
+This demo has a flow. You should start by clicking on the orange square at the right to start pumping the files in. 
+Then you can start clicking on the components that are processing these files from left to right including:
+* The adapter - make the point that we have many adpters, but on this demo we are using files. Use the preview feature of the Record Mapper to open a file on /MortageSystemFiles/Trans/Originals/ and show the contents of the file.
+* The process - make sure you tell them that should their process be different, we can easily adapt. It is a low code approach for business process orchestration. Don't worry about explaining what each activity on the process is doing. Just scroll and let them see the diagram. Make the point that the process is calling the transformations, lookups and business rules and get out
+* The DTL - transforms legacy data into the canonical structure and calls the look up tables
+* Look Up Table - show an example that is being applied (in this case, this example is used for processing the mortgage performance data)
+* Business Rules - show an example
 
-Then you can close these tabs leaving just the demo landing page open and click on the second ballon which will trigger files being sent from the mortgage legacy system and new tabs will be open so you can show the activity going on inside InterSystems IRIS. 
+Now stop. Don't touch the canonical model just yet. Move on to the control plane. Try to keep your tabs closed. You can always open them up again with ease by using the demo landing page:
+* Workflow - All this time you have been showing things, the files have been processed. So open the Workflow Inbox and show there is an issue with one of the files and the process has stopped. Accept the task. 
+* Monitoring Dashboard - Show that the problem appears on the dashboard as well. Take time to Explain the dashboard. Show that you can click on the error on the dashboard and ask for the detail listing. You can select that item and click on trace so you will be taken to the Visual Trace of the problem.
+* Visual Trace - explain the visual trace and that you can chose to keep months or years worth of trace which is very valuable for forensics and for explaining to internal peers and regulators what happened in any situation. Show that the last action is the worklow task that is sitting and waiting for an action from the Data Steward.
+* Fix the problem - by adding the missing mapping from the bad string to the code "O" on the lookup table
+* Retry - Use the workflow inbox to trigger the retry. 
+* Visual Trace again - show that visual trace got updated and shows the Data Steward's response and the processing continued
 
-Once the files are finished loading and you have looked at all the tabs that were opened for you, closed them! Then click on the next ballon and keep going like this.
+Now move to the canonical model and show how the data has been collated on the tables Canonical.Mortgage, Canonical.MortgagePerf and Canonical.MortgageAfford. 
+
+Go back to the monitoring dashboard and show that we have lots of files loaded. The error is gone. But our reports are overdue! Time to generate some reports.
+
+Show the report schedule on the control plane. Click on the PSD001 report to start its generation. Don't show the trace just yet. Move up to the Report Generation (upper right) part of the demo landing page:
+* Process - Click on the process to show that this step too is also guided by a process. They may implement their own process to implement their own way of working. Depending on the country, the regulator may reject a report and your process could keep going and open an workflow ticket with the Regulatory Report Manager to look into this problem. The entire conversation with the regulation can be orchestrated from here.
+* DTL - Make the point that when we schedule a report, we assign a DTL to extract the required data from the canonical model. That is very useful because, typically, regulators will evolve their schemas and we don't want to keep changing our canonical model and integrations too much. So, although the canonical model may have started looking a lot like the initial schema provided by the regulator, it may drift with time and that is ok. We are ready to deal with that.
+* Analytics - While the report is being generated, invite them to see "one more thing". Make the point that you are probablly aggregating data from more than one source. Some financial institutions have more than one mortgage system as well, due to acquisitions. So now you have clean and normalized data form all these systems on your canonical/conceptual model. Why not take advantage of it? Click on the analytics icon on the control plane. Show the cube. Open Analyzer and build a simple pivot. Make the point that this cube is being kept current with the data that is coming in from the legacy systems and may be useful in many situations such as: 1) To support the data steward during the process of building the smart service (the data pipeline). He/she may be looking at the data to evaluate its quality. 2) To build operational dashboards for the business; 3) To build dashboards to support the Regulatory Report Manager in his/her conversations with the regulators; 4) Make the poin that they can also use their preferred tools such as Tableau, Power BI, etc.
+* Trace - By now, the report is fully generated. Now click on the **Data Traceability** icon on the control plane to show the full message trace for the first time. Make the point that everything we do is recorded there. It is useful for foresics. We have loaded several files as the list of message traces will show. Our report generation request is there. Open it. It should be done by now. You should be able to open your Finder/Explorer and go to the folder FCAGeneratedReports and show the XML there. It is useful to open the file and show it. They will recognize the fields.
+
+Make the point that this schedule is actually a schedule. We are triggering the report by hand because this is a demo. But, typically, the report would be triggered automatically unless there is a data acquisition problem.
+
+Finally, make sure to open the Monitoring Dashboard one last time to show that the PSD 001 report is not overdue anymore. It is delivered.
+
+You can generate the PSD 007 report if you want. It will work. But it may not be necessary. You have shown a lot already.
 
 # Where are the reports being generated
 
