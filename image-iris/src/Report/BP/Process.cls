@@ -39,15 +39,39 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
                         
         Try
         {
+            Set collectMetrics = $Get(^reportMetrics)
+            Set reportName=context.ReportScheduleRun.ReportRunUniqueName
+
+            If collectMetrics 
+            {
+                Kill ^reportMetrics(reportName)
+                Set tReportTimeStart=$Piece($ZTimeStamp,",",2) //DEL
+                Set tGetResultSetTimeStart=$Piece($ZTimeStamp,",",2) //DEL
+            }
+
             Set canonicalId = ""
 
             Set status = context.ReportScheduleRun.GetResultSet(.oRS)
             Quit:$$$ISERR(status)
 
+            If collectMetrics 
+            {
+                Set tGetResultSetTimeEnd=$Piece($ZTimeStamp,",",2) //DEL
+                Set ^reportMetrics(reportName,"GetResultSet")=$Get(^reportMetrics(reportName, "GetResultSet"))+(tGetResultSetTimeEnd-tGetResultSetTimeStart) //DEL 
+                Set tDTLHeaderTimeStart=$Piece($ZTimeStamp,",",2) //DEL
+            }
+
             /// Building the header of the document. Just need to call this one once. The header uses information from the Schedule
             /// This DTL creates the XML document with the right schema
             Set status = $classmethod(context.ReportScheduleRun.HeaderDTL, "Transform", context.ReportScheduleRun, .reportObjectTree)
             Quit:$$$ISERR(status)
+
+            If collectMetrics 
+            {
+                Set tDTLHeaderTimeEnd=$Piece($ZTimeStamp,",",2) //DEL
+                Set ^reportMetrics(reportName,"DTLHeader")=$Get(^reportMetrics(reportName, "DTLHeader"))+(tDTLHeaderTimeEnd-tDTLHeaderTimeStart) //DEL 
+                Set tNextMsgStart=$Piece($ZTimeStamp,",",2) //DEL
+            }
 
             // Tried to use this with XML VDocs to see if the memory issues would stop. But the memory issue happens during the %Save!
             // Set status = reportXMLDoc.CommittedMode()
@@ -55,10 +79,24 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 
             While oRS.Next()
             {
+                If collectMetrics 
+                {
+                    Set tNextMsgEnd=$Piece($ZTimeStamp,",",2) //DEL
+                    Set ^reportMetrics(reportName,"NextMsg")=$Get(^reportMetrics(reportName, "NextMsg"))+(tNextMsgEnd-tNextMsgStart) //DEL 
+                    Set tOpenMsgTimeStart=$Piece($ZTimeStamp,",",2) //DEL
+                }
+
                 Set canonicalId = oRS.GetData(1)
 
                 Set canonicalObj = $classmethod(context.ReportScheduleRun.SourceCanonicalClassName, "%OpenId", canonicalId, , .status)
                 Quit:$$$ISERR(status)
+
+                If collectMetrics 
+                {
+                    Set tOpenMsgTimeEnd=$Piece($ZTimeStamp,",",2) //DEL
+                    Set ^reportMetrics(reportName,"OpenMsg")=$Get(^reportMetrics(reportName, "OpenMsg"))+(tOpenMsgTimeEnd-tOpenMsgTimeStart) //DEL 
+                    Set tDTLMsgTimeStart=$Piece($ZTimeStamp,",",2) //DEL
+                }
 
                 Set context.RecordCount=context.RecordCount+1
 
@@ -74,10 +112,18 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
                     Quit:$$$ISERR(status)
                 }
 
+                If collectMetrics 
+                {
+                    Set tDTLMsgTimeEnd=$Piece($ZTimeStamp,",",2) //DEL
+                    Set ^reportMetrics(reportName,"DTLMsg")=$Get(^reportMetrics(reportName, "DTLMsg"))+(tDTLMsgTimeEnd-tDTLMsgTimeStart) //DEL 
+                    Set tNextMsgStart=$Piece($ZTimeStamp,",",2) //DEL
+                }
+
                 // For testing.
                 //Quit:context.RecordCount=100
             }
             Quit:$$$ISERR(status)
+
         }
         Catch (oException)
         {
@@ -86,11 +132,12 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 
         If $$$ISERR(status) 
         {
-            If canonicalId'=""
+            If $Get(canonicalId)'=""
             {
                 $$$LOGERROR("An error occurred when processing canonical ID "_canonicalId_" from class "_context.ReportScheduleRun.SourceCanonicalClassName_".")
-                $$$LOGSTATUS(status)
             }
+
+            $$$LOGSTATUS(status) 
 
             Set status2 = context.ReportScheduleRun.ChangeToErrorStatus($System.Status.GetErrorText(status), context.RecordCount)
             If $$$ISERR(status2) Set status = $System.Status.AppendStatus(status, status2)
@@ -105,8 +152,34 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 
         $$$TRACE("Saving generated report.")
 
+        If collectMetrics 
+        {
+            Set tSaveReportStart=$Piece($ZTimeStamp,",",2) //DEL
+        }
+
         Set status = reportObjectTree.%Save()
         
+        If collectMetrics 
+        {
+            Set tSaveReportEnd=$Piece($ZTimeStamp,",",2) //DEL
+            Set ^reportMetrics(reportName,"SaveReport")=tSaveReportEnd-tSaveReportStart 
+            Set ^reportMetrics(reportName,"FullProc")=tSaveReportEnd-tReportTimeStart
+
+            Set ^reportMetrics(reportName,"DTLHeader%")        = (^reportMetrics(reportName, "DTLHeader")/^reportMetrics(reportName, "FullProc")*100)_"%" //DEL
+            Set ^reportMetrics(reportName,"DTLMsg%")        = (^reportMetrics(reportName, "DTLMsg")/^reportMetrics(reportName, "FullProc")*100)_"%" //DEL
+            Set ^reportMetrics(reportName,"OpenMsg%")        = (^reportMetrics(reportName, "OpenMsg")/^reportMetrics(reportName, "FullProc")*100)_"%" //DEL
+            Set ^reportMetrics(reportName,"GetResultSet%")  = (^reportMetrics(reportName, "GetResultSet")/^reportMetrics(reportName, "FullProc")*100)_"%" //DEL
+            Set ^reportMetrics(reportName,"NextMsg%") = (^reportMetrics(reportName, "NextMsg")/^reportMetrics(reportName, "FullProc")*100)_"%" //DEL
+            Set ^reportMetrics(reportName,"SaveReport%")       = (^reportMetrics(reportName, "SaveReport")/^reportMetrics(reportName, "FullProc")*100)_"%" //DEL
+
+            Set ^reportMetrics(reportName,"DTLHeaderAvg")        = (^reportMetrics(reportName, "DTLHeader")/context.RecordCount)_"s" //DEL
+            Set ^reportMetrics(reportName,"DTLMsgAvg")        = (^reportMetrics(reportName, "DTLMsg")/context.RecordCount)_"s" //DEL
+            Set ^reportMetrics(reportName,"OpenMsgAvg")        = (^reportMetrics(reportName, "OpenMsg")/context.RecordCount)_"s" //DEL
+            Set ^reportMetrics(reportName,"GetResultSetAvg")  = (^reportMetrics(reportName, "GetResultSet")/context.RecordCount)_"s" //DEL
+            Set ^reportMetrics(reportName,"NextMsgAvg") = (^reportMetrics(reportName, "NextMsg")/context.RecordCount)_"s" //DEL
+            Set ^reportMetrics(reportName,"SaveReportAvg")       = (^reportMetrics(reportName, "SaveReport")/context.RecordCount)_"s" //DEL
+        }
+
         If $$$ISERR(status)
         {
             $$$LOGERROR("An error occurred when trying to save the final report.")

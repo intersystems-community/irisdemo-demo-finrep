@@ -11,7 +11,7 @@ LegacyAsOfDate,LegacyFirmId,LegacyTransRef,LegacyLoanPurchase,LegacyOrigProvider
 2020-03-01,123456,AC319018,Y,123465,51076,100000,Y,104,0," moved to a different property, mortgage taken with same lender (includes porting)",0,,N,,N,,N,,N,,N,,N,,N,,,N,,0,2020-03-01,N,N,Y,123465,SPV,Y,123465,XYZ Plc
 2020-03-01,123456,AC319017,Y,123465,18022,100000,Y,344,0, remortgage to same lender,0,,N,,N,,N,,N,,N,,N,,N,,,N,,0,2020-03-01,N,N,Y,123465,SPV,Y,123465,XYZ Plc
 2020-03-01,123456,AC319016,N,123465,55008,100000,Y,146,0, repossession,0,,N,,N,,N,,N,,N,,N,,N,,,N,,0,2020-03-01,N,N,Y,123465,SPV,Y,123465,XYZ Plc
-2020-03-01,123456,AC319015,Y,123465,8469,100000,Y,144,0, repossession,0,,N,,N,,N,,N,,N,,N,,N,,,N,,0,2020-03-01,N,N,Y,123465,SPV,Y,123465,XYZ Plc
+2020-03-01,123456,AC319015,Y,123465,8469,100000,Y,144,0,New Reason for Closure - intentional data error,0,,N,,N,,N,,N,,N,,N,,N,,,N,,0,2020-03-01,N,N,Y,123465,SPV,Y,123465,XYZ Plc
 2020-03-01,123456,AC319014,N,123465,60952,100000,Y,239,0," moved to a different property, mortgage taken with same lender (includes porting)",0,,N,,N,,N,,N,,N,,N,,N,,,N,,0,2020-03-01,N,N,Y,123465,SPV,Y,123465,XYZ Plc
 2020-03-01,123456,AC319013,Y,123465,21461,100000,Y,77,0, voluntary repossession,0,,N,,N,,N,,N,,N,,N,,N,,,N,,0,2020-03-01,N,N,Y,123465,SPV,Y,123465,XYZ Plc
 2020-03-01,123456,AC319012,N,123465,72372,100000,Y,258,0, voluntary repossession,0,,N,,N,,N,,N,,N,,N,,N,,,N,,0,2020-03-01,N,N,Y,123465,SPV,Y,123465,XYZ Plc

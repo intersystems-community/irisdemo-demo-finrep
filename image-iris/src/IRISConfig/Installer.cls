@@ -24,6 +24,9 @@ ClassMethod ConfigIRIS() As %Status
 		Quit:$$$ISERR(tSC)
 
 		DO ##class(Security.SSLConfigs).Create("SSLCLIENT")
+
+		Set MapGlobalsProperties("Database")="IRISTEMP"
+		Set tSC=##Class(Config.MapGlobals).Create("USER","CTCache",.MapGlobalsProperties)
 	}
 	Catch (oException)
 	{
@@ -162,11 +165,15 @@ ClassMethod ConfigDemo(pNamespace As %String) As %Status
 	{
 		ZN pNamespace
 		
+		//Set ^normMetrics=1
+		//Set ^reportMetrics=1
+
 		Set obj = ##class(Normalization.BatchJobSpec).%New()
 		Set obj.BatchClassName="Staging.RM.MortgageTrans.Batch"
 		Set obj.BatchRecordClassName="Staging.RM.MortgageTrans.Record"
 		Set obj.DTLClassName="Custom.Normalization.DTL.Trans"
 		Set obj.CanonicalClassName="Canonical.Mortgage"
+		Set obj.ValidationRuleName="Custom.Normalization.Rule.Trans"
 		Set obj.CubeList="BatchControlRecord,MortgageSales"
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
@@ -177,6 +184,7 @@ ClassMethod ConfigDemo(pNamespace As %String) As %Status
 		Set obj.DTLClassName="Custom.Normalization.DTL.Afford"
 		Set obj.CanonicalClassName="Canonical.MortgageAfford"
 		Set obj.CubeList="BatchControlRecord,MortgageSales"
+		//Set obj.ValidationRuleName="Custom.Normalization.Rule.Afford"
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
 
@@ -185,6 +193,7 @@ ClassMethod ConfigDemo(pNamespace As %String) As %Status
 		Set obj.BatchRecordClassName="Staging.RM.MortgagePerf.Record"
 		Set obj.DTLClassName="Custom.Normalization.DTL.Perf"
 		Set obj.CanonicalClassName="Canonical.MortgagePerf"
+		//Set obj.ValidationRuleName="Custom.Normalization.Rule.Perf"
 		Set obj.CubeList="BatchControlRecord,MortgageSales"
 		Set tSC = obj.%Save()
 		Quit:$$$ISERR(tSC)
@@ -489,6 +498,8 @@ XData Install [ XMLNamespace = INSTALLER ]
             <Log Text="SourceDir defined - offline install from ${SourceDir}" Level="0"/>
             <Import File="${SourceDir}" Recurse="true"/>
         </IfDef>
+
+		<CSPApplication Url="/csp/report/" Directory="/FCAGeneratedReports" Recurse="true" AuthenticationMethods="#{##class(IRISConfig.Installer).AuthForSMP()}" IsNamespaceDefault="false" CookiePath="/csp/${CSPAppName}" AutoCompile="false" Grant="AppRole" CSPZENEnabled="true" InboundWebServicesEnabled="false" GroupById="%ISCMgtPortal" Resource="%Ens_Portal"/>
 	</Namespace>
 		
 	<Log Text="Adding workflow role for demo..." Level="0"/>
@@ -522,11 +533,6 @@ XData Install [ XMLNamespace = INSTALLER ]
 
 	<Log Text="Configuring IRIS..." Level="0"/>
 	<Invoke Class="IRISConfig.Installer" Method="ConfigIRIS" CheckStatus="true">
-	</Invoke>
-
-	<Log Text="Loading FCA XML Schemas..." Level="0"/>
-	<Invoke Class="IRISConfig.Installer" Method="LoadFCAXMLSchemas" CheckStatus="true">
-		<Arg name="pNamespace" Value="${Namespace}"/>
 	</Invoke>
 
 	<Log Text="Loading DeepSee Pivots and Dashboards..." Level="0"/>

@@ -19,6 +19,8 @@ Property LastStatusChange As %TimeStamp [ InitialExpression = {$ZDateTime($ZTime
 
 Property BatchRecordClassName As %String(MAXLEN = 250) [ Required ];
 
+Property ValidationRuleName As %String(MAXLEN = 250);
+
 Property NumberOfRecordsProcessed As %Integer;
 
 Property Reason As %String(MAXLEN = "");
@@ -45,6 +47,7 @@ ClassMethod Create(pBatchControl As Normalization.BatchControl, pSessionId As %S
         Set oNewBatchControlRecord.DTLClassName = pJobSpec.DTLClassName
         Set oNewBatchControlRecord.CanonicalClassName = pJobSpec.CanonicalClassName
         Set oNewBatchControlRecord.BatchRecordClassName = pJobSpec.BatchRecordClassName
+        Set oNewBatchControlRecord.ValidationRuleName = pJobSpec.ValidationRuleName
 
         If pBatchControl.LastControlRecord=""
         {
@@ -242,6 +245,9 @@ Storage Default
 </Value>
 <Value name="12">
 <Value>NumberOfRecordsProcessed</Value>
+</Value>
+<Value name="13">
+<Value>ValidationRuleName</Value>
 </Value>
 </Data>
 <DataLocation>^Normalization.BatchControA09AD</DataLocation>

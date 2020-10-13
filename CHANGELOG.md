@@ -1,3 +1,23 @@
+## 2.0.3 (October 07, 2020)
+  - Not using relationships on FCA objects anymore. 
+  - Added metrics to report generation. 
+  - Removed some mortgage performance files so we don't have to wait too long for them to finish loading. Moving the invalid code error to April's performance file.
+
+## 2.0.2 (October 06, 2020)
+  - Fixing bug on business rule where 18 days was being used instead of 18 YEARS
+
+## 2.0.1 (October 06, 2020)
+  - Renaming TodayHorolog() to Today()
+  - Fixing problem where ICM was deploying the demo without the volume FCAGeneratedReports
+
+## 2.0.0 (October 06, 2020)
+  - Adding business rules to the demo.
+  - Fixing issue that was preventing the deployment with ICM on AWS
+  - Adding warning to wait before trying the URL that ICM provides.
+  - Making PSD 00* document icons on the demo landing page clickable so we can download these files when demoing from AWS.
+  - Run is now purgin old generated reports after a demo is finished running.
+  - Improving documentation
+
 ## 1.0.10 (October 02, 2020)
   - Improving performance of normalization process in 20% 
 

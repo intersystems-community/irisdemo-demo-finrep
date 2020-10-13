@@ -108,6 +108,11 @@
 			window_open('_DeepSee.UserPortal.DashboardViewer.zen?DASHBOARD=FCA/FCA%20Reporting%20Monitoring.dashboard&IRISUserName=SuperUser&IRISPassword=sys')
 		}
 
+		function openBusinessRule()
+		{
+			window_open('EnsPortal.RuleEditor.zen?RULE=Custom.Normalization.Rule.Trans&IRISUserName=SuperUser&IRISPassword=sys')
+		}
+
 		/*
 			function openInstructions()
 			{
@@ -252,6 +257,24 @@
 			setTimeout("generatePSD007()", 1000);
 		}
 
+		function openGeneratedReport(fileNameSubstring)
+		{
+			var result = #server(IRISDemo.LandingPage.Utils.GetReportFileNameWithSubstring(fileNameSubstring))#;
+
+			var dataArray = result.split("^");
+
+			var status = dataArray[0];
+
+			if (status === "1")
+			{
+				var fileName = dataArray[1];
+				window_open("/csp/report/" + fileName);
+				return;
+			}
+
+			alert(status);
+		}
+
 		</script>
 		<style>
 		.Button {
@@ -289,8 +312,9 @@
 			<area target="" alt="Open mortgage transactions record mapper" title="Open mortgage transactions record mapper" href="javascript:openRecordMap()" coords="215,195,394,354" shape="rect">
 			<area target="" alt="Open data normalization process" title="Open data normalization process" href="javascript:openNormalizationProcess()" coords="464,251,735,379" shape="rect">
 			<area target="" alt="Open SQL Explorer so you can query the canonical model and other tables" title="Open SQL Explorer so you can query the canonical model and other tables" href="javascript:openSQLExplorer()" coords="826,182,985,428" shape="rect">
-			<area target="" alt="Open Data Transformation from Record Mapper to Canonical" title="Open Data Transformation from Record Mapper to Canonical" href="javascript:openDTLTransToCanonical()" coords="609,247,521,152" shape="rect">
-			<area target="" alt="Open Data Lookup" title="Open Data Lookup" href="javascript:openDataLookup()" coords="691,129,614,227" shape="rect">
+			<area target="" alt="Open Business Rule Editor" title="Open Business Rule Editor" href="javascript:openBusinessRule()" coords="643,140,723,246" shape="rect">
+			<area target="" alt="Open Data Transformation from Record Mapper to Canonical" title="Open Data Transformation from Record Mapper to Canonical" href="javascript:openDTLTransToCanonical()" coords="478,154,546,239" shape="rect">
+			<area target="" alt="Open Data Lookup" title="Open Data Lookup" href="javascript:openDataLookup()" coords="549,132,621,227" shape="rect">
 			<area target="" alt="Open workflow InBox" title="Open workflow InBox" href="javascript:openWorkflow()" coords="429,642,670,715" shape="rect">
 			<area target="" alt="Open reporting process" title="Open reporting process" href="javascript:openReportingProcess()" coords="1089,234,1336,373" shape="rect">
 			<area target="" alt="Open Data Transformation from Canonical to FCA PSD 001" title="Open Data Transformation from Canonical to FCA PSD 001" href="javascript:openDTLToFCAPSD001()" coords="1344,192,1444,292" shape="rect">
@@ -300,6 +324,9 @@
 			<area target="" alt="Open Mortgage Analytics Cube" title="Open Mortgage Analytics Cube" href="javascript:openMortgageCube()" coords="434,738,666,810" shape="rect">
 			<area target="" alt="Triggers the generation of PSD 001 report" title="Triggers the generation of PSD 001 report" href="javascript:triggerPSD001()" coords="970,767,1294,800" shape="rect">
 			<area target="" alt="Triggers the generation of PSD 007 report" title="Triggers the generation of PSD 007 report" href="javascript:triggerPSD007()" coords="970,815,1296,847" shape="rect">
+			<area target="" alt="Open generated PSD 001 file" title="Open generated PSD 001 file" href="javascript:openGeneratedReport('PSD001')" coords="1571,197,1698,287" shape="rect">
+			<area target="" alt="Open generated PSD 007 file" title="Open generated PSD 007 file" href="javascript:openGeneratedReport('PSD007')" coords="1576,319,1698,406" shape="rect">
+
 		</map>
 
 		<div id="log" width="100%">

@@ -13,7 +13,7 @@ Parameter XMLSEQUENCE = 1;
 Property FSAFeedHeader As FCA.PSD001.cmn.FSAFeedHeader(REFELEMENTQUALIFIED = 1, REFNAMESPACE = "http://www.fsa.gov.uk/XMLSchema/FSAFeedCommon-v1-2", XMLNAME = "FSAFeedHeader", XMLREF = 1) [ Required ];
 
 /// Defines the individual transactions to be reported
-Relationship FSAHSFFeedMGMsg As FCA.PSD001.FSAHSFFeedMGMsg(XMLNAME = "FSAHSFFeedMGMsg", XMLPROJECTION = "ELEMENT") [ Cardinality = many, Inverse = FSAHSFFeedMG ];
+Property FSAHSFFeedMGMsg As list Of FCA.PSD001.FSAHSFFeedMGMsg(XMLNAME = "FSAHSFFeedMGMsg", XMLPROJECTION = "ELEMENT") [ Required ];
 
 /// The %DeleteTrigger unified trigger is generated in order to cascade SQL deletes of an XML tree.
 Trigger %DeleteTrigger [ Event = DELETE, Foreach = row/object ]
@@ -22,6 +22,12 @@ Trigger %DeleteTrigger [ Event = DELETE, Foreach = row/object ]
  Set oref=..%OpenId({%%ID},,.sc) If $$$ISERR(sc) Quit sc
  Set oid=oref.FSAFeedHeaderGetObject()
  If oid'="" Set sc1=##class(FCA.PSD001.cmn.FSAFeedHeader).%Delete(oid) If $$$ISERR(sc1),$$$GETERRORCODE(sc1)'=$$$ERRORCODE($$$DeleteObjectNotFound) Set sc=$$$ADDSC(sc,sc1)
+ Set index=""
+ For {
+    Set oid=oref.FSAHSFFeedMGMsg.GetObjectNext(.index)
+    If index="" Quit
+    If oid'="" Set sc1=##class(FCA.PSD001.FSAHSFFeedMGMsg).%Delete(oid) If $$$ISERR(sc1),$$$GETERRORCODE(sc1)'=$$$ERRORCODE($$$DeleteObjectNotFound) Set sc=$$$ADDSC(sc,sc1)
+ }
  If $$$ISERR(sc) Set %ok=0,%msg=$system.Status.GetErrorText(sc) 
  Quit
 }
@@ -34,6 +40,9 @@ Storage Default
 </Value>
 <Value name="2">
 <Value>FSAFeedHeader</Value>
+</Value>
+<Value name="3">
+<Value>FSAHSFFeedMGMsg</Value>
 </Value>
 </Data>
 <DataLocation>^FCA.PSD001.FSAHSFFeedMGD</DataLocation>

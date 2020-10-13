@@ -16,7 +16,7 @@
     "Journal1VolumeIOPS": "3500",
     
     "Journal2VolumeType": "io1",
-    "Journal2VolumeSize": "50",
+    "Journal2VolumeSize": "70",
     "Journal2VolumeIOPS": "3500",
 
     "SSHUser": "ubuntu",
@@ -31,7 +31,7 @@
     "Zone": "us-east-1a",
     "DockerVersion": "5:19.03.8~3-0~ubuntu-bionic",
     "AMI": "ami-085925f297f89fce1",
-    "InstanceType": "i3.xlarge",
+    "InstanceType": "r5.xlarge",
     "Credentials": "/ICMDurable/aws.credentials",
     "SystemMode": "TEST",
     "ISCPassword": "sys",

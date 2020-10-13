@@ -1,17 +1,8 @@
 #!/bin/bash
-#
-# 1. This script is used by InterSystems employees so they can easily download ICM
-# from InterSystems' internal docker registry. It is not meant for public usage.
-#
-# 2. This script is only useful today to download ICM from docker.iscinternal.com and retag it 
-# from its full name (i.e: "docker.iscinternal.com/intersystems/icm:2020.2.0.204.0") to the same name
-# used when downloading ICM from WRC (i.e.: "intersystems/icm:2020.2.0.204.0"). So, if you are following
-# instructions on README.md on this folder and you are downloading ICM from WRC, you should not need this
-# script! But you are free to use if you are confortable with using docker.iscinternal.com.
-#
 
 export ICM_REPO=$(cat ./ICMDurable/CONF_ICM_REPO)
 export ICM_TAG=$(cat ./ICMDurable/CONF_ICM_TAG) 
+export ICM_REGISTRY=$(cat ./ICMDurable/CONF_ICM_REG) 
 
 #
 # CONSTANTS
@@ -84,16 +75,12 @@ function dockerLogin() {
 # MAIN
 #
 
-printf "\n\n${YELLOW}Loggin into docker.iscinternal.com (VPN Required!) to download newer images...${NC}\n"
-dockerLogin docker.iscinternal.com
+printf "\n\n${YELLOW}Loggin into https://containers.intersystems.com to download newer images...${NC}\n"
+printf "${YELLOW}You must use the encrypted password provided by https://containers.intersystems.com.${NC}\n"
+printf "${YELLOW}Open https://containers.intersystems.com on your browser, login with your InterSystems account${NC}\n"
+printf "${YELLOW}and you should get the password string.${NC}\n"
+dockerLogin https://$ICM_REGISTRY
 
-printf "\n\n${YELLOW}Pulling image docker.iscinternal.com/intersystems/icm:$ICM_TAG...${NC}\n"
-docker pull docker.iscinternal.com/intersystems/icm:$ICM_TAG
+printf "\n\n${YELLOW}docker pull $ICM_REPO:$ICM_TAG${NC}\n"
+docker pull $ICM_REGISTRY/$ICM_REPO:$ICM_TAG
 checkError "ICM Pull failed." "Pull successful!"
-
-
-# InterSystems' internal docker registry tags the images with the full name of the docker registry on it. 
-# Let's retag it to just intersystems/icm so that it will match the tag used by WRC
-printf "\n${YELLOW}Tagging image docker.iscinternal.com/intersystems/icm:$ICM_TAG to $ICM_REPO:$ICM_TAG...${NC}\n"
-docker tag docker.iscinternal.com/intersystems/icm:$ICM_TAG $ICM_REPO:$ICM_TAG
-checkError "IRIS Tagging failed." "IRIS Tagging successful!"

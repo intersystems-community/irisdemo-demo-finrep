@@ -10,13 +10,9 @@ Parameter XMLNAME = "FSAHSFFeedMGMsg";
 
 Parameter XMLSEQUENCE = 1;
 
-Index FSAHSFFeedMGIndex On FSAHSFFeedMG;
-
 Property CoreItems As FCA.PSD001.cmn.CoreItems(REFELEMENTQUALIFIED = 1, REFNAMESPACE = "http://www.fsa.gov.uk/XMLSchema/FSAFeedCommon-v1-2", XMLNAME = "CoreItems", XMLREF = 1) [ Required ];
 
 Property Mortgage As FCA.PSD001.Mortgage(XMLNAME = "Mortgage") [ Required ];
-
-Relationship FSAHSFFeedMG As FCA.PSD001.FSAHSFFeedMG(XMLPROJECTION = "NONE") [ Cardinality = one, Inverse = FSAHSFFeedMGMsg, OnDelete = cascade ];
 
 /// The %DeleteTrigger unified trigger is generated in order to cascade SQL deletes of an XML tree.
 Trigger %DeleteTrigger [ Event = DELETE, Foreach = row/object ]
@@ -42,9 +38,6 @@ Storage Default
 </Value>
 <Value name="3">
 <Value>Mortgage</Value>
-</Value>
-<Value name="4">
-<Value>FSAHSFFeedMG</Value>
 </Value>
 </Data>
 <DataLocation>^FCA.PSD001.FSAHSFFeedMGMsgD</DataLocation>

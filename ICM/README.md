@@ -12,18 +12,11 @@ ICM is built on top of Terraform and allows you to declare your infrastructure a
 
 To run the demo with InterSystems IRIS on AWS, you will need:
 * Basic understanding of AWS EC2 
-* An AWS account
+* An AWS account 
 * Git installed on your machine so you can clone this repository on your local PC
 * Docker installed on your machine so you can run ICM
-* ICM 2020 docker image
-
-If you are a supported InterSystems customer, you can download **InterSystems IRIS for Linux Ubuntu** and an InterSystems IRIS license from the [Evaluation Service](https://evaluation.intersystems.com).
-
-You will also need to go to the [Worldwide Response Center (WRC)](https://wrc.intersystems.com) and download ICM for InterSystems IRIS 2020. If you need help, just send an e-mail to support@intersystems.com and we will be glad to help!
 
 # Preparing the Environment
-
-You must execute the following steps, independently of which database you want to test on AWS.
 
 ## 1. Clonning the repo
 
@@ -35,7 +28,8 @@ git clone https://github.com/intersystems-community/irisdemo-demo-finrep
 
 ## 3. Preparing ICM to be run and InterSystems IRIS to be deployed
 
-If you don't have ICM, use the script **downloadicm.sh** to download it. The version of ICM this scripts download is defined by the file **ICM/ICMDurable/CONF_ICM_TAG**. 
+If you don't have ICM, use the script **downloadicm.sh** to download it. The version of ICM this scripts downloads is defined by the file **ICM/ICMDurable/CONF_ICM_TAG**. It comes with a reasonable default. Just follow
+the instructions given by the script and you should have ICM downloaded on your PC in no time.
 
 ## 4. Configuring AWS Credentials
 

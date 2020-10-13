@@ -22,6 +22,8 @@ Property DTLClassName As %String(MAXLEN = 256) [ Required ];
 /// batch is Discarded. 
 Property CanonicalClassName As %String(MAXLEN = 256) [ Required ];
 
+Property ValidationRuleName As %String(MAXLEN = 250);
+
 /// List of cubes that need to be synchronized after a batch is successfully loaded.
 Property CubeList As %String(MAXLEN = 32000) [ Required ];
 
@@ -70,6 +72,9 @@ Storage Default
 </Value>
 <Value name="6">
 <Value>CubeList</Value>
+</Value>
+<Value name="7">
+<Value>ValidationRuleName</Value>
 </Value>
 </Data>
 <DataLocation>^Normalization.BatchJobSpecD</DataLocation>

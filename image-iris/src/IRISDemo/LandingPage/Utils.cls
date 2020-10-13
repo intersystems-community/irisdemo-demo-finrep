@@ -3,6 +3,54 @@ Include Macros
 Class IRISDemo.LandingPage.Utils
 {
 
+ClassMethod GetReportFileNameWithSubstring(pFileNameSubstring As %String) As %String
+{
+    Set tSC = $$$OK
+
+	Try 
+    {
+        Set oRS = ##class(%ResultSet).%New("%Library.File:FileSet")
+        Set tSC = oRS.Execute("/FCAGeneratedReports/", "*"_pFileNameSubstring_"*.xml")
+        Quit:$$$ISERR(tSC)
+
+        If oRS.Next()
+        {
+            Set tFileName = oRS.GetData(1)
+            Set tFileName=$Piece(tFileName,"/",*)
+
+            Set tSC = ..CompressFile("/FCAGeneratedReports", tFileName, .tZippedFileName)
+            Quit:$$$ISERR(tSC)
+
+            Return "1^"_tZippedFileName
+        }
+
+        Return "The report has not been generated yet. If you triggered it, it is probably still being processed."
+    }
+    Catch (oException)
+    {
+        set tSC = oException.AsStatus()
+    }
+
+    Quit $System.Status.GetErrorText(tSC)
+}
+
+ClassMethod CompressFile(pDir As %String, pFileName As %String, Output pZippedFileName As %String) As %Status
+{
+    Set pFileNameWithoutExtension = $Piece(pFileName,".",1,*-1)
+    Set pZippedFileName = pFileNameWithoutExtension_".zip"
+
+    Do ##class(%File).Delete(pDir_"/"_pZippedFileName)
+
+    Set tRet = $ZF(-100, "", "tar", "-czf", pDir_"/"_pZippedFileName, pDir_"/"_pFileName)
+
+    If tRet=-1
+    {
+        Quit $$$ERROR(5001, "Could compress file "_pFileName)
+    }
+
+    Quit $$$OK
+}
+
 ClassMethod MoveFile(pFileName As %String, pFileDirectory As %String) As %String
 {
     Set tSC = $$$OK
