@@ -1,10 +1,14 @@
 package irisdemo.hyperledger;
 
+import java.io.File;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
 
+import org.apache.commons.io.FileUtils;
 import org.hyperledger.fabric.gateway.Contract;
 import org.hyperledger.fabric.gateway.Gateway;
 import org.hyperledger.fabric.gateway.Network;
@@ -19,6 +23,10 @@ import com.intersystems.gateway.GatewayContext;
 public class HyperledgerOutboundAdapter extends com.intersystems.enslib.pex.OutboundAdapter {
     // Connection to InterSystems IRIS
     private IRIS iris;
+
+    public static String Channel;
+
+    public static String Contract;
 
     /*static {
 		System.setProperty("org.hyperledger.fabric.sdk.service_discovery.as_localhost", "true");
@@ -68,28 +76,24 @@ public class HyperledgerOutboundAdapter extends com.intersystems.enslib.pex.Outb
 
         try (Gateway gateway = connect()) {
 
+            String reportIdentifier = req.getString("ReportIdentifier");
+            String reportCreationDate = req.getString("ReportCreationDate");
+            String submittingFirm = req.getString("SubmittingFirm");
+            String submittingDepartment = req.getString("SubmittingDepartment");
+            String reportContent = req.getString("ReportContent");
+            //String reportContent = FileUtils.readFileToString(new File(req.getString("ReportContentFile")), StandardCharsets.UTF_8);
+
             // get the network and contract
 			Network network = gateway.getNetwork("mychannel");
 			Contract contract = network.getContract("PSD001AssetContract");
-
-			byte[] result;
-
-            System.out.println("\n");
-            System.out.println("Submit Transaction: CreatePSD001Asset report1");
-            LOGINFO("Submit Transaction: CreatePSD001Asset report1");
-            //CreateAsset creates an asset with ID asset13, color yellow, owner Tom, size 5 and appraisedValue of 1300
             
-            byte[] array = new byte[7]; // length is bounded by 7
-            new Random().nextBytes(array);
-            String generatedString = new String(array, Charset.forName("UTF-8"));
+            LOGINFO("Submit Transaction: CreatePSD001Asset: " + reportIdentifier);
+			contract.submitTransaction("createPSD001", reportIdentifier, reportCreationDate, reportContent, submittingFirm, submittingDepartment);
 
-			contract.submitTransaction("createPSD001", generatedString, "2020-09-28", "<xml>Test<xml>", "ISC", "Sales");
-
-			System.out.println("\n");
-			System.out.println("Evaluate Transaction: getAsset report1");
-			// ReadAsset returns an asset with given assetID
-			result = contract.evaluateTransaction("getPSD001Asset", "report1");
-            System.out.println("result: " + new String(result));
+            LOGINFO("Evaluate Transaction: getAsset: " + reportIdentifier);
+            byte[] result;
+            // ReadAsset returns an asset with given assetID
+			result = contract.evaluateTransaction("getPSD001Asset", reportIdentifier);
             responseMsg = new String(result);
         }
         catch(Exception e){
