@@ -24,13 +24,9 @@ public class HyperledgerOutboundAdapter extends com.intersystems.enslib.pex.Outb
     // Connection to InterSystems IRIS
     private IRIS iris;
 
-    public static String Channel;
+    public String Channel;
 
-    public static String Contract;
-
-    /*static {
-		System.setProperty("org.hyperledger.fabric.sdk.service_discovery.as_localhost", "true");
-    }*/
+    public String Contract;
     
     // helper function for getting connected to the gateway
 	public static Gateway connect() throws Exception{
@@ -66,13 +62,12 @@ public class HyperledgerOutboundAdapter extends com.intersystems.enslib.pex.Outb
         return;
     }
 
-    public Object TestAdapter(Object request) throws Exception {
+    public void SubmitReportToHyperledger(Object request) throws Exception {
 
         String responseMsg = "Empty Response Value";
 
         IRISObject req = (IRISObject) request;
-        LOGINFO("Received object: " + req.invokeString("%ClassName", 1));
-        // Return record info
+        //LOGINFO("Received object: " + req.invokeString("%ClassName", 1));
 
         try (Gateway gateway = connect()) {
 
@@ -81,28 +76,19 @@ public class HyperledgerOutboundAdapter extends com.intersystems.enslib.pex.Outb
             String submittingFirm = req.getString("SubmittingFirm");
             String submittingDepartment = req.getString("SubmittingDepartment");
             String reportContent = req.getString("ReportContent");
-            //String reportContent = FileUtils.readFileToString(new File(req.getString("ReportContentFile")), StandardCharsets.UTF_8);
 
             // get the network and contract
-			Network network = gateway.getNetwork("mychannel");
-			Contract contract = network.getContract("PSD001AssetContract");
+			Network network = gateway.getNetwork(this.Channel);
+			Contract contract = network.getContract(this.Contract);
             
-            LOGINFO("Submit Transaction: CreatePSD001Asset: " + reportIdentifier);
-			contract.submitTransaction("createPSD001", reportIdentifier, reportCreationDate, reportContent, submittingFirm, submittingDepartment);
-
-            LOGINFO("Evaluate Transaction: getAsset: " + reportIdentifier);
-            byte[] result;
-            // ReadAsset returns an asset with given assetID
-			result = contract.evaluateTransaction("getPSD001Asset", reportIdentifier);
-            responseMsg = new String(result);
+            //LOGINFO("Submit Transaction: CreatePSD001Asset: " + reportIdentifier);
+            LOGINFO(this.Channel + " : " + this.Contract);
+			contract.submitTransaction("createMortgageReportingAsset", reportIdentifier, reportCreationDate, reportContent, submittingFirm, submittingDepartment);
         }
         catch(Exception e){
             System.err.println(e);
             LOGINFO("FAILED TO SUBMIT TRANSACTIONS");
             LOGINFO(e.getMessage());
-		}
-
-        IRISObject response = (IRISObject)(iris.classMethodObject("Ens.StringContainer","%New",responseMsg));
-        return response;
+        }
     }
 }

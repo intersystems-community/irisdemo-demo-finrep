@@ -62,3 +62,6 @@ images_built
 # VSCode
 .metals
 .vscode
+
+# Hyperledger Specific Files
+image-iris/hyperledger-wallet/*.id

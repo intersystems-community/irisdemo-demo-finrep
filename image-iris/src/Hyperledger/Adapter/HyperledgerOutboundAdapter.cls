@@ -11,9 +11,9 @@ Method OnInit() As %Status
 	Quit ##super()
 }
 
-Method TestAdapter(pReq As %RegisteredObject) As %String
+Method SubmitReport(pReq As %RegisteredObject) As %String
 {
-    return ..%DispatchMethod("TestAdapter", pReq)
+    Do ..%DispatchMethod("SubmitReportToHyperledger", pReq)
 }
 
 }
