@@ -44,8 +44,8 @@ cd ./hyperledger/fabric-samples/test-network
 
 trap cleanup INT
 
-printf "\n\n${PURPLE}CTRL+C detected. Bringin up Hyperledger Test Network and Creating channel - mychannel${RESET}\n"
-source network.sh up createChannel -ca -c mychannel 
+printf "\n\n${PURPLE}Bringin up Hyperledger Test Network and Creating channel - mychannel${RESET}\n"
+source network.sh up createChannel -ca -c mychannel -i 2.2.0 -cai 1.4
 
 printf "\n\n${PURPLE}Deploying MortgageReporting Chaincode to peer nodes on Hyperldger Network${RESET}\n"
 source network.sh deployCC -ccn MortgageReportingAssetContract -ccl java
