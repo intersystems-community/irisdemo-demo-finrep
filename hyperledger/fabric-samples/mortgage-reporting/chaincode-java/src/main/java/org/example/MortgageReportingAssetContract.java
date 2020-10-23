@@ -73,4 +73,8 @@ public class MortgageReportingAssetContract implements ContractInterface {
         ctx.getStub().delState(reportIdentifier);
     }
 
+    public String validateReportingAsset() {
+        return "Reporting Asset Validated";
+    }
+
 }
