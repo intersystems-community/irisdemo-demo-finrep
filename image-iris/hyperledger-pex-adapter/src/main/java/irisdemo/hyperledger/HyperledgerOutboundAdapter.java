@@ -80,8 +80,8 @@ public class HyperledgerOutboundAdapter extends com.intersystems.enslib.pex.Outb
             // get the network and contract
 			Network network = gateway.getNetwork(this.Channel);
             Contract contract = network.getContract(this.Contract);
-            
-            LOGINFO("Calling Non-Transaction Validation Method: " + contract.validateReportingAsset());
+
+            LOGINFO("Calling Non-Transaction Validation Method: " + contract.evaluateTransaction("validateReportingAsset"));
             
             //LOGINFO("Submit Transaction: CreatePSD001Asset: " + reportIdentifier);
             LOGINFO(this.Channel + " : " + this.Contract);

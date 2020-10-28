@@ -8,7 +8,7 @@ import org.hyperledger.fabric.contract.ContractInterface;
 import org.hyperledger.fabric.contract.annotation.Contract;
 import org.hyperledger.fabric.contract.annotation.Default;
 import org.hyperledger.fabric.contract.annotation.Transaction;
-
+import org.hyperledger.fabric.contract.annotation.Transaction.TYPE;
 import org.hyperledger.fabric.contract.annotation.Contact;
 import org.hyperledger.fabric.contract.annotation.Info;
 import org.hyperledger.fabric.contract.annotation.License;
@@ -73,7 +73,8 @@ public class MortgageReportingAssetContract implements ContractInterface {
         ctx.getStub().delState(reportIdentifier);
     }
 
-    public String validateReportingAsset() {
+    @Transaction(intent = TYPE.EVALUATE)
+    public String validateReportingAsset(Context ctx) {
         return "Reporting Asset Validated";
     }
 
