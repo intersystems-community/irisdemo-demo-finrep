@@ -22,24 +22,23 @@ public class MortgageReportingAsset {
     private String reportContent;
 
     @Property()
-    private String submittingFirm;
+    private String reportURL;
 
     @Property()
-    private String submittingDepartment;
-
+    private String submittingFirm;
 
     public MortgageReportingAsset() {
     }
 
     public static MortgageReportingAsset createInstance(String reportIdentifier, String reportCreationDate, String reportContent,
-        String submittingFirm, String submittingDepartment) {
+        String reportURL, String submittingFirm) {
 
         MortgageReportingAsset newAsset = new MortgageReportingAsset();
         newAsset.setReportIdentifier(reportIdentifier);
         newAsset.setReportCreationDate(reportCreationDate);
         newAsset.setReportContent(reportContent);
+        newAsset.setReportURL(reportURL);
         newAsset.setSubmittingFirm(submittingFirm);
-        newAsset.setSubmittingDepartment(submittingDepartment);
 
         return newAsset; 
     }
@@ -56,9 +55,9 @@ public class MortgageReportingAsset {
         String reportCreationDate = obj.getString("reportCreationDate");
         String reportContent = obj.getString("reportContent");
         String submittingFirm = obj.getString("submittingFirm");
-        String submittingDepartment = obj.getString("submittingDepartment");
+        String reportURL = obj.getString("reportURL");
         
-        return createInstance(reportIdentifier, reportCreationDate, reportContent, submittingFirm, submittingDepartment);
+        return createInstance(reportIdentifier, reportCreationDate, reportContent, reportURL, submittingFirm);
     }
 
     public String getReportIdentifier() {
@@ -93,11 +92,11 @@ public class MortgageReportingAsset {
         this.submittingFirm = submittingFirm;
     }
 
-    public String getSubmittingDepartment() {
-        return submittingDepartment;
+    public String getReportURL() {
+        return reportURL;
     }
 
-    public void setSubmittingDepartment(String submittingDepartment) {
-        this.submittingDepartment = submittingDepartment;
+    public void setReportURL(String reportURL) {
+        this.reportURL = reportURL;
     }
 }

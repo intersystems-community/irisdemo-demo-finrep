@@ -2,13 +2,13 @@
 
 source ../buildtools.sh
 
-#echo "Building hyperledger-pex-adapter jar file..."
-#cd ./hyperledger-pex-adapter
-#./build.sh
-#go_up_tree_and_exit_if_error "hyperledger-pex-adapter could not be built"
-#cd ..
+echo "Building hyperledger-pex-adapter jar file..."
+cd ./hyperledger-pex-adapter
+./build.sh
+go_up_tree_and_exit_if_error "hyperledger-pex-adapter could not be built"
+cd ..
 
-#echo "hyperledger-pex-adapter jar file built!"
+echo "hyperledger-pex-adapter jar file built!"
 
 echo "Building iris-datasource image now..."
 

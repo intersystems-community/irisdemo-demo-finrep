@@ -74,18 +74,14 @@ public class HyperledgerOutboundAdapter extends com.intersystems.enslib.pex.Outb
             String reportIdentifier = req.getString("ReportIdentifier");
             String reportCreationDate = req.getString("ReportCreationDate");
             String submittingFirm = req.getString("SubmittingFirm");
-            String submittingDepartment = req.getString("SubmittingDepartment");
-            String reportContent = req.getString("ReportContent");
+            String reportURL = req.getString("ReportURL");
 
             // get the network and contract
 			Network network = gateway.getNetwork(this.Channel);
             Contract contract = network.getContract(this.Contract);
-
-            LOGINFO("Calling Non-Transaction Validation Method: " + contract.evaluateTransaction("validateReportingAsset"));
             
-            //LOGINFO("Submit Transaction: CreatePSD001Asset: " + reportIdentifier);
-            LOGINFO(this.Channel + " : " + this.Contract);
-			contract.submitTransaction("createMortgageReportingAsset", reportIdentifier, reportCreationDate, reportContent, submittingFirm, submittingDepartment);
+            LOGINFO("Submit Transaction: CreateMortgageReportingAsset: " + reportIdentifier);
+			contract.submitTransaction("createMortgageReportingAsset", reportIdentifier, reportCreationDate, reportURL, submittingFirm);
         }
         catch(Exception e){
             System.err.println(e);

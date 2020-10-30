@@ -3,6 +3,13 @@
  */
 package org.example;
 
+import java.io.InputStream;
+import java.security.MessageDigest;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+
 import org.hyperledger.fabric.contract.Context;
 import org.hyperledger.fabric.contract.ContractInterface;
 import org.hyperledger.fabric.contract.annotation.Contract;
@@ -13,6 +20,17 @@ import org.hyperledger.fabric.contract.annotation.Contact;
 import org.hyperledger.fabric.contract.annotation.Info;
 import org.hyperledger.fabric.contract.annotation.License;
 import static java.nio.charset.StandardCharsets.UTF_8;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+
 
 @Contract(name = "MortgageReportingAssetContract",
     info = @Info(title = "MortgageReportingAssetContract",
@@ -30,6 +48,46 @@ public class MortgageReportingAssetContract implements ContractInterface {
     public MortgageReportingAssetContract() {
     }
 
+    //Helper Method to validate that XML document is well formed.
+    private Document validateTestDocument(InputStream XMLDocStream) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        return factory.newDocumentBuilder().parse(XMLDocStream);
+    }
+
+    private CredentialsProvider generateCredentials() {
+        CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials("SuperUser", "sys");
+        provider.setCredentials(AuthScope.ANY, credentials);
+        return provider;
+    }
+
+    private String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
+
+    //Helper Method returns the Hexidecimal string representation of a 256 Bit FCA reporting Hash
+    private String getCryptographicDocumentSeal(String documentURL) throws Exception{
+        HttpClient client = HttpClientBuilder.create()
+		.setDefaultCredentialsProvider(generateCredentials())
+		.build();
+		
+		HttpGet request = new HttpGet(documentURL);
+
+		HttpResponse response = client.execute(request);
+
+		byte[] docBytes = IOUtils.toByteArray(response.getEntity().getContent());
+		
+		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		byte[] sha256DocumentHash = digest.digest(docBytes);
+		
+		return bytesToHex(sha256DocumentHash);
+    }
+
     @Transaction()
     public boolean mortgageReportingAssetExists(Context ctx, String reportIdentifier) {
         byte[] buffer = ctx.getStub().getState(reportIdentifier);
@@ -37,19 +95,26 @@ public class MortgageReportingAssetContract implements ContractInterface {
     }
 
     @Transaction()
-    public void createMortgageReportingAsset(Context ctx, String reportIdentifier, String reportCreationDate, String reportContent, String submittingFirm, String submittingDepartment) {
+    public void createMortgageReportingAsset(Context ctx, String reportIdentifier, String reportCreationDate, String reportURL, String submittingFirm) {
         boolean exists = mortgageReportingAssetExists(ctx,reportIdentifier);
         if (exists) {
             throw new RuntimeException("The asset "+reportIdentifier+" already exists");
         }
-        MortgageReportingAsset asset = MortgageReportingAsset.createInstance(reportIdentifier, reportCreationDate, reportContent, submittingFirm, submittingDepartment);
+        try{
+            String cryptoGraphicContentSeal = getCryptographicDocumentSeal(reportURL);
+            MortgageReportingAsset asset = MortgageReportingAsset.createInstance(reportIdentifier, reportCreationDate, cryptoGraphicContentSeal, reportURL, submittingFirm);
 
-        asset.setReportIdentifier(reportIdentifier);
-        asset.setReportCreationDate(reportCreationDate);
-        asset.setReportContent(reportContent);
-        asset.setSubmittingFirm(submittingFirm);
-        asset.setSubmittingDepartment(submittingDepartment);
-        ctx.getStub().putState(reportIdentifier, asset.toJSONString().getBytes(UTF_8));
+            asset.setReportIdentifier(reportIdentifier);
+            asset.setReportCreationDate(reportCreationDate);
+            asset.setReportContent(cryptoGraphicContentSeal);
+            asset.setReportURL(reportURL);
+            asset.setSubmittingFirm(submittingFirm);
+
+            ctx.getStub().putState(reportIdentifier, asset.toJSONString().getBytes(UTF_8));
+
+        }catch(Exception e){
+            throw new RuntimeException(e.toString());
+        }
     }
 
     @Transaction()
@@ -72,10 +137,4 @@ public class MortgageReportingAssetContract implements ContractInterface {
         }
         ctx.getStub().delState(reportIdentifier);
     }
-
-    @Transaction(intent = TYPE.EVALUATE)
-    public String validateReportingAsset(Context ctx) {
-        return "Reporting Asset Validated";
-    }
-
 }

@@ -14,6 +14,7 @@ Method SaveReport(pRequest As Report.ReportScheduleRun, Output pResponse As Hype
   	Set tSC = $$$OK
 	Try 
 	{
+		Set ReportURLBase = "http://host.docker.internal:10000/csp/user/rest/data/"
 
 		Set reportObjTree = $classmethod(pRequest.ReportClassName, "%OpenId", pRequest.GeneratedReportObjectId,, .tSC)
 		Quit:$$$ISERR(tSC)
@@ -22,50 +23,21 @@ Method SaveReport(pRequest As Report.ReportScheduleRun, Output pResponse As Hype
 
 		If pRequest.ReportClassName = "FCA.PSD001.FSAHSFFeedMG" {
 			Set ReportHeader = reportObjTree.FSAFeedHeader
-			Set Identifier = ReportHeader.ReportDetails.ReportIdentifier
-
-			For i=1:1:reportObjTree.FSAHSFFeedMGMsg.Count() {  
-				if i < 5{
-					Set FeedMSGTree = reportObjTree.FSAHSFFeedMGMsg.GetAt(i)
-					Set tSC = FeedMSGTree.XMLExportToString(.XMLContentString)
-					Quit:$$$ISERR(tSC)
-
-					Set TransactionReq = ##class(Hyperledger.BO.CreateReportTransactionReq).%New()
-
-					Set TransactionReq.ReportIdentifier = ReportHeader.ReportDetails.ReportIdentifier_"-"_FeedMSGTree.%Id()
-					Set TransactionReq.ReportCreationDate = $ZDATETIME(ReportHeader.ReportDetails.ReportCreationDate, 3, 1)
-					Set TransactionReq.SubmittingFirm = ReportHeader.Submitter.SubmittingFirm
-					Set TransactionReq.SubmittingDepartment = ReportHeader.Submitter.SubmittingDept
-					Set TransactionReq.ReportContent = XMLContentString
-
-					$$$TRACE("Sending PSD001 To Hyperledger For Storage. Report Identifier: "_TransactionReq.ReportIdentifier)
-					Do ..Adapter.SubmitReport(TransactionReq) 
-				}
-			}
 		}
 		ElseIf pRequest.ReportClassName = "FCA.PSD007.PSD007MortgagePerformanceSalesData" {
 			Set ReportHeader = reportObjTree.PSDFeedHeader
-			Set Identifier = ReportHeader.ReportDetails.ReportIdentifier
-
-			For i=1:1:reportObjTree.PSD007FeedMsg.Count() {  
-				if i < 5{
-					Set FeedMSGTree = reportObjTree.PSD007FeedMsg.GetAt(i)
-					Set tSC = FeedMSGTree.XMLExportToString(.XMLContentString)
-					Quit:$$$ISERR(tSC)
-
-					Set TransactionReq = ##class(Hyperledger.BO.CreateReportTransactionReq).%New()
-
-					Set TransactionReq.ReportIdentifier = ReportHeader.ReportDetails.ReportIdentifier_"-"_FeedMSGTree.%Id()
-					Set TransactionReq.ReportCreationDate = $ZDATETIME(ReportHeader.ReportDetails.ReportCreationDate, 3, 1)
-					Set TransactionReq.SubmittingFirm = ReportHeader.Submitter.SubmittingFirm
-					Set TransactionReq.SubmittingDepartment = "N/A"
-					Set TransactionReq.ReportContent = XMLContentString
-
-					$$$TRACE("Sending PSD007 To Hyperledger For Storage. Report Identifier: "_TransactionReq.ReportIdentifier)
-					Do ..Adapter.SubmitReport(TransactionReq) 
-				}
-			}
 		}
+
+		Set TransactionReq = ##class(Hyperledger.BO.CreateReportTransactionReq).%New()
+		Set Identifier = ReportHeader.ReportDetails.ReportIdentifier
+
+		Set TransactionReq.ReportIdentifier = Identifier
+		Set TransactionReq.ReportCreationDate = $ZDATETIME(ReportHeader.ReportDetails.ReportCreationDate, 3, 1)
+		Set TransactionReq.SubmittingFirm = ReportHeader.Submitter.SubmittingFirm
+		Set TransactionReq.ReportURL = ReportURLBase_""_pRequest.ReportClassName_"/"_pRequest.GeneratedReportObjectId
+
+		$$$TRACE("Sending Mortgage Reporting Asset For Storage. Report Identifier: "_Identifier)
+		Do ..Adapter.SubmitReport(TransactionReq)
 
 		Set pResponse.ReportSaveStatus =  "Report: "_Identifier_" Saved Successfully!"
 	} 

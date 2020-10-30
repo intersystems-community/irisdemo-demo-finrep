@@ -37,7 +37,7 @@ ClassMethod Get(pClassName As %String, pID As %String) As %Status
 		
 		If obj="" $$$ThrowNotFoundException("Id "_pID_" not found on "_pClassName)
 
-		Do obj.%JSONExport()
+		Do obj.XMLExport()
 	}
 	Catch (oException)
 	{
