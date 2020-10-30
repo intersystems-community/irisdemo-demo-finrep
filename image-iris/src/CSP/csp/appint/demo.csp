@@ -100,7 +100,8 @@
 
 		function openRESTService()
 		{
-			window_open('rest/data/corebanking.com.irisdemo.banksim.avroevent.NewCustomerAvroEvent/2?IRISUserName=SuperUser&IRISPassword=sys')
+			alert('This file is big and it may take several minutes to download.');
+			window_open('/csp/user/rest/data/FCA.PSD001.FSAHSFFeedMG/1');
 		}
 		
 		function openMonitoringDashboard()
@@ -317,15 +318,18 @@
 			<area target="" alt="Open Data Lookup" title="Open Data Lookup" href="javascript:openDataLookup()" coords="549,132,621,227" shape="rect">
 			<area target="" alt="Open workflow InBox" title="Open workflow InBox" href="javascript:openWorkflow()" coords="429,642,670,715" shape="rect">
 			<area target="" alt="Open reporting process" title="Open reporting process" href="javascript:openReportingProcess()" coords="1089,234,1336,373" shape="rect">
-			<area target="" alt="Open Data Transformation from Canonical to FCA PSD 001" title="Open Data Transformation from Canonical to FCA PSD 001" href="javascript:openDTLToFCAPSD001()" coords="1344,192,1444,292" shape="rect">
-			<area target="" alt="Open Data Transformation from Canonical to FCA PSD 007" title="Open Data Transformation from Canonical to FCA PSD 007" href="javascript:openDTLToFCAPSD007()" coords="1342,311,1443,411" shape="rect">
 			<area target="" alt="Open batch and reporting monitoring dashboard" title="Open batch and reporting monitoring dashboard" href="javascript:openMonitoringDashboard()" coords="685,645,917,715" shape="rect">
 			<area target="" alt="Open data traceability" title="Open data traceability" href="javascript:openMessageTrace()" coords="686,742,915,812" shape="rect">
 			<area target="" alt="Open Mortgage Analytics Cube" title="Open Mortgage Analytics Cube" href="javascript:openMortgageCube()" coords="434,738,666,810" shape="rect">
 			<area target="" alt="Triggers the generation of PSD 001 report" title="Triggers the generation of PSD 001 report" href="javascript:triggerPSD001()" coords="970,767,1294,800" shape="rect">
 			<area target="" alt="Triggers the generation of PSD 007 report" title="Triggers the generation of PSD 007 report" href="javascript:triggerPSD007()" coords="970,815,1296,847" shape="rect">
-			<area target="" alt="Open generated PSD 001 file" title="Open generated PSD 001 file" href="javascript:openGeneratedReport('PSD001')" coords="1571,197,1698,287" shape="rect">
-			<area target="" alt="Open generated PSD 007 file" title="Open generated PSD 007 file" href="javascript:openGeneratedReport('PSD007')" coords="1576,319,1698,406" shape="rect">
+
+			<area target="" alt="Open Hyper Ledger Explorer" title="Open Hyper Ledger Explorer" href="javascript:openHyperLedgerExplorer()" coords="1853,242,1706,372" shape="rect">
+			<area target="" alt="Open Data Transformation from Canonical to FCA PSD 001" title="Open Data Transformation from Canonical to FCA PSD 001" href="javascript:openDTLToFCAPSD001()" coords="1322,369,1412,460" shape="rect">
+			<area target="" alt="Open Data Transformation from Canonical to FCA PSD 007" title="Open Data Transformation from Canonical to FCA PSD 007" href="javascript:openDTLToFCAPSD007()" coords="1292,306,1383,360" shape="rect">
+			<area target="" alt="Open generated PSD 001 file" title="Open generated PSD 001 file" href="javascript:openGeneratedReport('PSD001')" coords="1423,531,1523,629" shape="rect">
+			<area target="" alt="Open generated PSD 007 file" title="Open generated PSD 007 file" href="javascript:openGeneratedReport('PSD007')" coords="1442,472,1540,526" shape="rect">
+			<area target="" alt="Open PSD 001 Report over REST" title="Open PSD 001 Report over REST" href="javascript:openRESTService()" coords="1568,500,1628,581" shape="rect">
 
 		</map>
 
