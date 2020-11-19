@@ -67,7 +67,6 @@ public class HyperledgerOutboundAdapter extends com.intersystems.enslib.pex.Outb
         String responseMsg = "Empty Response Value";
 
         IRISObject req = (IRISObject) request;
-        //LOGINFO("Received object: " + req.invokeString("%ClassName", 1));
 
         try (Gateway gateway = connect()) {
 

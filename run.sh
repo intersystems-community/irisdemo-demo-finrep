@@ -29,12 +29,15 @@ clean_files()
 
     rm -f ./FCAGeneratedReports/*.xml
     rm -f ./FCAGeneratedReports/*.zip
+
+    printf "\n\n${PURPLE}Removing Hyperledger Wallet Identities...${RESET}\n"
+    rm -f ./image-iris/hyperledger-wallet/*id
 }
 
 cleanup()
 {
     printf "\n\n${PURPLE}CTRL+C detected. Removing containters...${RESET}\n"
-    docker-compose stop
+    docker-compose down --volumes --remove-orphans
     docker-compose rm -f
 
     clean_files
@@ -44,9 +47,26 @@ cleanup()
 }
 trap cleanup INT
 
-docker-compose stop
-docker-compose rm -f
-
 clean_files
 
-docker-compose up --remove-orphans
+docker-compose -f docker-compose-ca.yml up -d
+
+docker run --rm --name hyperledgerw \
+--net host \
+-v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
+-v `pwd`/hyperledger/system-genesis-block:/hyperledger/fabric-samples/test-network/system-genesis-block \
+intersystemsdc/irisdemo-base-hyperledgerw:version-latest up -ca
+
+docker-compose up -d
+
+docker run --rm --name hyperledgerw \
+--net host \
+-v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
+-v `pwd`/hyperledger/system-genesis-block:/hyperledger/fabric-samples/test-network/system-genesis-block \
+intersystemsdc/irisdemo-base-hyperledgerw:version-latest createChannel -c mychannel
+
+docker run --rm --name hyperledgerw \
+--net host \
+-v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
+-v `pwd`/hyperledger/system-genesis-block:/hyperledger/fabric-samples/test-network/system-genesis-block \
+intersystemsdc/irisdemo-base-hyperledgerw:version-latest deployCC -ccn MortgageReportingAssetContract -ccl java

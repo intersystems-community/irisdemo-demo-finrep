@@ -11,10 +11,13 @@ CYAN="\033[1;36m"
 WHITE="\033[1;37m"
 RESET="\033[0m"
 
-WD=${PWD}
-cd ./hyperledger/fabric-samples/test-network
-
 printf "\n\n${PURPLE}Stopping Demo and Cleaning Up Test Network Configurations.${RESET}\n"
-source network.sh down
+docker-compose down --volumes --remove-orphans
 
-cd $WD
+docker-compose -f docker-compose-ca.yml down --volumes --remove-orphans
+
+docker run --rm --name hyperledgerw \
+--net host \
+-v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
+-v `pwd`/hyperledger/system-genesis-block:/hyperledger/fabric-samples/test-network/system-genesis-block \
+intersystemsdc/irisdemo-base-hyperledgerw:version-latest cleanUp
