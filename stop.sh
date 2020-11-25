@@ -14,10 +14,10 @@ RESET="\033[0m"
 printf "\n\n${PURPLE}Stopping Demo and Cleaning Up Test Network Configurations.${RESET}\n"
 docker-compose down --volumes --remove-orphans
 
-docker-compose -f docker-compose-ca.yml down --volumes --remove-orphans
+docker-compose -f docker-compose-ca.yml down --remove-orphans
 
 docker run --rm --name hyperledgerw \
 --net host \
 -v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
 -v `pwd`/hyperledger/system-genesis-block:/hyperledger/fabric-samples/test-network/system-genesis-block \
-intersystemsdc/irisdemo-base-hyperledgerw:version-latest cleanUp
+intersystemsdc/irisdemo-base-hyperledgerw:latest cleanUp

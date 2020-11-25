@@ -38,13 +38,23 @@ cleanup()
 {
     printf "\n\n${PURPLE}CTRL+C detected. Removing containters...${RESET}\n"
     docker-compose down --volumes --remove-orphans
+    docker-compose -f docker-compose-ca.yml down --remove-orphans
+
+    docker run --rm --name hyperledgerw \
+    --net host \
+    -v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
+    -v `pwd`/hyperledger/system-genesis-block:/hyperledger/fabric-samples/test-network/system-genesis-block \
+    intersystemsdc/irisdemo-base-hyperledgerw:latest cleanUp
+
     docker-compose rm -f
 
     clean_files
 
     printf "\n\n${PURPLE}Cleaning up complete.${RESET}\n"
     trap - INT
+    exit
 }
+
 trap cleanup INT
 
 clean_files
@@ -55,7 +65,7 @@ docker run --rm --name hyperledgerw \
 --net host \
 -v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
 -v `pwd`/hyperledger/system-genesis-block:/hyperledger/fabric-samples/test-network/system-genesis-block \
-intersystemsdc/irisdemo-base-hyperledgerw:version-latest up -ca
+intersystemsdc/irisdemo-base-hyperledgerw:latest up -ca
 
 docker-compose up -d
 
@@ -63,10 +73,11 @@ docker run --rm --name hyperledgerw \
 --net host \
 -v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
 -v `pwd`/hyperledger/system-genesis-block:/hyperledger/fabric-samples/test-network/system-genesis-block \
-intersystemsdc/irisdemo-base-hyperledgerw:version-latest createChannel -c mychannel
+intersystemsdc/irisdemo-base-hyperledgerw:latest createChannel -c mychannel
 
 docker run --rm --name hyperledgerw \
 --net host \
 -v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
 -v `pwd`/hyperledger/system-genesis-block:/hyperledger/fabric-samples/test-network/system-genesis-block \
-intersystemsdc/irisdemo-base-hyperledgerw:version-latest deployCC -ccn MortgageReportingAssetContract -ccl java
+intersystemsdc/irisdemo-base-hyperledgerw:latest deployCC -ccn MortgageReportingAssetContract -ccl java
+
