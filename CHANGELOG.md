@@ -1,3 +1,35 @@
+## 2.1.0 (November 25, 2020)
+  - returning gitignore to it's original state
+  - adding system-genesis-block foldere
+  - Merge pull request #2 from intersystems-community/package-hyperledger
+  - updating run and stop scripts, updating README, and adding hyperledger explorer images
+  - cadding .env file to ensure network is named correctly
+  - cleaning up package structure to use hperledgerw container
+  - updating docker-compose-test-net file to set explicit Hyperledger Explorer version
+  - adding link to Hyperledger Explorer to landing page
+  - Merge branch 'master' into adding-hyperledger-adapter
+  - adding updates to include saving reporting doc hashing to Hyperledger network
+  - Improving demo landing page.
+  - Enhancing demo landing page to show the Hyper Ledger components.
+  - Adding a trailing new line to the message
+  - Fixing bug on REST service
+  - improving MortgageReportingAssetContract
+  - Merge branch 'adding-hyperledger-adapter' of https://github.com/intersystems-community/irisdemo-demo-finrep into adding-hyperledger-adapter
+  - adding non transaction method for testing purposes
+  - Making sure the environment variables are being passed to the composition when starting the network
+  - fixing git ignore so that it ignores any newly generated binaries
+  - adding necessary Gradle JAr file for building without having gradle installed
+  - adding necessary hyperledger binaries to run locally
+  - updating documentation in hyperledger directory
+  - readding hyperledger folder
+  - removing old hyperledger folder
+  - adding requirements for automating hyperledger network initialization
+  - Merge branch 'master' into adding-hyperledger-adapter
+  - adding hyperledger packages
+  - Improving README
+  - fixing merge conflict with docker-compose to include Amir's performance changes
+  - adding resources for hyperledger
+
 ## 2.0.3 (October 07, 2020)
   - Not using relationships on FCA objects anymore. 
   - Added metrics to report generation. 
