@@ -126,6 +126,14 @@ XData ProductionDefinition
     <Setting Target="Host" Name="FailureTimeout">-1</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">E=R</Setting>
   </Item>
+  <Item Name="Hyperledger Reporting Operation" Category="" ClassName="Hyperledger.BO.ReportingOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="%gatewayPort">55555</Setting>
+    <Setting Target="Adapter" Name="Channel">mychannel</Setting>
+    <Setting Target="Adapter" Name="Contract">MortgageReportingAssetContract</Setting>
+  </Item>
+  <Item Name="Java Gateway" Category="" ClassName="EnsLib.JavaGateway.Service" PoolSize="1" Enabled="true" Foreground="false" Comment="Gate used for running Hyperledger Pex Adapter" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="JVMArgs">-Xmx512m</Setting>
+  </Item>
 </Production>
 }
 

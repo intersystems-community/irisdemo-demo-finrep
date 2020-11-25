@@ -24,7 +24,7 @@ Information about PSD 001 and PSD 007 can be found [here](https://www.fca.org.uk
 
 The demo also shows how we can produce real time reporting about the information that is being sent by the legacy systems for preparing reports, and about the status of the FCA reports that are can be scheduled, overdue or delivered.
 
-Once the report is sent to the FCA (over file uploading, SOAP, etc.), a validation process is started on Gabriel. Gabriel can reject the report which would cause a workflow to correct in Gabriel. The financial institution can correct it by using a Gabriel's UI or cancell that report and send a new one. **We are not showing this part of the process on this demo**.
+Once the report is sent to the FCA (over file uploading, SOAP, etc.), a validation process is started on Gabriel. Gabriel can reject the report which would cause a workflow to correct in Gabriel. The financial institution can correct it by using a Gabriel's UI or cancel that report and send a new one. **We are not showing this part of the process on this demo**.
 
 Demo of InterSystems IRIS being used to:
 * Parsing mortgage data coming in batch files using our **Record Mapper** UI
@@ -33,6 +33,25 @@ Demo of InterSystems IRIS being used to:
 * Configuration of reports that will pull information from the canonical model and transform it to UK's FCA schemas for [PSD 001 and PSD 007](https://www.fca.org.uk/firms/regulatory-reporting/product-sales-data-reporting) reporting.
 * Monitoring of incoming batches and scheduled report statuses using **dashboards**
 * Showing **full traceability** of batches and report generation
+* Send Reporting Data To A Running Hyperledger Network
+
+
+
+# Hyperledger
+
+The demo also includes a running Hyperledger Network that is deployed with a smart contract called **MortgageReportingAssestContrat** . During the mortgage reporting process, reports are also sent to the hyperledger network using this smart contract.
+
+In order to view the running network,  the demo also comes with a Hyperledger Explorer. The explorer will allow you to view activity occuring on your Hyperledger Network. The explorer runs on port 8080. After staring your demo and navigating to this page you will see an image that looks like this.
+
+![Demo](https://github.com/intersystems-community/irisdemo-demo-finrep/blob/master/image-iris/html/explorer-login.png?raw=true)
+
+You can use the credentials: **user: exploreradmin password: exploreradminpw** to get into the running explorer.
+
+After successful login you will see the dashboard which will let you inspect the activity of your demo.
+
+![Demo](https://github.com/intersystems-community/irisdemo-demo-finrep/blob/master/image-iris/html/explorer-landing.png?raw=true)
+
+After the demo finishes generating reports, you can take a look at the transactions in the explorer.
 
 ## How to run the demo
 
@@ -45,14 +64,12 @@ Clone this repository to your local machine to get the entire source code. Don't
 ```bash
 git clone https://github.com/intersystems-community/irisdemo-demo-finrep
 cd irisdemo-demo-finrep
-docker-compose up
+./run.sh
 ```
 
-Another approach is tu use the **run.sh** script. This script will make sure the containers are removed before you start the demo and also after you are finished with the demo. It will also clean up generated report files and the files that are moved to the Done folders. Using the run.sh script is a good way to always start fresh and keep everything clean.
+The run script will make sure the containers are removed before you start the demo and also after you are finished with the demo. It will also clean up generated report files and the files that are moved to the Done folders. Using the run.sh script is a good way to always start fresh and keep everything clean.
 
 When starting, you will see lots of messages from all the containers that are starting. That is fine. Don't worry!
-
-When it is done, it will just hang there, without returning control to you. That is fine too. Just leave this window open. If you CTRL+C on this window, docker compose will stop all the containers and stop the demo.
 
 After all the containers have started, open a browser at [http://localhost:10000/csp/user/demo.csp](http://localhost:10000/csp/appint/demo.csp) to see the landing page of the demo. When requested, use the credentials **SuperUser/sys** to log in. 
 
@@ -108,6 +125,7 @@ Show the report schedule on the control plane. Click on the PSD001 report to sta
 * DTL - Make the point that when we schedule a report, we assign a DTL to extract the required data from the canonical model. That is very useful because, typically, regulators will evolve their schemas and we don't want to keep changing our canonical model and integrations too much. So, although the canonical model may have started looking a lot like the initial schema provided by the regulator, it may drift with time and that is ok. We are ready to deal with that.
 * Analytics - While the report is being generated, invite them to see "one more thing". Make the point that you are probablly aggregating data from more than one source. Some financial institutions have more than one mortgage system as well, due to acquisitions. So now you have clean and normalized data form all these systems on your canonical/conceptual model. Why not take advantage of it? Click on the analytics icon on the control plane. Show the cube. Open Analyzer and build a simple pivot. Make the point that this cube is being kept current with the data that is coming in from the legacy systems and may be useful in many situations such as: 1) To support the data steward during the process of building the smart service (the data pipeline). He/she may be looking at the data to evaluate its quality. 2) To build operational dashboards for the business; 3) To build dashboards to support the Regulatory Report Manager in his/her conversations with the regulators; 4) Make the poin that they can also use their preferred tools such as Tableau, Power BI, etc.
 * Trace - By now, the report is fully generated. Now click on the **Data Traceability** icon on the control plane to show the full message trace for the first time. Make the point that everything we do is recorded there. It is useful for foresics. We have loaded several files as the list of message traces will show. Our report generation request is there. Open it. It should be done by now. You should be able to open your Finder/Explorer and go to the folder FCAGeneratedReports and show the XML there. It is useful to open the file and show it. They will recognize the fields.
+* Hyperledger - open up the hyperledger explorer and show them that a new transaction has been generated. The hash in the transaction is a 256 bit hash of the report content. It acts as a cryptograhic seal, which seals the contents of the document at that point in time.
 
 Make the point that this schedule is actually a schedule. We are triggering the report by hand because this is a demo. But, typically, the report would be triggered automatically unless there is a data acquisition problem.
 
@@ -133,12 +151,6 @@ Another approach you could use would be to:
 * Resent the same file
 
 The process above will work as well and can be used to demonstrate this second workflow.
-
-# Can I run the demo on AWS?
-
-Yes!
-
-Follow instructions [here](./ICM/README.md)
 
 # Other demo applications
 

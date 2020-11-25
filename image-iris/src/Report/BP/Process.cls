@@ -28,10 +28,9 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 </property>
 <property name='RecordCount' type='%Integer' instantiate='0' />
 </context>
-
 <sequence xend='200' yend='350' >
-<while name='Generate Report' condition='context.Action="Generate"' xpos='200' ypos='250' xend='200' yend='1500' >
-<scope xpos='200' ypos='250' xend='200' yend='1400' >
+<while name='Generate Report' condition='context.Action="Generate"' xpos='200' ypos='250' xend='200' yend='1950' >
+<scope xpos='200' ypos='250' xend='200' yend='1850' >
 <assign name="Open/Create Report Schedule" property="context.ReportSchedule" value="##class(Report.ReportSchedule).%OpenId(request.ReportScheduleId,,.status)" action="set" xpos='200' ypos='350' />
 <assign name="New Report Schedule Run" property="context.ReportScheduleRun" value="##class(Report.ReportScheduleRun).Create(context.ReportSchedule, process.%SessionId, .status)" action="set" xpos='200' ypos='450' />
 <assign name="Reset record count" property="context.RecordCount" value="0" action="set" xpos='200' ypos='550' />
@@ -207,18 +206,23 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 <assign property="callrequest" value="context.ReportScheduleRun" action="set" />
 </request>
 </call>
-<if name='Cubes?' condition='context.ReportSchedule.Report.CubeList&apos;=""' xpos='200' ypos='1350' xend='200' yend='1600' >
+<if name='Cubes?' condition='context.ReportSchedule.Report.CubeList&apos;=""' xpos='200' ypos='1250' xend='200' yend='1500' >
 <true>
-<call name='Synchronize Cubes' target='Cube Operations' async='0' xpos='335' ypos='1500' >
+<call name='Synchronize Cubes' target='Cube Operations' async='0' xpos='335' ypos='1400' >
 <request type='Cube.BO.SynchronizeCubeListReq' >
 <assign property="callrequest.CubeList" value="context.ReportSchedule.Report.CubeList" action="set" />
 </request>
 </call>
 </true>
 </if>
-
+<call name='Send To Hyperledger' target='Hyperledger Reporting Operation' async='0' xpos='200' ypos='1600' >
+<request type='Report.ReportScheduleRun' >
+<assign property="callrequest" value="context.ReportScheduleRun" action="set" />
+</request>
+<response type='Hyperledger.BO.CreatePSD001Resp' />
+</call>
 <faulthandlers>
-<catchall name='Report Generation error' xpos='200' ypos='1250' xend='200' yend='1250' >
+<catchall name='Report Generation error' xpos='200' ypos='1700' xend='200' yend='1250' >
 <trace name='Report Generation problem' value='"Report Generation problem"' xpos='200' ypos='250' />
 <assign name="Compose Message" property="context.Message" value="&quot;The following problem occurred when trying to process session &quot;_process.%SessionId_&quot;: &quot;_$System.Status.GetOneStatusText(..%Context.%LastError)" action="set" xpos='200' ypos='350' />
 <alert value='context.Message' xpos='200' ypos='450' />

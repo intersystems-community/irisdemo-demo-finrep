@@ -22,12 +22,12 @@
 			winReference.parent.focus();
 		}
 
-		/*
-		function openKafkaControlCenter()
+		
+		function openHyperLedgerExplorer()
 		{
-			window_open('http://' + ip + ':9021/');
+			window_open('http://' + ip + ':8080/');
 		}
-		*/
+		
 
 		
 		function openProduction()
