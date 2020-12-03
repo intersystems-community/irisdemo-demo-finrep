@@ -20,4 +20,5 @@ docker run --rm --name hyperledgerw \
 --net host \
 -v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
 -v `pwd`/hyperledger/system-genesis-block:/hyperledger/fabric-samples/test-network/system-genesis-block \
-intersystemsdc/irisdemo-base-hyperledgerw:latest cleanUp
+-v `pwd`/hyperledger/chaincodes/mortgage-reporting-cc:/hyperledger/fabric-samples/mortgage-reporting-cc \
+intersystemsdc/irisdemo-base-hyperledgerw:version-1.2.0 cleanUp

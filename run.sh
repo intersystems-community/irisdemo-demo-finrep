@@ -65,7 +65,7 @@ docker run --rm --name hyperledgerw \
 --net host \
 -v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
 -v `pwd`/hyperledger/system-genesis-block:/hyperledger/fabric-samples/test-network/system-genesis-block \
-intersystemsdc/irisdemo-base-hyperledgerw:latest up -ca
+intersystemsdc/irisdemo-base-hyperledgerw:version-1.2.0 up -ca
 
 docker-compose up -d
 
@@ -73,11 +73,12 @@ docker run --rm --name hyperledgerw \
 --net host \
 -v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
 -v `pwd`/hyperledger/system-genesis-block:/hyperledger/fabric-samples/test-network/system-genesis-block \
-intersystemsdc/irisdemo-base-hyperledgerw:latest createChannel -c mychannel
+intersystemsdc/irisdemo-base-hyperledgerw:version-1.2.0 createChannel -c mychannel
 
 docker run --rm --name hyperledgerw \
 --net host \
 -v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
 -v `pwd`/hyperledger/system-genesis-block:/hyperledger/fabric-samples/test-network/system-genesis-block \
-intersystemsdc/irisdemo-base-hyperledgerw:latest deployCC -ccn MortgageReportingAssetContract -ccl java
+-v `pwd`/hyperledger/chaincodes/mortgage-reporting-cc:/hyperledger/fabric-samples/mortgage-reporting-cc \
+intersystemsdc/irisdemo-base-hyperledgerw:version-1.2.0 deployCC -ccn MortgageReportingAssetContract -ccl java
 
