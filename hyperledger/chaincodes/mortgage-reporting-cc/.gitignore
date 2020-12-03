@@ -1,3 +1,4 @@
 wallet
 !wallet/.gitkeep
 chaincode-java/build
+chaincode-java/.gradle
