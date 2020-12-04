@@ -1,15 +1,19 @@
 #!/bin/bash
 #
-# This script is meant to support running the speedtest with docker-compose
+# Use this script to start the demo. It will:
+# 1- Start the Certificate Authority first.
+# 2- Run a container to produce the certificates for our test organizations
+# 3- Start the demo with the two organizations (org0 is the FCA and org1 is the bank)
+#    on a single peer (peer0) and IRIS
+# 4- Create a private channel for both organizations (the FCA and the bank)
+# 5- Compile the chain code and deploy it on the channel. The chain code needs to be 
+#    compiled when we are starting the demo because we are relying on original code of
+#    shipped with the hyperledger SDK that uses graddle and shell scripts to compile and deploy
+#    the chain code in an easy way. 
 #
-# You can:
-# - call it without any arguments to run the speed test using IRIS. 
-# - call it with an argument to run the speed test using another datbase. The available options are: 
-#   - mysql
-#
-# Each option will lead to using a diffent docker-compose.yml file.
-#
-
+# We packaged the hyperledger SDK in an image called irisdemo-base-hyperledgerw. We use this image
+# bellow on steps 2, 4 and 5
+ 
 YELLOW="\033[1;33m"
 BLUE="\033[1;34m"
 PURPLE="\033[1;35m"
