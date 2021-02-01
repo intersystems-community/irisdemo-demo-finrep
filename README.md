@@ -57,6 +57,8 @@ After the demo finishes generating reports, you can take a look at the transacti
 
 **WARNING: If you are running on a Mac or Windows, you must give Docker at least 5Gb of RAM for this demo to run properly. Also, please check this [troubleshooting](https://github.com/intersystems-community/irisdemo-base-troubleshooting) document in case you find problems starting the demo with docker-compose. Disk space available for the docker VM is the most common cause for trouble.**
 
+**If running on a Mac, make sure you disable Docker Experimental Feature "Use gRPC FUSE for file sharing". This is causing an issue where the chain code can not be installed in the hyperledger.**
+
 To run the demo on your PC, make sure you have **Git** and **Docker** installed on your machine. 
 
 Clone this repository to your local machine to get the entire source code. Don't worry, you don't need to rebuild the demo from its source. It is just easier this way. After cloning the repo, change to its directory and start the demo:

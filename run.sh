@@ -73,6 +73,8 @@ intersystemsdc/irisdemo-base-hyperledgerw:version-1.2.0 up -ca
 
 docker-compose up -d
 
+sleep 10
+
 docker run --rm --name hyperledgerw \
 --net host \
 -v `pwd`/hyperledger/organizations:/hyperledger/fabric-samples/test-network/organizations \
