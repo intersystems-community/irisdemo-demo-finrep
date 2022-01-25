@@ -1,3 +1,14 @@
+## 2.2.0 (January 25, 2022)
+  - Bumping IRIS version to 2021.2.0.649.0
+  - Documentation
+  - Adding warning about gRPC Experimental Feature
+  - Merge branch 'master' of https://github.com/intersystems-community/irisdemo-demo-finrep
+  - updating stop script to cleanup chaincode resources
+  - removing unnecessary gradle files and adding them to git ignore
+  - adding chaincode to project so people can view/modify and updating run scripts to use versioned hyperledgerw container
+  - Documentation
+  - fixing bump version script
+
 ## 2.1.0 (November 25, 2020)
   - returning gitignore to it's original state
   - adding system-genesis-block foldere
