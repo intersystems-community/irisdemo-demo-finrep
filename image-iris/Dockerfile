@@ -1,4 +1,4 @@
-FROM intersystemsdc/irisdemo-base-irisint-community:version-1.9.4U
+FROM intersystemsdc/irisdemo-base-irisint-community:version-1.10.3U
 
 # IRIS Global buffers and Routine Buffers
 ENV IRIS_GLOBAL_BUFFERS=2048
@@ -22,7 +22,7 @@ RUN mv $IRIS_APP_SOURCEDIR/Batch-Batch\ Control\ Record\ Stats /tmp/dfi/ && \
 mv $IRIS_APP_SOURCEDIR/FCA-FCA\ Reporting\ Monitoring /tmp/dfi/ && \
 mv $IRIS_APP_SOURCEDIR/FCA-Report\ Status /tmp/dfi/ && \
 ls -l /tmp/dfi && \
-/usr/irissys/demo/irisdemoinstaller.sh
+/demo/irisdemoinstaller.sh
 
 ADD --chown=irisowner:irisuser ./html/landing-page.png $ISC_PACKAGE_INSTALLDIR/csp/user/
 ADD --chown=irisowner:irisuser ./html/landing-page-detailed.png $ISC_PACKAGE_INSTALLDIR/csp/user/

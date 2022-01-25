@@ -15,7 +15,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <intersystems.library.version>3.2.0</intersystems.library.version>
+    <intersystems.library.version>3.3.0</intersystems.library.version>
   </properties>
 
   <dependencies>
@@ -50,12 +50,6 @@
     <dependency>
       <groupId>com.intersystems</groupId>
       <artifactId>intersystems-utils</artifactId>
-      <version>${intersystems.library.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.intersystems</groupId>
-      <artifactId>intersystems-gateway</artifactId>
       <version>${intersystems.library.version}</version>
     </dependency>
     
