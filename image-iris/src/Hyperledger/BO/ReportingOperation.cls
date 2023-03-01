@@ -14,7 +14,7 @@ Method SaveReport(pRequest As Report.ReportScheduleRun, Output pResponse As Hype
   	Set tSC = $$$OK
 	Try 
 	{
-		Set ReportURLBase = "http://host.docker.internal:10000/csp/user/rest/data/"
+		Set ReportURLBase = "http://iris:52773/csp/user/rest/data/"
 
 		Set reportObjTree = $classmethod(pRequest.ReportClassName, "%OpenId", pRequest.GeneratedReportObjectId,, .tSC)
 		Quit:$$$ISERR(tSC)
