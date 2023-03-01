@@ -1,3 +1,7 @@
+## 2.3.0 (March 01, 2023)
+  - Bumping IRIS Community version to version-1.10.5U
+  - fixing Hyperledger issue
+
 ## 2.2.0 (January 25, 2022)
   - Bumping IRIS version to 2021.2.0.649.0
   - Documentation

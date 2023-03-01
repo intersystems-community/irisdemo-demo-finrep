@@ -139,7 +139,7 @@ services:
       - test
 
   iris:
-    image: intersystemsdc/irisdemo-demo-finrep:iris-version-2.2.0
+    image: intersystemsdc/irisdemo-demo-finrep:iris-version-2.3.0
     hostname: iris
     init: true
     container_name: iris
