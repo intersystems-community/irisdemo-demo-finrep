@@ -8,14 +8,16 @@ ENV IRIS_ROUTINE_BUFFERS=256
 #ARG IRIS_PROJECT_FOLDER_NAME=iris-opcua-oee
 ARG IRIS_PROJECT_FOLDER_NAME=src
 
-# Adding source code that will be loaded by the installer
-ADD --chown=irisowner:irisuser ./${IRIS_PROJECT_FOLDER_NAME}/ $IRIS_APP_SOURCEDIR
+USER irisowner
 
-ADD --chown=irisowner:irisuser ./FCASchemas/ /tmp/FCASchemas/
-ADD --chown=irisowner:irisuser ./html/fca-logo.jpg /usr/irissys/csp/broker/covers/
+# Adding source code that will be loaded by the installer
+ADD --chown=irisowner:irisowner ./${IRIS_PROJECT_FOLDER_NAME}/ $IRIS_APP_SOURCEDIR
+
+ADD --chown=irisowner:irisowner ./FCASchemas/ /tmp/FCASchemas/
+ADD --chown=irisowner:irisowner ./html/fca-logo.jpg /usr/irissys/csp/broker/covers/
 
 #Phil Change To add new hyperledger pex adapter 
-ADD --chown=irisowner:irisuser ./hyperledger-pex-adapter.jar /hyperledger/hyperledger-pex-adapter.jar
+ADD --chown=irisowner:irisowner ./hyperledger-pex-adapter.jar /hyperledger/hyperledger-pex-adapter.jar
 
 # Running the installer. This will load the source from our project.
 RUN mv $IRIS_APP_SOURCEDIR/Batch-Batch\ Control\ Record\ Stats /tmp/dfi/ && \
@@ -24,11 +26,7 @@ mv $IRIS_APP_SOURCEDIR/FCA-Report\ Status /tmp/dfi/ && \
 ls -l /tmp/dfi && \
 /demo/irisdemoinstaller.sh
 
-ADD --chown=irisowner:irisuser ./html/landing-page.png $ISC_PACKAGE_INSTALLDIR/csp/user/
-ADD --chown=irisowner:irisuser ./html/landing-page-detailed.png $ISC_PACKAGE_INSTALLDIR/csp/user/
-ADD --chown=irisowner:irisuser ./html/image-map-resizer/js/imageMapResizer.min.js $ISC_PACKAGE_INSTALLDIR/csp/user/
-ADD --chown=irisowner:irisuser ./html/image-map-resizer/js/imageMapResizer.map $ISC_PACKAGE_INSTALLDIR/csp/user/
-
-# USER root
-# RUN echo "vm.nr_hugepages=2056" >> /etc/sysctl.conf  
-# USER irisowner
+ADD --chown=irisowner:irisowner ./html/landing-page.png $ISC_PACKAGE_INSTALLDIR/csp/user/
+ADD --chown=irisowner:irisowner ./html/landing-page-detailed.png $ISC_PACKAGE_INSTALLDIR/csp/user/
+ADD --chown=irisowner:irisowner ./html/image-map-resizer/js/imageMapResizer.min.js $ISC_PACKAGE_INSTALLDIR/csp/user/
+ADD --chown=irisowner:irisowner ./html/image-map-resizer/js/imageMapResizer.map $ISC_PACKAGE_INSTALLDIR/csp/user/
